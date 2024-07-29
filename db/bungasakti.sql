@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jul 26, 2024 at 03:01 PM
--- Server version: 8.0.30
--- PHP Version: 7.4.33
+-- Host: 127.0.0.1
+-- Generation Time: Jul 29, 2024 at 06:06 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -37,8 +38,8 @@ CREATE TABLE `customer` (
   `address` text NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `isActive` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -47,14 +48,14 @@ CREATE TABLE `customer` (
 --
 
 CREATE TABLE `det_invoice` (
-  `idDetInvoice` int NOT NULL,
+  `idDetInvoice` int(11) NOT NULL,
   `idInvoice` varchar(8) NOT NULL,
-  `idDetOrder` int NOT NULL,
-  `qtyInvoice` int NOT NULL,
+  `idDetOrder` int(11) NOT NULL,
+  `qtyInvoice` int(11) NOT NULL,
   `remark` text NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -63,16 +64,16 @@ CREATE TABLE `det_invoice` (
 --
 
 CREATE TABLE `det_master_order` (
-  `idDetOrder` int NOT NULL,
+  `idDetOrder` int(11) NOT NULL,
   `idMasterOrder` varchar(10) NOT NULL,
   `idBarang` varchar(10) NOT NULL,
-  `qtyOrder` int NOT NULL,
-  `qtyBalance` int NOT NULL,
-  `fixedPrice` int NOT NULL,
-  `total` bigint NOT NULL,
+  `qtyOrder` int(11) NOT NULL,
+  `qtyBalance` int(11) NOT NULL,
+  `fixedPrice` int(11) NOT NULL,
+  `total` bigint(20) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -81,13 +82,13 @@ CREATE TABLE `det_master_order` (
 --
 
 CREATE TABLE `det_master_pembelian` (
-  `idDetPembelian` int NOT NULL,
+  `idDetPembelian` int(11) NOT NULL,
   `idPembelian` varchar(8) NOT NULL,
   `idStock` varchar(8) NOT NULL,
-  `qty` int NOT NULL,
-  `price` int NOT NULL,
-  `total` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `qty` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `total` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -96,12 +97,12 @@ CREATE TABLE `det_master_pembelian` (
 --
 
 CREATE TABLE `det_master_penjualan` (
-  `idDetPenjualan` int NOT NULL,
+  `idDetPenjualan` int(11) NOT NULL,
   `idPenjualan` varchar(10) NOT NULL,
   `idStock` varchar(8) NOT NULL,
-  `qty` int NOT NULL,
-  `total` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `qty` int(11) NOT NULL,
+  `total` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -110,15 +111,15 @@ CREATE TABLE `det_master_penjualan` (
 --
 
 CREATE TABLE `det_purchase_request` (
-  `idDetPR` int NOT NULL,
+  `idDetPR` int(11) NOT NULL,
   `idPR` varchar(8) NOT NULL,
   `idBarang` varchar(10) NOT NULL,
-  `qtyOrder` int NOT NULL,
-  `descriptionCustom` text,
+  `qtyOrder` int(11) NOT NULL,
+  `descriptionCustom` text DEFAULT NULL,
   `status` varchar(32) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -132,13 +133,13 @@ CREATE TABLE `master_barang` (
   `description` text NOT NULL,
   `mcRefrence` varchar(32) NOT NULL,
   `uom` varchar(16) NOT NULL,
-  `totalStock` int NOT NULL,
+  `totalStock` int(11) NOT NULL,
   `type` varchar(32) NOT NULL,
-  `basePrice` int NOT NULL,
+  `basePrice` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `isActive` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -155,7 +156,7 @@ CREATE TABLE `master_invoice` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `status` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -172,8 +173,8 @@ CREATE TABLE `master_order` (
   `status` varchar(32) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `isActive` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -186,10 +187,10 @@ CREATE TABLE `master_pembelian` (
   `issuingDate` date NOT NULL,
   `idUser` varchar(8) NOT NULL,
   `notaRefrence` varchar(50) DEFAULT NULL,
-  `remark` text,
+  `remark` text DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -206,7 +207,7 @@ CREATE TABLE `master_penjualan` (
   `remark` text NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -217,11 +218,21 @@ CREATE TABLE `master_penjualan` (
 CREATE TABLE `master_toko` (
   `idToko` varchar(8) NOT NULL,
   `namaToko` varchar(50) NOT NULL,
-  `address` text,
+  `address` text DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `lastActive` datetime NOT NULL,
+  `isActive` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `master_toko`
+--
+
+INSERT INTO `master_toko` (`idToko`, `namaToko`, `address`, `createdAt`, `updatedAt`, `lastActive`, `isActive`) VALUES
+('a2a77061', 'Toko Boja', 'Campurejo Semarang', '2024-07-29 22:31:37', '2024-07-29 22:35:14', '0000-00-00 00:00:00', 1),
+('decb2bcf', 'Toko Semarang', 'Banyumanik', '2024-07-29 22:47:25', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1),
+('eaf29525', 'Toko Gading', 'Gading Serpong', '2024-07-29 22:35:30', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -236,8 +247,8 @@ CREATE TABLE `purchase_request` (
   `remark` text NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `isActive` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -249,11 +260,11 @@ CREATE TABLE `toko_stock` (
   `idStock` varchar(8) NOT NULL,
   `idToko` varchar(8) NOT NULL,
   `idBarang` varchar(10) NOT NULL,
-  `qtyStock` int NOT NULL,
+  `qtyStock` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `isActive` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -265,14 +276,21 @@ CREATE TABLE `user` (
   `idUser` varchar(8) NOT NULL,
   `name` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `idToko` varchar(8) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `idToko` varchar(8) DEFAULT NULL,
   `level` varchar(10) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `isActive` int NOT NULL DEFAULT '1',
+  `isActive` int(11) NOT NULL DEFAULT 1,
   `lastLogin` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`idUser`, `name`, `username`, `password`, `idToko`, `level`, `createdAt`, `updatedAt`, `isActive`, `lastLogin`) VALUES
+('558ba751', 'Prionaka Luthfi', 'admin', '$2y$10$SIMPtxCPwRRT1K.IhlcXjO/E23qrqxO5kMa3abUTejiQp9F0.8Abm', 'decb2bcf', 'ADMIN', '2024-07-28 23:14:00', '2024-07-29 22:53:10', 1, '2024-07-29 20:58:14');
 
 --
 -- Indexes for dumped tables
@@ -376,31 +394,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `det_invoice`
 --
 ALTER TABLE `det_invoice`
-  MODIFY `idDetInvoice` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetInvoice` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `det_master_order`
 --
 ALTER TABLE `det_master_order`
-  MODIFY `idDetOrder` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetOrder` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `det_master_pembelian`
 --
 ALTER TABLE `det_master_pembelian`
-  MODIFY `idDetPembelian` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetPembelian` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `det_master_penjualan`
 --
 ALTER TABLE `det_master_penjualan`
-  MODIFY `idDetPenjualan` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetPenjualan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `det_purchase_request`
 --
 ALTER TABLE `det_purchase_request`
-  MODIFY `idDetPR` int NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetPR` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
