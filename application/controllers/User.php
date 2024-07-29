@@ -18,9 +18,11 @@ class User extends CI_Controller
     public function index()
     {
         $id = substr($this->uuid->v4(), 0, 18);
+        $this->load->model('ModelToko');
 
         $data = array(
             'content' => 'app/user',
+            'getAllToko' => $this->ModelToko->getAllToko(),
             'getAllUsers' => $this->ModelUser->getAllUser(),
         );
         $this->load->view('app/index', $data);
@@ -31,6 +33,7 @@ class User extends CI_Controller
         $idUser = substr($this->uuid->v4(), 0, 8);
         $username = str_replace(' ', '', $this->input->post('username'));
         $name = $this->input->post('name');
+        $idToko = $this->input->post('idToko');
         $level = $this->input->post('level');
         $password = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
 
@@ -45,6 +48,7 @@ class User extends CI_Controller
             $data = array(
                 'idUser' => $idUser,
                 'name' => $name,
+                'idToko' => ($idToko) ? $idToko : NULL,
                 'level' => $level,
                 'password' => $password,
                 'username' => $username,
@@ -52,11 +56,20 @@ class User extends CI_Controller
             );
 
             $insertRow = $this->ModelUser->insertUser($data);
-            $this->session->set_flashdata('msg', '
-            <div class="alert alert-success" role="alert">
-                <strong>Simpan Berhasil !</strong>
-            </div>');
-            echo ($insertRow) ? json_encode(true) : json_encode(false);
+            if ($insertRow) {
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success" role="alert">
+                    <strong>Simpan Berhasil !</strong>
+                </div>');
+                echo json_encode(true);
+            } else {
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-danger" role="alert">
+                    <strong>Gagal Simpan! </strong>
+                </div>');
+                echo json_encode(false);
+            }
+            // echo ($insertRow) ? json_encode(true) : json_encode(false);
         }
     }
 
@@ -72,23 +85,34 @@ class User extends CI_Controller
         $idUser = $this->input->post('idUser');
         $username = str_replace(' ', '', $this->input->post('username'));
         $name = $this->input->post('name');
+        $idToko = $this->input->post('idToko');
         $level = $this->input->post('level');
 
         $data = array(
             'name' => $name,
             'level' => $level,
             'username' => $username,
+            'idToko' => ($idToko) ? $idToko : NULL,
             'updatedAt' => date('Y-m-d H:i:s'),
         );
 
         $checkSameUsername = $this->ModelUser->getUserById($idUser);
         if ($checkSameUsername->username == $username) {
             $insertRow = $this->ModelUser->updateUser($data, $idUser);
-            $this->session->set_flashdata('msg', '
-            <div class="alert alert-success" role="alert">
-                <strong>Update Berhasil !</strong>
-            </div>');
-            echo ($insertRow) ? json_encode(true) : json_encode(false);
+            // echo ($insertRow) ? json_encode(true) : json_encode(false);
+            if ($insertRow) {
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success" role="alert">
+                    <strong>Update Berhasil !</strong>
+                </div>');
+                echo json_encode(true);
+            } else {
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-danger" role="alert">
+                    <strong>Gagal Update! </strong>
+                </div>');
+                echo json_encode(false);
+            }
         } else {
             $checkUsernameExists = $this->ModelUser->checkExistUsername($username);
             if ($checkUsernameExists) {
@@ -99,11 +123,19 @@ class User extends CI_Controller
                 echo json_encode(true);
             } else {
                 $insertRow = $this->ModelUser->updateUser($data, $idUser);
-                $this->session->set_flashdata('msg', '
-                <div class="alert alert-success" role="alert">
-                    <strong>Update Berhasil !</strong>
-                </div>');
-                echo ($insertRow) ? json_encode(true) : json_encode(false);
+                if ($insertRow) {
+                    $this->session->set_flashdata('msg', '
+                    <div class="alert alert-success" role="alert">
+                        <strong>Update Berhasil !</strong>
+                    </div>');
+                    echo json_encode(true);
+                } else {
+                    $this->session->set_flashdata('msg', '
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Gagal Update! </strong>
+                    </div>');
+                    echo json_encode(false);
+                }
             }
         }
     }

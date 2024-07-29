@@ -7,6 +7,8 @@ class ModelUser extends CI_Model
     {
         $this->db->from('user');
         $this->db->join('master_toko', 'master_toko.idToko = user.idToko', 'left');
+        $this->db->where('user.isActive', '1');
+
         $db = $this->db->get();
         return $db->result();
     }
@@ -47,7 +49,8 @@ class ModelUser extends CI_Model
     function deleteUser($idUser)
     {
         $this->db->where('idUser', $idUser);
-        $this->db->delete('user');
+        $this->db->update('user', ['isActive' => '0']);
+
         if ($this->db->affected_rows() > 0) {
             return true; // Return true if data was deleted successfully
         } else {

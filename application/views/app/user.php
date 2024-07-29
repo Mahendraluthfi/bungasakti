@@ -79,6 +79,15 @@
                         </select>
                         <label for="floatingSelect">Pilih Level User</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="idToko" id="floatingToko" aria-label="Floating label select example">
+                            <option selected value="">Pilih</option>
+                            <?php foreach ($getAllToko as $data) { ?>
+                                <option value="<?php echo $data->idToko ?>"><?php echo $data->namaToko ?></option>
+                            <?php } ?>
+                        </select>
+                        <label for="floatingToko">Pilih Lokasi Toko</label>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -141,6 +150,8 @@
                 $('#floatingPassword').attr('disabled', 'disabled');
                 $('#floatingSelect').val(data.level);
                 $('#floatingSelect').trigger('change');
+                $('#floatingToko').val(data.idToko);
+                $('#floatingToko').trigger('change');
                 save_method = 'editUser';
                 $('#modalTitleId').text('Edit Data User');
                 $('#modalId').modal('show');
