@@ -4,36 +4,36 @@
             <div class="card d-block">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
-                        <h4>Master User</h4>
-                        <button type="button" class="btn btn-primary" onclick="add()"><span class="mdi mdi-plus"></span> Tambah User
+                        <h4>Master Customer</h4>
+                        <button type="button" class="btn btn-primary" onclick="add()"><span class="mdi mdi-plus"></span> Tambah Customer
                         </button>
                     </div>
                     <?php echo $this->session->flashdata('msg'); ?>
-                    <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+                    <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap">
                         <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Username</th>
-                                <th>Toko</th>
-                                <th>Level</th>
-                                <th>#</th>
-                            </tr>
+                            <th>No</th>
+                            <th>Perusahaan</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Alamat</th>
+                            <th>No HP/Telp</th>
+                            <th>#</th>
                         </thead>
                         <tbody>
                             <?php $no = 1;
-                            foreach ($getAllUsers as $data) { ?>
+                            foreach ($getAllCustomer as $data) { ?>
                                 <tr>
                                     <td><?php echo $no++ ?></td>
-                                    <td><?php echo $data->name ?></td>
+                                    <td><?php echo $data->companyName ?></td>
                                     <td><?php echo $data->username ?></td>
-                                    <td><?php echo $data->namaToko ?></td>
-                                    <td><?php echo $data->level ?></td>
+                                    <td><?php echo $data->email ?></td>
+                                    <td><?php echo $data->address ?></td>
+                                    <td><?php echo $data->contactNumber ?></td>
                                     <td>
-                                        <button type="button" onclick="get('<?php echo $data->idUser ?>')" class="btn btn-success btn-sm">
+                                        <button type="button" onclick="get('<?php echo $data->idCustomer ?>')" class="btn btn-success btn-sm mb-1">
                                             <i class="mdi mdi-pencil"></i> Edit
                                         </button>
-                                        <button type="button" onclick="deleteUser('<?php echo $data->idUser ?>')" class="btn btn-danger btn-sm">
+                                        <button type="button" onclick="deleteCustomer('<?php echo $data->idCustomer ?>')" class="btn btn-danger btn-sm">
                                             <i class="mdi mdi-delete"></i> Hapus
                                         </button>
                                     </td>
@@ -41,7 +41,7 @@
                             <?php } ?>
                         </tbody>
                     </table>
-                </div><!-- end card body -->
+                </div>
             </div>
         </div>
     </div>
@@ -56,37 +56,31 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="frmUser">
+                <form id="frmCustomer">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" required name="name" id="floatingNama" placeholder="Username">
-                        <label for="floatingNama">Nama Lengkap</label>
+                        <input type="text" class="form-control" required name="companyName" id="floatingCompany" placeholder="Nama Perusahaan">
+                        <label for="floatingCompany">Nama Perusahaan</label>
+                        <input type="hidden" name="idCustomer">
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" required name="username" id="floatingUsername" placeholder="Username">
-                        <input type="hidden" name="idUser">
                         <label for="floatingUsername">Username</label>
                     </div>
-                    <p id="error-message" class="text-danger"></p>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control" required name="password" id="floatingPassword" placeholder="Username">
+                        <input type="text" class="form-control" required name="email" id="floatingEmail" placeholder="Username">
+                        <label for="floatingEmail">E-mail</label>
+                    </div>
+                    <div class="form-floating mb-3" id="sectionPassword">
+                        <input type="password" class="form-control" required name="password" id="floatingPassword" placeholder="Password">
                         <label for="floatingPassword">Password</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select class="form-select" name="level" required id="floatingSelect" aria-label="Floating label select example">
-                            <option selected="">Pilih</option>
-                            <option value="KASIR">KASIR</option>
-                            <option value="ADMIN">ADMIN</option>
-                        </select>
-                        <label for="floatingSelect">Pilih Level User</label>
+                        <textarea class="form-control" name="address" required placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                        <label for="floatingTextarea">Alamat Perusahaan</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select class="form-select" name="idToko" id="floatingToko" aria-label="Floating label select example">
-                            <option selected value="">Pilih</option>
-                            <?php foreach ($getAllToko as $data) { ?>
-                                <option value="<?php echo $data->idToko ?>"><?php echo $data->namaToko ?></option>
-                            <?php } ?>
-                        </select>
-                        <label for="floatingToko">Pilih Lokasi Toko</label>
+                        <input type="text" class="form-control" required name="contactNumber" id="floatingContact" placeholder="Username">
+                        <label for="floatingContact">No HP/Telp</label>
                     </div>
                 </form>
             </div>
@@ -100,31 +94,30 @@
     </div>
 </div>
 
-<!-- Optional: Place to the bottom of scripts -->
 <script>
-    let base_url = '<?php echo base_url() ?>';
+    let base_url = '<?php echo base_url(); ?>';
     let save_method;
-
-    let userId;
-    const form = document.getElementById('frmUser');
-
+    const form = document.getElementById('frmCustomer');
     const add = () => {
-        save_method = 'saveUser';
-        $('#modalTitleId').text('Tambah User Baru');
-        $('#floatingPassword').removeAttr('disabled', 'disabled');
-        $('#modalId').modal('show');
+        save_method = 'addCustomer';
+        $('#modalTitleId').text('Tambah Customer Baru');
+        $('#sectionPassword').removeAttr('style', 'display:none');
+        $('#floatingPassword').removeAttr('required');
         form.reset();
+        $('#modalId').modal('show');
     }
 
     const save = () => {
-        if (form.checkValidity()) {
+
+        if (form.checkValidity() == true) {
             $.ajax({
-                url: base_url + 'user/' + save_method,
+                url: base_url + 'customer/' + save_method,
                 type: 'POST',
-                data: $('#frmUser').serialize(),
+                data: $('#frmCustomer').serialize(),
                 dataType: 'JSON',
                 success: function(data) {
                     (data === true) ? location.reload(): alert("Error menyimpan data");
+                    // console.log(data);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
@@ -135,26 +128,27 @@
         }
     }
 
-    const get = (idUser) => {
+    const get = (idCustomer) => {
         $.ajax({
-            url: base_url + 'user/getUserById',
+            url: base_url + 'customer/getCustomerById',
             type: 'POST',
             data: {
-                idUser: idUser
+                idCustomer: idCustomer
             },
             dataType: 'JSON',
             success: function(data) {
-                $('[name="idUser"]').val(data.idUser);
+                $('#modalTitleId').text('Ubah Data Customer');
+                $('[name="idCustomer"]').val(data.idCustomer);
+                $('[name="address"]').val(data.address);
+                $('#floatingCompany').val(data.companyName);
+                $('#floatingContact').val(data.contactNumber);
                 $('#floatingUsername').val(data.username);
-                $('#floatingNama').val(data.name);
-                $('#floatingPassword').attr('disabled', 'disabled');
-                $('#floatingSelect').val(data.level);
-                $('#floatingSelect').trigger('change');
-                $('#floatingToko').val(data.idToko);
-                $('#floatingToko').trigger('change');
-                save_method = 'editUser';
-                $('#modalTitleId').text('Edit Data User');
+                $('#floatingEmail').val(data.email);
+                $('#floatingPassword').removeAttr('required');
+                $('#sectionPassword').attr('style', 'display: none');
+                save_method = 'updateCustomer';
                 $('#modalId').modal('show');
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');
@@ -162,14 +156,13 @@
         });
     }
 
-    const deleteUser = ($idUser) => {
-        let x = confirm('Anda yakin menghapus data ini ?');
-        if (x) {
+    const deleteCustomer = (idCustomer) => {
+        if (confirm('Apakah anda yakin ingin menghapus data ini?')) {
             $.ajax({
-                url: base_url + 'user/deleteUser',
+                url: base_url + 'customer/deleteCustomer',
                 type: 'POST',
                 data: {
-                    idUser: $idUser
+                    idCustomer: idCustomer
                 },
                 dataType: 'JSON',
                 success: function(data) {
