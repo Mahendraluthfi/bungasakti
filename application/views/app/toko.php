@@ -47,7 +47,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="modalId" tabindex="-1" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

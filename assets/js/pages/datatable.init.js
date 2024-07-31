@@ -20,6 +20,10 @@ $(document).ready(function () {
 			scrollX: !0,
 			columnDefs: [{ width: "1%", targets: 0 }],
 		}),
+		$("#scroll-horizontal-datatable2").DataTable({
+			scrollX: !0,
+			columnDefs: [{ width: "1%", targets: 0 }],
+		}),
 		$("#complex-header-datatable").DataTable({
 			columnDefs: [{ visible: !1, targets: -1 }],
 		}),

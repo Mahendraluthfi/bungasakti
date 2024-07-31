@@ -102,7 +102,7 @@
                 <div id="sidebar-menu">
 
                     <div class="logo-box">
-                        <a href="index.html" class="logo logo-light">
+                        <a href="<?php echo base_url() ?>" class="logo logo-light">
                             <span class="logo-sm">
                                 <img src="<?php echo base_url() ?>assets/logo/flatlogo.png" alt="" height="30">
                             </span>
@@ -110,7 +110,7 @@
                                 <img src="<?php echo base_url() ?>assets/logo/flatlogo.png" alt="" height="45">
                             </span>
                         </a>
-                        <a href="index.html" class="logo logo-dark">
+                        <a href="<?php echo base_url() ?>" class="logo logo-dark">
                             <span class="logo-sm">
                                 <img src="<?php echo base_url() ?>assets/logo/flatlogo.png" alt="" height="30">
                             </span>
@@ -152,7 +152,7 @@
                                         <a href="<?php echo base_url('Barang') ?>" class="tp-link">Barang</a>
                                     </li>
                                     <li>
-                                        <a href="<?php echo base_url('Toko/stock') ?>" class="tp-link">Stock Toko</a>
+                                        <a href="<?php echo base_url('Stock') ?>" class="tp-link">Stock Toko</a>
                                     </li>
                                     <li>
                                         <a href="<?php echo base_url('Order') ?>" class="tp-link">Order</a>
