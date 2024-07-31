@@ -28,9 +28,26 @@ class Stock extends CI_Controller
         $getTokoById = $this->ModelToko->getTokoById($idToko);
         $data = array(
             'content' => 'app/stockView',
-            'getNamaToko' => $getTokoById->namaToko
+            'getNamaToko' => $getTokoById->namaToko,
+            'getStockByToko' => $this->ModelToko->getStockByToko($idToko)
         );
         $this->load->view('app/index', $data);
+    }
+
+    function getStockById()
+    {
+    }
+
+    function addStock()
+    {
+    }
+
+    function updateStock()
+    {
+    }
+
+    function deleteStock()
+    {
     }
 }
 

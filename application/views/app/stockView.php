@@ -78,13 +78,14 @@
     const addStock = () => {
         $('#modalId').modal('show');
         form.reset();
+        save_method = 'addStock';
         $('#modalTitleId').text('Tambah Stock Barang');
     }
 
     const save = () => {
         if (form.checkValidity == true) {
             $.ajax({
-                url: base_url,
+                url: base_url + 'stock/' + save_method,
                 type: 'POST',
                 dataType: 'JSON',
                 success: function(data) {},
@@ -97,10 +98,13 @@
         }
     }
 
-    const get = () => {
+    const get = (idStock) => {
         $.ajax({
-            url: base_url,
+            url: base_url + 'stock/getStockById',
             type: 'POST',
+            data: {
+                idStock: idStock,
+            },
             dataType: 'JSON',
             success: function(data) {},
             error: function(jqXHR, textStatus, errorThrown) {
@@ -109,10 +113,21 @@
         });
     }
 
-    const deleteStock = () => {
+    const deleteStock = (idStock) => {
         let x = confirm('Yakin hapus data ini ?');
         if (x) {
-
+            $.ajax({
+                url: base_url + 'stock/deleteStock',
+                type: 'POST',
+                data: {
+                    idStock: idStock,
+                },
+                dataType: 'JSON',
+                success: function(data) {},
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
         }
     }
 </script>

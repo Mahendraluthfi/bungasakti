@@ -44,6 +44,10 @@ class ModelToko extends CI_Model
             return false; // Return false if data was not deleted
         }
     }
+
+    function getStockByToko($idToko)
+    {
+    }
 }
 
 /* End of file ModelToko.php */
