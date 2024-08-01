@@ -18,6 +18,7 @@
     <link href="<?php echo base_url() ?>assets/libs/datatables.net-keytable-bs5/css/keyTable.bootstrap5.min.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() ?>assets/libs/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() ?>assets/libs/datatables.net-select-bs5/css/select.bootstrap5.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.0/dist/css/tom-select.css" rel="stylesheet">
 
     <!-- App css -->
     <link href="<?php echo base_url() ?>assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style">
@@ -154,6 +155,20 @@
                                     <li>
                                         <a href="<?php echo base_url('Stock') ?>" class="tp-link">Stock Toko</a>
                                     </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#transaction" data-bs-toggle="collapse">
+                                <i data-feather="shopping-cart"></i>
+                                <span> Transaksi </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="transaction">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a href="<?php echo base_url('Purchase') ?>" class="tp-link">Purchase Request</a>
+                                    </li>
                                     <li>
                                         <a href="<?php echo base_url('Order') ?>" class="tp-link">Order</a>
                                     </li>
@@ -168,12 +183,6 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
-                        <li>
-                            <a href="calendar.html" class="tp-link">
-                                <i data-feather="bell"></i>
-                                <span> Purchase Request </span>
-                            </a>
                         </li>
                         <li>
                             <a href="#report" data-bs-toggle="collapse">
@@ -276,7 +285,16 @@
     <!-- App js-->
     <script src="<?php echo base_url() ?>assets/js/app.js"></script>
     <script src="<?php echo base_url() ?>assets/js/pages/datatable.init.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.0/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        new TomSelect("#select-beast", {
+            create: false,
+            sortField: {
+                field: "text",
+                direction: "asc"
+            }
+        });
+    </script>
 </body>
 
 </html>

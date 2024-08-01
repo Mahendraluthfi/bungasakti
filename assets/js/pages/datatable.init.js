@@ -16,6 +16,9 @@ $(document).ready(function () {
 			scrollCollapse: !0,
 			paging: !1,
 		}),
+		$("#scroll-horizontal-datatable-zero").DataTable({
+			scrollX: !0,
+		}),
 		$("#scroll-horizontal-datatable").DataTable({
 			scrollX: !0,
 			columnDefs: [{ width: "1%", targets: 0 }],

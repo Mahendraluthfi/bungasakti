@@ -16,9 +16,13 @@ class Barang extends CI_Controller
 
     public function index()
     {
+        $getAllBarang = $this->ModelBarang->getAllBarang();
+        foreach ($getAllBarang as $key => $value) {
+            $value->valueStock = $this->db->query("SELECT SUM(qtyStock) as qty from toko_stock where idBarang='$value->idBarang'")->row();
+        }
         $data = array(
             'content' => 'app/barang',
-            'getAllBarang' => $this->ModelBarang->getAllBarang(),
+            'getAllBarang' => $getAllBarang,
         );
 
         $this->load->view('app/index', $data);

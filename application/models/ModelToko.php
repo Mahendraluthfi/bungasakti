@@ -47,6 +47,35 @@ class ModelToko extends CI_Model
 
     function getStockByToko($idToko)
     {
+        $this->db->select('toko_stock.*, master_barang.description, master_barang.uom, master_barang.type');
+        $this->db->from('toko_stock');
+        $this->db->join('master_barang', 'toko_stock.idBarang = master_barang.idBarang');
+        $this->db->where('idToko', $idToko);
+        $db = $this->db->get();
+        return $db->result();
+    }
+
+    function stockExist($idToko, $idBarang)
+    {
+        $data = $this->db->get_where('toko_stock', ['idToko' => $idToko, 'idBarang' => $idBarang]);
+        return ($data->num_rows() > 0) ? true : false; // Return true if stock exists, otherwise return false
+    }
+
+    function updateStock($idToko, $idBarang, $qtyStock)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->db->where('idToko', $idToko);
+        $this->db->where('idBarang', $idBarang);
+        $this->db->set('qtyStock', 'qtyStock +' . $qtyStock, FALSE);
+        $this->db->set('updatedAt', date('Y-m-d H:i:s'));
+        $this->db->update('toko_stock');
+        return $this->db->affected_rows() > 0; // Return true if stock was updated successfully, otherwise return false
+    }
+
+    function addStock($object)
+    {
+        $this->db->insert('toko_stock', $object);
+        return $this->db->affected_rows() > 0; // Return true if stock was inserted successfully, otherwise return false
     }
 }
 

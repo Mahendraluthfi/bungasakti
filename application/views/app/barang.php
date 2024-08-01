@@ -30,7 +30,7 @@
                                     <td><?php echo $data->barcode ?></td>
                                     <td><?php echo $data->mcRefrence ?></td>
                                     <td><?php echo $data->uom ?></td>
-                                    <td><?php echo $data->totalStock ?></td>
+                                    <td><?php echo ($data->valueStock->qty) ? $data->valueStock->qty : '0' ?></td>
                                     <td><?php echo $data->type ?></td>
                                     <td><?php echo $data->basePrice ?></td>
                                     <td>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         <select class="form-select" name="type" required id="floatingType" aria-label="Floating label select example">
-                            <option selected="">Pilih</option>
+                            <option value="" selected="">Pilih</option>
                             <option value="READY">READY</option>
                             <option value="CUSTOM">CUSTOM</option>
                         </select>

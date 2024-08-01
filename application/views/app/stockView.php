@@ -21,10 +21,27 @@
                                 <th>Satuan Unit</th>
                                 <th>Qty Stock</th>
                                 <th>Tipe</th>
+                                <th>Last_Update</th>
                                 <th>#</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <?php $no = 1;
+                            foreach ($getStockByToko as $data) { ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $data->description ?></td>
+                                    <td><?php echo $data->uom ?></td>
+                                    <td><?php echo $data->qtyStock ?></td>
+                                    <td><?php echo $data->type ?></td>
+                                    <td><?php echo $data->updatedAt ?></td>
+                                    <td>
+                                        <button type="button" onclick="historyPembelian('<?php echo $data->idStock ?>')" class="btn btn-warning btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="History Pembelian" tabindex="0"><i class="mdi mdi-history"></i></button>
+                                        <button type="button" onclick="detailStock('<?php echo $data->idStock ?>')" class="btn btn-success btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang" tabindex="0"><i class="mdi mdi-details"></i></button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
                     </table>
                     <hr>
                     <h4>History Pembelian Barang - <?php echo $getNamaToko ?></h4>
@@ -58,12 +75,29 @@
             </div>
             <div class="modal-body">
                 <form id="frmStock">
-
+                    <div class="row mb-3">
+                        <label for="inputIdBarang" class="col-sm-3 col-form-label">Barang</label>
+                        <div class="col-sm-9">
+                            <select name="idBarang" required id="select-beast">
+                                <option value="">Pilih</option>
+                                <?php foreach ($getAllBarang as $data) { ?>
+                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="qtyStock" class="col-sm-3 col-form-label">Qty Stock</label>
+                        <div class="col-sm-9">
+                            <input type="hidden" name="idToko" value="<?php echo $this->uri->segment(3) ?>">
+                            <input type="number" required min="1" name="qtyStock" class="form-control" placeholder="Qty Stock">
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" onclick="save()">Simpan</button>
             </div>
         </div>
     </div>
@@ -83,51 +117,22 @@
     }
 
     const save = () => {
-        if (form.checkValidity == true) {
+        if (form.checkValidity() == true) {
             $.ajax({
                 url: base_url + 'stock/' + save_method,
                 type: 'POST',
+                data: $('#frmStock').serialize(),
                 dataType: 'JSON',
-                success: function(data) {},
+                success: function(data) {
+                    location.reload();
+                    // console.log(data);
+                },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Error get data from ajax');
                 }
             });
         } else {
             form.reportValidity();
-        }
-    }
-
-    const get = (idStock) => {
-        $.ajax({
-            url: base_url + 'stock/getStockById',
-            type: 'POST',
-            data: {
-                idStock: idStock,
-            },
-            dataType: 'JSON',
-            success: function(data) {},
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            }
-        });
-    }
-
-    const deleteStock = (idStock) => {
-        let x = confirm('Yakin hapus data ini ?');
-        if (x) {
-            $.ajax({
-                url: base_url + 'stock/deleteStock',
-                type: 'POST',
-                data: {
-                    idStock: idStock,
-                },
-                dataType: 'JSON',
-                success: function(data) {},
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error get data from ajax');
-                }
-            });
         }
     }
 </script>

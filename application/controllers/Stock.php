@@ -11,7 +11,9 @@ class Stock extends CI_Controller
             redirect('appLogin', 'refresh');
         }
         date_default_timezone_set('Asia/Jakarta');
+        $this->load->library('Uuid');
         $this->load->model('ModelToko');
+        $this->load->model('ModelBarang');
     }
 
     public function index()
@@ -29,25 +31,36 @@ class Stock extends CI_Controller
         $data = array(
             'content' => 'app/stockView',
             'getNamaToko' => $getTokoById->namaToko,
-            'getStockByToko' => $this->ModelToko->getStockByToko($idToko)
+            'getStockByToko' => $this->ModelToko->getStockByToko($idToko),
+            'getAllBarang' => $this->ModelBarang->getAllBarang(),
         );
         $this->load->view('app/index', $data);
     }
 
-    function getStockById()
-    {
-    }
-
     function addStock()
     {
-    }
+        $idBarang = $this->input->post('idBarang');
+        $qtyStock = $this->input->post('qtyStock');
+        $idToko = $this->input->post('idToko');
+        $idStock = substr($this->uuid->v4(), 0, 8);
 
-    function updateStock()
-    {
-    }
+        $data = array(
+            'idStock' => $idStock,
+            'idToko' => $idToko,
+            'idBarang' => $idBarang,
+            'qtyStock' => $qtyStock,
+            'createdAt' => date('Y-m-d H:i:s'),
+        );
 
-    function deleteStock()
-    {
+        $checkStockExist = $this->ModelToko->stockExist($idToko, $idBarang);
+        if ($checkStockExist) {
+            $updateStock = $this->ModelToko->updateStock($idToko, $idBarang, $qtyStock);
+            echo ($updateStock) ? json_encode(true) : json_encode(false);
+        } else {
+            $addStock = $this->ModelToko->addStock($data);
+            echo ($addStock) ? json_encode(true) : json_encode(false);
+        }
+        // echo json_encode(true);
     }
 }
 
