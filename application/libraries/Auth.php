@@ -20,7 +20,7 @@ class Auth
 
     function is_logged_in_customer()
     {
-        if ($this->ci->session->userdata('sessionIdCustomer') == '' && $this->ci->session->userdata('sessionLoged') == '') {
+        if ($this->ci->session->userdata('sessionIdCustomer') == '' && $this->ci->session->userdata('sessionLoged') == '' && $this->ci->session->userdata('sessionUsernameCustomer') == '') {
             return false;
         }
         return true;

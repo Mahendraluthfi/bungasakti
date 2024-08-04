@@ -30,7 +30,7 @@
                                     <td><?php echo $data->address ?></td>
                                     <td><?php echo $data->contactNumber ?></td>
                                     <td>
-                                        <button type="button" onclick="get('<?php echo $data->idCustomer ?>')" class="btn btn-success btn-sm mb-1">
+                                        <button type="button" onclick="get('<?php echo $data->idCustomer ?>')" class="btn btn-success btn-sm">
                                             <i class="mdi mdi-pencil"></i> Edit
                                         </button>
                                         <button type="button" onclick="deleteCustomer('<?php echo $data->idCustomer ?>')" class="btn btn-danger btn-sm">

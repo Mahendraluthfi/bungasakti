@@ -42,6 +42,16 @@ class ModelCustomer extends CI_Model
             return false;
         }
     }
+
+    function getUserByEmail($email)
+    {
+        $query = $this->db->get_where('customer', array('email' => $email));
+        return $query->row();
+    }
+
+    function register()
+    {
+    }
 }
 
 /* End of file ModelCustomer.php */
