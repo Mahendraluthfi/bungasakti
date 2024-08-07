@@ -50,7 +50,7 @@ class ModelPurchase extends CI_Model
 
     function getDetailPurchase($idPR)
     {
-        $this->db->select('det_purchase_request.*, master_barang.description');
+        $this->db->select('det_purchase_request.*, master_barang.description, master_barang.mcRefrence');
         $this->db->from('det_purchase_request');
         $this->db->join('master_barang', 'master_barang.idBarang = det_purchase_request.idBarang', 'left');
         $this->db->where('idPR', $idPR);
@@ -106,6 +106,17 @@ class ModelPurchase extends CI_Model
             $this->db->update('purchase_request', ['isActive' => '0'], ['idPR' => $idPR]);
         }
         return $this->db->affected_rows() > 0;
+    }
+
+    function getAllPurchaseByCustomer($idCustomer)
+    {
+        $this->db->select('purchase_request.*, customer.companyName');
+        $this->db->from('purchase_request');
+        $this->db->join('customer', 'customer.idCustomer = purchase_request.idCustomer');
+        $this->db->where('purchase_request.isActive', '1');
+        $this->db->where('purchase_request.idCustomer', $idCustomer);
+        $db = $this->db->get();
+        return $db->result();
     }
 }
 

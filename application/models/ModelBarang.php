@@ -44,6 +44,17 @@ class ModelBarang extends CI_Model
             return false;
         }
     }
+
+    function getKartuStock($idBarang)
+    {
+        $this->db->select('toko_stock.*, master_barang.description, master_toko.namaToko');
+        $this->db->from('toko_stock');
+        $this->db->join('master_barang', 'toko_stock.idBarang = master_barang.idBarang');
+        $this->db->join('master_toko', 'toko_stock.idToko = master_toko.idToko');
+        $this->db->where('toko_stock.idBarang', $idBarang);
+        $db = $this->db->get();
+        return $db->result();
+    }
 }
 
 /* End of file ModelBarang.php */

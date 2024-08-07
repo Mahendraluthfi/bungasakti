@@ -30,7 +30,8 @@
                                     <td><?php echo $data->status ?></td>
                                     <td><?php echo $data->updatedAt ?></td>
                                     <td>
-                                        <button type="button" onclick="get('<?php echo $data->idPR ?>')" class="btn btn-info btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang" tabindex="0"><i class="mdi mdi-eye"></i></button>
+
+                                        <button type="button" onclick="get('<?php echo $data->idPR ?>')" class="btn btn-info btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang / Proses Order" tabindex="0"><i class="mdi mdi-eye"></i></button>
                                         <?php if ($data->status == "PENDING" || $data->status == "SUBMIT") { ?>
                                             <a href="<?php echo base_url('purchase/formEdit/' . $data->idPR) ?>" class="btn btn-warning btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Barang" tabindex="0"><i class="mdi mdi-pencil"></i></a>
                                         <?php } ?>
@@ -84,6 +85,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div id="btnProcced"></div>
                 <div class="table-responsive">
                     <table class="table table-light table-bordered table-sm">
                         <form id="frmPurchase">
@@ -134,14 +136,6 @@
     </div>
 </div>
 
-<!-- Optional: Place to the bottom of scripts -->
-<script>
-    const myModal = new bootstrap.Modal(
-        document.getElementById("modalId"),
-        options,
-    );
-</script>
-
 
 <script>
     let base_url = '<?php echo base_url(); ?>';
@@ -165,7 +159,15 @@
             },
             dataType: 'JSON',
             success: function(data) {
-                console.log(data);
+                // console.log(data);                
+                $('#btnProcced').html('');
+                if (data.getPRbyId.status == 'SUBMIT') {
+                    $('#btnProcced').html('<button type="button" onclick="procced(\'' + data.getPRbyId.idPR + '\')" class="btn btn-success mb-2"><i class="mdi mdi-cart-arrow-down"></i> Proses to Order</button>');
+                } else {
+                    $('#btnProcced').html('');
+                }
+
+                // $('#modalTitleId').text('Detail PR'+ data.get
                 $('.title-text').text('Detail PR ' + data.getPRbyId.idPR);
                 $('.companyName').text(data.getPRbyId.companyName);
                 $('.email').text(data.getPRbyId.email);
@@ -216,6 +218,13 @@
                     alert('Error get data from ajax');
                 }
             });
+        }
+    }
+
+    const procced = (idPR) => {
+        let x = confirm('Proses PR ini ke transaksi Order ?');
+        if (x) {
+            alert('OK');
         }
     }
 </script>

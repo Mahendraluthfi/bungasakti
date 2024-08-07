@@ -38,7 +38,7 @@ class Login extends CI_Controller
             redirect('clientHome');
         } else {
             $this->session->set_flashdata('msg', '
-            <div class="alert alert-danger" role="alert">
+            <div class="alert text-center alert-danger" role="alert">
                 <strong>Error. Email atau Password Salah! </strong>
             </div>');
             redirect('login');
@@ -68,19 +68,19 @@ class Login extends CI_Controller
         $isEmailExist = $this->ModelCustomer->getUserByEmail($email);
         if ($isEmailExist) {
             $this->session->set_flashdata('msg', '
-            <div class="alert alert-danger" role="alert">
+            <div class="alert text-center alert-danger" role="alert">
                 <strong>Error. Email sudah terdaftar !</strong>
             </div>');
         } else {
             $insertRow = $this->ModelCustomer->insertCustomer($data);
             if ($insertRow) {
                 $this->session->set_flashdata('msg', '
-                <div class="alert alert-success" role="alert">
+                <div class="alert text-center alert-success" role="alert">
                     <strong>Register Berhasil!</strong>
                 </div>');
             } else {
                 $this->session->set_flashdata('msg', '
-                <div class="alert alert-danger" role="alert">
+                <div class="alert text-center alert-danger" role="alert">
                     <strong>Error. Register Gagal!</strong>
                 </div>');
             }
@@ -93,6 +93,15 @@ class Login extends CI_Controller
     function logout()
     {
         session_destroy();
+        redirect('login');
+    }
+
+    function forgotPassword()
+    {
+        $this->session->set_flashdata('msg', '
+                <div class="alert text-center alert-danger" role="alert">
+                    <strong>Hubungi pihak Bunga Sakti untuk reset password !</strong>
+                </div>');
         redirect('login');
     }
 }

@@ -73,7 +73,7 @@
                                         <button class="btn btn-primary btn-block">Login</button>
                                     </div>
                                     <div class="col-6 d-flex align-items-center justify-content-end">
-                                        <a href="06_reset.html">Forgot password?</a>
+                                        <a href="<?php echo base_url('login/forgotPassword') ?>">Forgot password?</a>
                                     </div>
                                 </div>
                                 <?php echo form_close() ?>
@@ -166,6 +166,7 @@
         </div>
 
     </div>
+
 
     <script src="<?php echo base_url() ?>template/js/jquery.min.js"></script>
     <script src="<?php echo base_url() ?>template/js/bootstrap.min.js"></script>

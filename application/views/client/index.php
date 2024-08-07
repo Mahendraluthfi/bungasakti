@@ -79,7 +79,7 @@
                                 <!-- <div class="dropdown-divider"></div> -->
 
                                 <!-- item-->
-                                <a href="<?php echo base_url('appLogin/logout') ?>" class="dropdown-item notify-item">
+                                <a href="<?php echo base_url('login/logout') ?>" class="dropdown-item notify-item">
                                     <i class="mdi mdi-location-exit fs-16 align-middle"></i>
                                     <span>Logout</span>
                                 </a>

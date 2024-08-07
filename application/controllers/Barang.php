@@ -124,6 +124,17 @@ class Barang extends CI_Controller
             echo json_encode(false);
         }
     }
+
+    function viewKartuStock()
+    {
+        $idBarang = $this->input->post('idBarang');
+        $data = array(
+            'getBarangbyId' => $this->ModelBarang->getBarangById($idBarang),
+            'getKartuStock' => $this->ModelBarang->getKartuStock($idBarang),
+        );
+
+        echo json_encode($data);
+    }
 }
 
 /* End of file Barang.php */

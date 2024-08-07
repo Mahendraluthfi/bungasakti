@@ -99,6 +99,43 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modalKartuStock" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollabl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleKartu"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <b>Nama Barang :</b>
+                <h5 id="namaBarang" class="mb-2"></h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nama Toko</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbKartu"></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Place to the bottom of scripts -->
+<script>
+    const myModal = new bootstrap.Modal(
+        document.getElementById("modalId"),
+        options,
+    );
+</script>
+
+
 <script>
     let base_url = '<?php echo base_url() ?>';
     let save_method;
@@ -174,5 +211,32 @@
                 }
             });
         }
+    }
+
+    const viewKartuStok = (idBarang) => {
+        $.ajax({
+            url: base_url + 'barang/viewKartuStock',
+            type: 'POST',
+            data: {
+                idBarang: idBarang
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                let html;
+                for (let i = 0; i < data.getKartuStock.length; i++) {
+                    html += "<tr>" +
+                        "<td>" + data.getKartuStock[i].namaToko + "</td>" +
+                        "<td>" + data.getKartuStock[i].qtyStock + "</td>" +
+                        "</tr>";
+                }
+                $('#tbKartu').html(html);
+                $('#modalTitleKartu').text('Kartu Stok Barang');
+                $('#namaBarang').text(data.getBarangbyId.description);
+                $('#modalKartuStock').modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
     }
 </script>

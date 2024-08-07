@@ -6,8 +6,8 @@
                     <div class="d-flex justify-content-between">
                         <h4>Form - PR No. <?php echo strtoupper($getCurrentPurchase->idPR) ?></h4>
                         <nav class="breadcrumb">
-                            <a class="breadcrumb-item" href="<?php echo base_url() ?>">Dashboard</a>
-                            <a class="breadcrumb-item" href="<?php echo base_url('Purchase') ?>">Purchase Request</a>
+                            <a class="breadcrumb-item" href="<?php echo base_url('clientHome') ?>">Dashboard</a>
+                            <a class="breadcrumb-item" href="<?php echo base_url('clientPurchase') ?>">Purchase Request</a>
                             <span class="breadcrumb-item active" aria-current="page">Edit Form</span>
                         </nav>
                     </div>
@@ -62,7 +62,6 @@
                             <tr>
                                 <td>No</td>
                                 <td>Barang</td>
-                                <td>Mat.Code</td>
                                 <td>Custom Request</td>
                                 <td>Qty</td>
                                 <td>Keterangan</td>
@@ -76,7 +75,6 @@
                                 <tr>
                                     <td><?php echo $no++ ?></td>
                                     <td><?php echo $data->description ?></td>
-                                    <td><?php echo $data->mcRefrence ?></td>
                                     <td><?php echo $data->descriptionCustom ?></td>
                                     <td><?php echo $data->qtyOrder ?></td>
                                     <td><?php echo $data->remark ?></td>
@@ -89,7 +87,7 @@
                         </tbody>
                     </table>
 
-                    <a href="<?php echo base_url('purchase/submitPR/' . $getCurrentPurchase->idPR) ?>" class="btn btn-dark mt-2" onclick="return confirm('Apakah anda yakin untuk Submit PR ini ?')">Submit PR</a>
+                    <a href="<?php echo base_url('clientPurchase/submitPR/' . $getCurrentPurchase->idPR) ?>" class="btn btn-dark mt-2" onclick="return confirm('Apakah anda yakin untuk Submit PR ini ?')">Submit PR</a>
                 </div>
             </div>
         </div>
@@ -112,7 +110,7 @@
                                 <option value="">Pilih</option>
                                 <option value="CUSTOM">Lainnya / Custom Barang</option>
                                 <?php foreach ($getAllBarang as $data) { ?>
-                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?> / <?php echo $data->mcRefrence ?></option>
+                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -182,7 +180,7 @@
     const save = () => {
         if (form.checkValidity() == true) {
             $.ajax({
-                url: base_url + 'purchase/' + save_method,
+                url: base_url + 'clientPurchase/' + save_method,
                 type: 'POST',
                 data: $('#frmAddBarang').serialize(),
                 dataType: 'JSON',
@@ -201,7 +199,7 @@
 
     const get = (idDetPR) => {
         $.ajax({
-            url: base_url + 'purchase/getDetPRbyID',
+            url: base_url + 'clientPurchase/getDetPRbyID',
             type: 'POST',
             data: {
                 idDetPR: idDetPR
@@ -251,7 +249,7 @@
         let x = confirm('Hapus data ini ?');
         if (x) {
             $.ajax({
-                url: base_url + 'purchase/deleteDetPR',
+                url: base_url + 'clientPurchase/deleteDetPR',
                 type: 'POST',
                 data: {
                     idDetPR: idDetPR
@@ -269,7 +267,7 @@
 
     const update = () => {
         $.ajax({
-            url: base_url + 'purchase/updateForm',
+            url: base_url + 'clientPurchase/updateForm',
             type: 'POST',
             data: $('#frmPurchase').serialize(),
             dataType: 'JSON',

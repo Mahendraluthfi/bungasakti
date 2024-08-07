@@ -62,6 +62,7 @@
                             <tr>
                                 <td>No</td>
                                 <td>Barang</td>
+                                <td>Mat.Code</td>
                                 <td>Custom Request</td>
                                 <td>Qty</td>
                                 <td>Keterangan</td>
@@ -75,6 +76,7 @@
                                 <tr>
                                     <td><?php echo $no++ ?></td>
                                     <td><?php echo $data->description ?></td>
+                                    <td><?php echo $data->mcRefrence ?></td>
                                     <td><?php echo $data->descriptionCustom ?></td>
                                     <td><?php echo $data->qtyOrder ?></td>
                                     <td><?php echo $data->remark ?></td>
@@ -110,7 +112,7 @@
                                 <option value="">Pilih</option>
                                 <option value="CUSTOM">Lainnya / Custom Barang</option>
                                 <?php foreach ($getAllBarang as $data) { ?>
-                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?></option>
+                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?> / <?php echo $data->mcRefrence ?></option>
                                 <?php } ?>
                             </select>
                         </div>
