@@ -16,8 +16,8 @@ class Purchase extends CI_Controller
         $this->load->model('ModelPurchase');
         $this->load->model('ModelCustomer');
         $this->load->model('ModelBarang');
+        $this->load->model('ModelOrder');
     }
-
 
     public function index()
     {
@@ -49,7 +49,7 @@ class Purchase extends CI_Controller
                 'content' => 'app/purchaseForm',
                 'getCurrentPurchase' => $getCurrentPurchase,
                 'getDetailPurchase' => $getDetailPurchase,
-                'getAllBarang' => $this->ModelBarang->getAllBarang(),
+                'getAllBarang' => $this->ModelBarang->getAllBarangReady(),
             );
             $this->load->view('app/index', $data);
             // echo json_encode($data);
@@ -66,7 +66,7 @@ class Purchase extends CI_Controller
             'content' => 'app/purchaseFormEdit',
             'getCurrentPurchase' => $getPRbyId,
             'getDetailPurchase' => $getDetailPurchase,
-            'getAllBarang' => $this->ModelBarang->getAllBarang(),
+            'getAllBarang' => $this->ModelBarang->getAllBarangReady(),
         );
         $this->load->view('app/index', $data);
     }
@@ -245,6 +245,55 @@ class Purchase extends CI_Controller
             $this->session->set_flashdata('msg', '
             <div class="alert alert-danger" role="alert">
                 <strong>Gagal hapus PR!</strong>
+            </div>');
+            echo json_encode(false);
+        }
+    }
+
+    function proccedOrder()
+    {
+        $idPR = $this->input->post('idPR');
+        $getPRbyId = $this->ModelPurchase->getPRbyId($idPR);
+        $idMasterOrder = substr($this->uuid->v4(), 0, 8);
+        $objectOrder = array(
+            'idMasterOrder' => $idMasterOrder,
+            'idCustomer' => $getPRbyId->idCustomer,
+            'idPR' => $idPR,
+            'status' => 'PROSES',
+            'createdAt' => date('Y-m-d H:i:s'),
+        );
+
+        $insertOrder = $this->ModelOrder->insertOrderbyPR($objectOrder);
+        $getDetailPurchase = $this->ModelPurchase->getDetailPurchase($idPR);
+
+        foreach ($getDetailPurchase as $key => $value) {
+            if ($value->idBarang !== null) {
+                $total = $value->qtyOrder * $value->basePrice;
+
+                $this->db->insert('det_master_order', [
+                    'idMasterOrder' => $idMasterOrder,
+                    'idBarang' => $value->idBarang,
+                    'qtyOrder' => $value->qtyOrder,
+                    'qtyBalance' => $value->qtyOrder,
+                    'fixedPrice' => $value->basePrice,
+                    'total' => $total,
+                    'createdAt' => date('Y-m-d H:i:s')
+                ]);
+            }
+        }
+
+        $this->db->update('purchase_request', ['status' => 'ORDER'], ['idPR' => $idPR]);
+
+        if ($insertOrder) {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Proses order berhasil!</strong>
+            </div>');
+            echo json_encode(true);
+        } else {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger" role="alert">
+                <strong>Gagal proses order!</strong>
             </div>');
             echo json_encode(false);
         }

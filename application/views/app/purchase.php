@@ -224,7 +224,21 @@
     const procced = (idPR) => {
         let x = confirm('Proses PR ini ke transaksi Order ?');
         if (x) {
-            alert('OK');
+            // alert('OK');
+            $.ajax({
+                url: base_url + 'purchase/proccedOrder',
+                type: 'POST',
+                data: {
+                    idPR: idPR,
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
         }
     }
 </script>

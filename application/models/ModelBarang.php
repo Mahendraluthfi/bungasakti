@@ -8,6 +8,11 @@ class ModelBarang extends CI_Model
         return $this->db->get_where('master_barang', ['isActive' => '1'])->result();
     }
 
+    function getAllBarangReady()
+    {
+        return $this->db->get_where('master_barang', ['isActive' => '1', 'type' => 'READY'])->result();
+    }
+
     function insertBarang($object)
     {
         $this->db->insert('master_barang', $object);
