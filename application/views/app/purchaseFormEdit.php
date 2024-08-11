@@ -65,6 +65,7 @@
                                 <td>Mat.Code</td>
                                 <td>Custom Request</td>
                                 <td>Qty</td>
+                                <td>Tipe</td>
                                 <td>Keterangan</td>
                                 <td>#</td>
                             </tr>
@@ -79,6 +80,7 @@
                                     <td><?php echo $data->mcRefrence ?></td>
                                     <td><?php echo $data->descriptionCustom ?></td>
                                     <td><?php echo $data->qtyOrder ?></td>
+                                    <td><?php echo $data->type ?></td>
                                     <td><?php echo $data->remark ?></td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-primary" onclick="get(<?php echo $data->idDetPR ?>)"><i class="mdi mdi-pencil"></i></button>

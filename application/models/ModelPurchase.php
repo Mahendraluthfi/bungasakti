@@ -50,7 +50,7 @@ class ModelPurchase extends CI_Model
 
     function getDetailPurchase($idPR)
     {
-        $this->db->select('det_purchase_request.*, master_barang.description, master_barang.mcRefrence, master_barang.basePrice');
+        $this->db->select('det_purchase_request.*, master_barang.description, master_barang.mcRefrence, master_barang.basePrice, master_barang.type');
         $this->db->from('det_purchase_request');
         $this->db->join('master_barang', 'master_barang.idBarang = det_purchase_request.idBarang', 'left');
         $this->db->where('idPR', $idPR);

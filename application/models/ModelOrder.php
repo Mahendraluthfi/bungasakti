@@ -18,6 +18,42 @@ class ModelOrder extends CI_Model
         $this->db->insert('master_order', $object);
         return $this->db->affected_rows() > 0;
     }
+
+    function getOrderById($idMasterOrder)
+    {
+        $this->db->select('master_order.*, customer.companyName, customer.email, customer.contactNumber');
+        $this->db->from('master_order');
+        $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');
+        $this->db->where('idMasterOrder', $idMasterOrder);
+        $db = $this->db->get();
+        return $db->row();
+    }
+
+    function getOrderListById($idMasterOrder)
+    {
+        $this->db->select('det_master_order.*, master_barang.description, master_barang.mcRefrence');
+        $this->db->from('det_master_order');
+        $this->db->join('master_barang', 'master_barang.idBarang = det_master_order.idBarang');
+        $this->db->where('det_master_order.idMasterOrder', $idMasterOrder);
+        $db = $this->db->get();
+        return $db->result();
+    }
+
+    function checkBarangNotInMaster($idPR)
+    {
+        $this->db->select('*');
+        $this->db->from('det_purchase_request');
+        $this->db->where('idPR', $idPR);
+        $this->db->where('idBarang', null);
+        $db = $this->db->get();
+        return $db->result();
+    }
+
+    function insertDetMasterOrder($object)
+    {
+        $this->db->insert('det_master_order', $object);
+        return $this->db->affected_rows() > 0;
+    }
 }
 
 /* End of file ModelOrder.php */

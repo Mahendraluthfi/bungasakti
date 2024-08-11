@@ -127,14 +127,6 @@
     </div>
 </div>
 
-<!-- Optional: Place to the bottom of scripts -->
-<script>
-    const myModal = new bootstrap.Modal(
-        document.getElementById("modalId"),
-        options,
-    );
-</script>
-
 
 <script>
     let base_url = '<?php echo base_url() ?>';

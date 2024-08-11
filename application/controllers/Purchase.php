@@ -49,7 +49,7 @@ class Purchase extends CI_Controller
                 'content' => 'app/purchaseForm',
                 'getCurrentPurchase' => $getCurrentPurchase,
                 'getDetailPurchase' => $getDetailPurchase,
-                'getAllBarang' => $this->ModelBarang->getAllBarangReady(),
+                'getAllBarang' => $this->ModelBarang->getAllBarang(),
             );
             $this->load->view('app/index', $data);
             // echo json_encode($data);
@@ -66,7 +66,7 @@ class Purchase extends CI_Controller
             'content' => 'app/purchaseFormEdit',
             'getCurrentPurchase' => $getPRbyId,
             'getDetailPurchase' => $getDetailPurchase,
-            'getAllBarang' => $this->ModelBarang->getAllBarangReady(),
+            'getAllBarang' => $this->ModelBarang->getAllBarang(),
         );
         $this->load->view('app/index', $data);
     }

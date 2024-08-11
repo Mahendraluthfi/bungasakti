@@ -37,7 +37,10 @@
                                     <td><?php echo $data->poRefrence ?></td>
                                     <td><?php echo $data->status ?></td>
                                     <td>Rp. <?php echo number_format($data->totalOrder->totalOrder) ?></td>
-                                    <td></td>
+                                    <td>
+                                        <a href="<?php echo base_url('order/editOrder/' . $data->idMasterOrder) ?>" class="btn btn-warning btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0"><i class="mdi mdi-pencil"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteData('<?php echo $data->idMasterOrder ?>')" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Order" tabindex="0"><i class="mdi mdi-trash-can"></i></button>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>
@@ -47,3 +50,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    let base_url = '<?php echo base_url(); ?>';
+    const deleteData = (idMasterOrder) => {
+        //
+    }
+</script>

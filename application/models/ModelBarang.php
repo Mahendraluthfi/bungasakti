@@ -60,6 +60,8 @@ class ModelBarang extends CI_Model
         $db = $this->db->get();
         return $db->result();
     }
+
+    function isIssuedStock($idDetOrder) {}
 }
 
 /* End of file ModelBarang.php */

@@ -125,6 +125,7 @@
                                 <td>Barang</td>
                                 <td>Custom Request</td>
                                 <td>Qty</td>
+                                <td>Tipe</td>
                                 <td>Keterangan</td>
                             </tr>
                         </thead>
@@ -182,11 +183,13 @@
                 for (let i = 0; i < data.getDetailPurchase.length; i++) {
                     let namaBarang = data.getDetailPurchase[i].description ? data.getDetailPurchase[i].description : '';
                     let namaBarangCustom = data.getDetailPurchase[i].descriptionCustom ? data.getDetailPurchase[i].descriptionCustom : '';
+                    let type = (data.getDetailPurchase[i].type) ? data.getDetailPurchase[i].type : '';
                     html += '<tr>' +
                         '<td>' + no++ + '</td>' +
                         '<td>' + namaBarang + '</td>' +
                         '<td>' + namaBarangCustom + '</td>' +
                         '<td>' + data.getDetailPurchase[i].qtyOrder + '</td>' +
+                        '<td>' + type + '</td>' +
                         '<td>' + data.getDetailPurchase[i].remark + '</td>' +
                         '</tr>';
                 }
