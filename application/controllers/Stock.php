@@ -32,7 +32,7 @@ class Stock extends CI_Controller
             'content' => 'app/stockView',
             'getNamaToko' => $getTokoById->namaToko,
             'getStockByToko' => $this->ModelToko->getStockByToko($idToko),
-            'getAllBarang' => $this->ModelBarang->getAllBarang(),
+            'getAllBarang' => $this->ModelBarang->getAllBarangReady(),
         );
         $this->load->view('app/index', $data);
     }

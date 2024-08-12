@@ -85,16 +85,17 @@
                             </div>
                             <button type="button" class="btn btn-primary btn-sm" onclick="addBarang()"><i class="mdi mdi-plus"></i> Tambah Barang</button>
                         </div>
-                        <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap">
+                        <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap table-sm">
                             <thead>
-                                <tr>
+                                <tr class="fw-bold">
                                     <td>No</td>
                                     <td>Barang</td>
                                     <td>Mat.Code</td>
+                                    <td>Tipe</td>
                                     <td>Qty Order</td>
-                                    <td>Blc Order</td>
                                     <td>Price</td>
                                     <td>Total</td>
+                                    <td>Stock Take</td>
                                     <td>Status</td>
                                     <td>#</td>
                                 </tr>
@@ -106,16 +107,20 @@
                                         <td><?php echo $no++; ?></td>
                                         <td><?php echo $data->description ?></td>
                                         <td><?php echo $data->mcRefrence ?></td>
-                                        <td><?php echo $data->qtyOrder ?></td>
-                                        <td><?php echo $data->qtyBalance ?></td>
+                                        <td><?php echo substr($data->type, 0, 1) ?></td>
+                                        <td><?php echo $data->qtyBalance . '/' . $data->qtyOrder ?></td>
                                         <td><?php echo number_format($data->fixedPrice) ?></td>
                                         <td><?php echo number_format($data->total) ?></td>
                                         <td></td>
                                         <td>
-                                            <button type="button" class="btn btn-info btn-sm"><i class="mdi mdi-pencil" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0"></i></button>
-                                            <button type="button" class="btn btn-secondary btn-sm"><i class="mdi mdi-store" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Atur Stock Order" tabindex="0"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-delete" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Item" tabindex="0"></i></button>
-
+                                            <?php echo ($data->statusQty == 1) ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-danger">PENDING</span>' ?>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-info btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0"><i class="mdi mdi-pencil"></i></button>
+                                            <?php if ($data->type == "READY") { ?>
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Atur Stock Order" tabindex="0" onclick="aturStock('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-store"></i></button>
+                                            <?php } ?>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Item" tabindex="0"><i class="mdi mdi-delete"></i></button>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -195,7 +200,7 @@
                             <select name="idBarang" id="select-beast" required>
                                 <option value="">Pilih</option>
                                 <?php foreach ($getAllBarang as $data) { ?>
-                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?> / <?php echo $data->mcRefrence ?></option>
+                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?> / <?php echo $data->mcRefrence ?> / <?php echo $data->type ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -218,6 +223,60 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modalAturStock" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Atur Stock Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmAturStock">
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Barang</label>
+                        <div class="col-sm-9">
+                            <!-- <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"> -->
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Qty Order</label>
+                        <div class="col-sm-9"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Atur Stock</label>
+                        <div class="col-sm-9"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Ambil Qty</label>
+                        <div class="col-sm-9"></div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-sm table-condensed py-2">
+                    <thead>
+                        <tr>
+                            <td>Toko</td>
+                            <td>Ambil Stock</td>
+                            <td>Datetime</td>
+                            <td>#</td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbAturStock"></tbody>
+                </table>
+                <button type="button" class="btn btn-secondary">Validasi Atur Stock</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     let base_url = '<?php echo base_url(); ?>';
@@ -309,5 +368,31 @@
         } else {
             formOrder.reportValidity();
         }
+    }
+
+    const aturStock = (idDetOrder) => {
+        $.ajax({
+            url: base_url + 'order/aturStock',
+            type: 'POST',
+            data: {
+                idDetOrder: idDetOrder
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                console.log(data);
+                $('#modalAturStock').modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    function showTableAturStock($idDetOrder) {
+
+    }
+
+    const issuedStock = () => {
+
     }
 </script>

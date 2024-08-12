@@ -77,6 +77,15 @@ class ModelToko extends CI_Model
         $this->db->insert('toko_stock', $object);
         return $this->db->affected_rows() > 0; // Return true if stock was inserted successfully, otherwise return false
     }
+
+    function getStockByIdBarang($idBarang)
+    {
+        $this->db->select('toko_stock.*, master_toko.namaToko');
+        $this->db->from('toko_stock');
+        $this->db->join('master_toko', 'master_toko.idToko = toko_stock.idToko');
+        $this->db->where('toko_stock.idBarang', $idBarang);
+        return $this->db->get()->result();
+    }
 }
 
 /* End of file ModelToko.php */

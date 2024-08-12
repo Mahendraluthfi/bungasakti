@@ -31,7 +31,7 @@ class ModelOrder extends CI_Model
 
     function getOrderListById($idMasterOrder)
     {
-        $this->db->select('det_master_order.*, master_barang.description, master_barang.mcRefrence');
+        $this->db->select('det_master_order.*, master_barang.description, master_barang.mcRefrence, master_barang.type');
         $this->db->from('det_master_order');
         $this->db->join('master_barang', 'master_barang.idBarang = det_master_order.idBarang');
         $this->db->where('det_master_order.idMasterOrder', $idMasterOrder);
@@ -53,6 +53,16 @@ class ModelOrder extends CI_Model
     {
         $this->db->insert('det_master_order', $object);
         return $this->db->affected_rows() > 0;
+    }
+
+    function getDetOrderById($idDetOrder)
+    {
+        $this->db->select('det_master_order.*, master_barang.description');
+        $this->db->from('det_master_order');
+        $this->db->join('master_barang', 'master_barang.idBarang = det_master_order.idBarang');
+        $this->db->where('det_master_order.idDetOrder', $idDetOrder);
+        $db = $this->db->get();
+        return $db->row();
     }
 }
 

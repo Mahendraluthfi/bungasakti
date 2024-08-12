@@ -14,6 +14,7 @@ class Order extends CI_Controller
         $this->load->model('ModelPurchase');
         $this->load->model('ModelBarang');
         $this->load->model('ModelOrder');
+        $this->load->model('ModelToko');
     }
 
     public function index()
@@ -102,6 +103,7 @@ class Order extends CI_Controller
             'qtyBalance' => $qtyOrder,
             'fixedPrice' => $basePrice,
             'total' => $total,
+            'statusQty' => ($type == "CUSTOM") ? 1 : 0,
             'createdAt' => date('Y-m-d H:i:s')
         ]);
         $dataDetPR = array(
@@ -112,7 +114,7 @@ class Order extends CI_Controller
         if ($insertRow && $updateRow) {
             $this->session->set_flashdata('msg', '
             <div class="alert alert-success" role="alert">
-                <strong>Simpan barang berhasil!</strong>
+                <strong>Simpan master barang berhasil!</strong>
             </div>');
             echo json_encode(true);
         } else {
@@ -137,6 +139,7 @@ class Order extends CI_Controller
             'qtyOrder' => $qtyOrder,
             'qtyBalance' => $qtyOrder,
             'fixedPrice' => $getBarangById->basePrice,
+            'statusQty' => ($getBarangById->type == "CUSTOM") ? 1 : 0,
             'total' => $total,
             'createdAt' => date('Y-m-d H:i:s')
         );
@@ -154,6 +157,18 @@ class Order extends CI_Controller
             </div>');
             echo json_encode(false);
         }
+    }
+
+    function aturStock()
+    {
+        $idDetOrder = $this->input->post('idDetOrder');
+        $getDetOrderById = $this->ModelOrder->getDetOrderById($idDetOrder);
+        $getStockByIdBarang = $this->ModelToko->getStockByIdBarang($getDetOrderById->idBarang);
+        $data = [
+            'getDetOrderById' => $getDetOrderById,
+            'getStockByIdBarang' => $getStockByIdBarang,
+        ];
+        echo json_encode($data);
     }
 }
 
