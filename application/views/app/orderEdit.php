@@ -111,7 +111,13 @@
                                         <td><?php echo $data->qtyBalance . '/' . $data->qtyOrder ?></td>
                                         <td><?php echo number_format($data->fixedPrice) ?></td>
                                         <td><?php echo number_format($data->total) ?></td>
-                                        <td></td>
+                                        <td>
+                                            <?php if ($data->getStockIssuedByDetOrder) {
+                                                foreach ($data->getStockIssuedByDetOrder as $datarow) { ?>
+                                                    <span class="badge bg-dark" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="<?php echo $datarow->namaToko ?>" tabindex="0"><?php echo $datarow->qtyIssued ?></span>
+                                            <?php }
+                                            } ?>
+                                        </td>
                                         <td>
                                             <?php echo ($data->statusQty == 1) ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-danger">PENDING</span>' ?>
                                         </td>
@@ -237,31 +243,38 @@
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">Barang</label>
                         <div class="col-sm-9">
-                            <!-- <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com"> -->
+                            <input type="text" readonly class="form-control-plaintext description">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">Qty Order</label>
-                        <div class="col-sm-9"></div>
+                        <div class="col-sm-9">
+                            <input type="text" readonly class="form-control-plaintext qtyOrder">
+                        </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">Atur Stock</label>
-                        <div class="col-sm-9"></div>
+                        <div class="col-sm-9">
+                            <select name="pilihStock" required class="form-control"></select>
+                        </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label">Ambil Qty</label>
-                        <div class="col-sm-9"></div>
+                        <div class="col-sm-9">
+                            <input type="number" required min="0" name="ambilStock" class="form-control" placeholder="Masukkan Qty">
+                            <input type="hidden" name="idDetOrder">
+                        </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-
+                            <button type="button" onclick="atur()" class="btn btn-dark">Atur</button>
                         </div>
                     </div>
                 </form>
                 <table class="table table-sm table-condensed py-2">
                     <thead>
-                        <tr>
+                        <tr class="fw-bold">
                             <td>Toko</td>
                             <td>Ambil Stock</td>
                             <td>Datetime</td>
@@ -270,7 +283,7 @@
                     </thead>
                     <tbody id="tbAturStock"></tbody>
                 </table>
-                <button type="button" class="btn btn-secondary">Validasi Atur Stock</button>
+                <button type="button" class="btn btn-secondary" onclick="validasiStock()">Validasi Atur Stock</button>
 
             </div>
         </div>
@@ -282,6 +295,8 @@
     let base_url = '<?php echo base_url(); ?>';
     let form = document.getElementById('frmBarang');
     let formOrder = document.getElementById('frmAddBarang');
+    let formAturStock = document.getElementById('frmAturStock');
+    let maxAmbil;
     const updatePO = () => {
         let poRefrence = $('[name="poRefrence"]').val();
         let idMasterOrder = $('[name="idMasterOrder"]').val();
@@ -371,6 +386,12 @@
     }
 
     const aturStock = (idDetOrder) => {
+        getAturStock(idDetOrder);
+        showTableAturStock(idDetOrder);
+        $('#modalAturStock').modal('show');
+    }
+
+    function getAturStock(idDetOrder) {
         $.ajax({
             url: base_url + 'order/aturStock',
             type: 'POST',
@@ -379,8 +400,25 @@
             },
             dataType: 'JSON',
             success: function(data) {
-                console.log(data);
-                $('#modalAturStock').modal('show');
+                // console.log(data);
+                $('.description').val(data.getDetOrderById.description);
+                $('.qtyOrder').val(data.getDetOrderById.qtyOrder);
+                $('[name="idDetOrder"]').val(idDetOrder);
+                let html;
+                html = `<option value="">Pilih</option>`;
+                for (let i = 0; i < data.getStockByIdBarang.length; i++) {
+                    html += `<option value="${data.getStockByIdBarang[i].idStock}" data-qty-stock="${data.getStockByIdBarang[i].qtyStock}">${data.getStockByIdBarang[i].namaToko+' ['+data.getStockByIdBarang[i].qtyStock+']'}</option>`;
+                }
+                $('[name="pilihStock"]').html(html);
+                $('[name="pilihStock"]').on('change', function() {
+                    let selectedOption = $(this).find(':selected');
+                    if (selectedOption.val()) {
+                        // Approach 1: Using data attributes                        
+                        let qtyStock = selectedOption.data('qty-stock');
+                        maxAmbil = qtyStock;
+                        // console.log(maxAmbil);
+                    }
+                });
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');
@@ -388,11 +426,100 @@
         });
     }
 
-    function showTableAturStock($idDetOrder) {
-
+    function showTableAturStock(idDetOrder) {
+        $.ajax({
+            url: base_url + 'order/showStockIssued',
+            type: 'POST',
+            data: {
+                idDetOrder: idDetOrder
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                let html;
+                $('#tbAturStock').html('');
+                for (let i = 0; i < data.length; i++) {
+                    html += `<tr>
+                            <td>${data[i].namaToko}</td>
+                            <td>${data[i].qtyIssued}</td>
+                            <td>${data[i].createdAt}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="hapusAtur('${data[i].id}','${data[i].idDetOrder}')">X</button>
+                            </td>
+                        </tr>`;
+                }
+                $('#tbAturStock').html(html);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
     }
 
-    const issuedStock = () => {
+    const atur = () => {
+        if (formAturStock.checkValidity() == true) {
+            let inputQty = $('[name="ambilStock"]').val();
+            if (inputQty > maxAmbil) {
+                alert('Ambil Stock melebihi Qty yang tersedia!');
+            } else {
+                $.ajax({
+                    url: base_url + 'order/stockIssued',
+                    type: 'POST',
+                    data: $('#frmAturStock').serialize(),
+                    dataType: 'JSON',
+                    success: function(data) {
+                        // location.reload();
+                        $('[name="ambilStock"]').val('');
+                        showTableAturStock(data.idDetOrder);
+                        getAturStock(data.idDetOrder);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Error get data from ajax');
+                    }
+                });
+            }
+        } else {
+            formAturStock.reportValidity();
+        }
+    }
 
+    const hapusAtur = (id, idDetOrder) => {
+        let x = confirm('Hapus data ini ?');
+        if (x) {
+            $.ajax({
+                url: base_url + 'order/hapusAtur',
+                type: 'POST',
+                data: {
+                    id: id
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    // location.reload();
+                    showTableAturStock(idDetOrder);
+                    getAturStock(idDetOrder);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        }
+    }
+    const validasiStock = () => {
+        let idDetOrder = $('[name="idDetOrder"]').val();
+        // alert(idDetOrder);
+        $.ajax({
+            url: base_url + 'order/stockValidation',
+            type: 'POST',
+            data: {
+                idDetOrder: idDetOrder
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                location.reload();
+                // console.log(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
     }
 </script>

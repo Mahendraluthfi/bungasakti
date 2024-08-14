@@ -36,9 +36,9 @@ class Order extends CI_Controller
         if ($idMasterOrder) {
             $getOrderById = $this->ModelOrder->getOrderById($idMasterOrder);
             $getListOrderById = $this->ModelOrder->getOrderListById($idMasterOrder);
-            // foreach ($getListOrderById as $key => $value) {
-            //     $value->isIssued = $this->ModelOrder->isIssuedStock($value->idDetOrder);
-            // }
+            foreach ($getListOrderById as $key => $value) {
+                $value->getStockIssuedByDetOrder = $this->ModelOrder->getStockIssuedByDetOrder($value->idDetOrder);
+            }
             $getPR = $getOrderById->idPR;
             $data = array(
                 'content' => 'app/orderEdit',
@@ -169,6 +169,77 @@ class Order extends CI_Controller
             'getStockByIdBarang' => $getStockByIdBarang,
         ];
         echo json_encode($data);
+    }
+
+    function stockIssued()
+    {
+        $idDetOrder = $this->input->post('idDetOrder');
+        $idStock = $this->input->post('pilihStock');
+        $qtyIssued = $this->input->post('ambilStock');
+        $data = [
+            'idStock' => $idStock,
+            'qtyIssued' => $qtyIssued,
+            'idDetOrder' => $idDetOrder,
+            'createdAt' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->db->insert('stock_issued', $data);
+
+        // $this->db->set("updateAt", date('Y-m-d H:i:s'));
+        $this->db->set("qtyStock", "qtyStock - $qtyIssued", FALSE);
+        $this->db->where('idStock', $idStock);
+        $this->db->update('toko_stock');
+
+        echo json_encode(['idDetOrder' => $idDetOrder]);
+    }
+
+    function showStockIssued()
+    {
+        $idDetOrder = $this->input->post('idDetOrder');
+        // $idDetOrder = $id;
+        $getStockIssuedByDetOrder = $this->ModelOrder->getStockIssuedByDetOrder($idDetOrder);
+        echo json_encode($getStockIssuedByDetOrder);
+    }
+
+    function hapusAtur()
+    {
+        $id = $this->input->post('id');
+        $get = $this->db->get_where('stock_issued', ['id' => $id])->row();
+
+        // $this->db->set("updateAt", date('Y-m-d H:i:s'));
+        $this->db->set('qtyStock', 'qtyStock + ' . $get->qtyIssued, FALSE);
+        $this->db->where('idStock', $get->idStock);
+        $this->db->update('toko_stock');
+
+        $this->db->delete('stock_issued', ['id' => $id]);
+        echo json_encode(true);
+    }
+
+    function stockValidation()
+    {
+        $idDetOrder = $this->input->post('idDetOrder');
+        $getDetOrderById = $this->ModelOrder->getDetOrderById($idDetOrder);
+        $getSumStockIssued  = $this->ModelOrder->getSumStockIssued($idDetOrder);
+        $qtyOrder = $getDetOrderById->qtyOrder;
+        $sumIssued  = $getSumStockIssued;
+        if ($sumIssued >= $qtyOrder) {
+            //OK
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Atur stok berhasil!</strong>
+            </div>');
+            $this->db->update('det_master_order', ['statusQty' => '1', 'updatedAt' => date('Y-m-d H:i:s')], ['idDetOrder' => $idDetOrder]);
+            $status = true;
+        } else {
+            $this->db->update('det_master_order', ['statusQty' => '0', 'updatedAt' => date('Y-m-d H:i:s')], ['idDetOrder' => $idDetOrder]);
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger" role="alert">
+                <strong>Atur stok gagal! Mohon cek lagi atur stock</strong>
+            </div>');
+            $status = false;
+        }
+
+        echo json_encode(true);
     }
 }
 

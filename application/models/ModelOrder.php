@@ -64,6 +64,24 @@ class ModelOrder extends CI_Model
         $db = $this->db->get();
         return $db->row();
     }
+
+    function getStockIssuedByDetOrder($idDetOrder)
+    {
+        $db = $this->db->query("SELECT stock_issued.*, master_toko.namaToko FROM `stock_issued`
+            JOIN toko_stock ON toko_stock.idStock = stock_issued.idStock
+            JOIN master_toko ON master_toko.idToko = toko_stock.idToko
+            WHERE stock_issued.idDetOrder = '$idDetOrder'");
+        return $db->result();
+    }
+
+    function getSumStockIssued($idDetOrder)
+    {
+        $this->db->select('SUM(qtyIssued) AS sumStockIssued');
+        $this->db->from('stock_issued');
+        $this->db->where('idDetOrder', $idDetOrder);
+        $db = $this->db->get();
+        return $db->row()->sumStockIssued;
+    }
 }
 
 /* End of file ModelOrder.php */
