@@ -51,9 +51,52 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Tambah Order Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?php echo form_open('order/addNewOrder') ?>
+                <div class="row mb-2">
+                    <label for="inputCustomer" class="col-sm-2 col-md-3 col-form-label">Customer</label>
+                    <div class="col-sm-9 col-md-9">
+                        <select name="idCustomer" required id="select-beast" onchange="pickCustomer(this)">
+                            <option value="">Pilih Customer</option>
+                            <?php foreach ($getAllCustomer as $data) { ?>
+                                <option value="<?php echo $data->idCustomer ?>"><?php echo $data->companyName ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-sm-2 col-md-3 col-form-label">PO Refrence</label>
+                    <div class="col-sm-9 col-md-9">
+                        <input type="text" class="form-control" name="poRefrence" placeholder="Masukkan PO Client">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <label class="col-sm-2 col-md-3 col-form-label"></label>
+                    <div class="col-sm-9 col-md-9">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+                <?php echo form_close() ?>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let base_url = '<?php echo base_url(); ?>';
     const deleteData = (idMasterOrder) => {
         //
+    }
+
+    const openModal = () => {
+        $('#modalId').modal('show');
     }
 </script>

@@ -6,8 +6,8 @@
     <meta charset="utf-8" />
     <title>Log In | CV. Bunga Sakti</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc." />
-    <meta name="author" content="Zoyothemes" />
+    <meta name="description" content="CV. Bunga Sakti Vendor Management System" />
+    <meta name="author" content="Naka Developers" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- App favicon -->
@@ -37,7 +37,7 @@
                                 </div>
 
                                 <div class="pt-0">
-                                    <?php echo form_open('applogin/submit') ?>
+                                    <?php echo form_open('appLogin/submit') ?>
                                     <div class="form-group mb-3">
                                         <label for="emailaddress" class="form-label">Username</label>
                                         <input class="form-control" name="username" type="text" id="emailaddress" required="" placeholder="Masukan Username">

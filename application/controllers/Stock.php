@@ -62,6 +62,15 @@ class Stock extends CI_Controller
         }
         // echo json_encode(true);
     }
+
+    function detailStock()
+    {
+        $idBarang = $this->input->post('idBarang');
+        $data = $this->ModelBarang->getBarangById($idBarang);
+        $valueStock = $this->db->query("SELECT SUM(qtyStock) as qty from toko_stock where idBarang='$idBarang'")->row();
+
+        echo json_encode(['data' => $data, 'qty' => $valueStock]);
+    }
 }
 
 /* End of file Stock.php */

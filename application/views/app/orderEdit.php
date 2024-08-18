@@ -107,8 +107,8 @@
                                         <td><?php echo $no++; ?></td>
                                         <td><?php echo $data->description ?></td>
                                         <td><?php echo $data->mcRefrence ?></td>
-                                        <td><?php echo substr($data->type, 0, 1) ?></td>
-                                        <td><?php echo $data->qtyBalance . '/' . $data->qtyOrder ?></td>
+                                        <td><?php echo $data->type ?></td>
+                                        <td><?php echo '/' . $data->qtyOrder ?></td>
                                         <td><?php echo number_format($data->fixedPrice) ?></td>
                                         <td><?php echo number_format($data->total) ?></td>
                                         <td>
@@ -119,10 +119,12 @@
                                             } ?>
                                         </td>
                                         <td>
-                                            <?php echo ($data->statusQty == 1) ? '<span class="badge bg-success">OK</span>' : '<span class="badge bg-danger">PENDING</span>' ?>
+                                            <?php echo ($data->statusQty == 1)
+                                                ? '<span class="badge bg-success">OK</span>'
+                                                : (($data->statusQty == 2) ? '<span class="badge bg-warning">OVER</span>' : '<span class="badge bg-danger">PENDING</span>') ?>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-info btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0"><i class="mdi mdi-pencil"></i></button>
+                                            <button type="button" class="btn btn-info btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0" onclick="editOrder('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-pencil"></i></button>
                                             <?php if ($data->type == "READY") { ?>
                                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Atur Stock Order" tabindex="0" onclick="aturStock('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-store"></i></button>
                                             <?php } ?>
@@ -132,6 +134,11 @@
                                 <?php } ?>
                             </tbody>
                         </table>
+                        <div class="py-2">
+                            <button type="button" class="btn btn-primary"><i class="mdi mdi-offer"></i> Print Quotation</button>
+                            <button type="button" class="btn btn-warning" onclick="buatInvoice()"><i class="mdi mdi-invoice-clock"></i> Generate Invoice</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -230,7 +237,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="modalAturStock" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -290,9 +296,108 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div
+        class="modal-dialog"
+        role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Edit List Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmEdit">
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" name="description" placeholder="Nama Barang" id="floatingDescription" readonly></textarea>
+                        <label for="floatingDescription">Nama Barang / Deskripsi</label>
+                        <input type="hidden" name="idDetEdit">
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" required class="form-control" name="qtyOrder" id="floatingQty" placeholder="Qty Order">
+                        <label for="floatingQty">Qty Order</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" required class="form-control" name="fixedPrice" id="floatingBasePrice" placeholder="Harga">
+                        <label for="floatingBasePrice">Harga</label>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="simpanEdit()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalInvoice" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Buat Invoice</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label for="">Pilih Barang yang dibuat Invoice</label>
+                <form id="frmInvoice">
+                    <table class="table table-striped w-100 nowrap table-sm">
+                        <thead>
+                            <tr class="fw-bold">
+                                <td>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault"></label>
+                                    </div>
+                                </td>
+                                <td>Barang</td>
+                                <td>Mat.Code</td>
+                                <td>Tipe</td>
+                                <td>Qty Order</td>
+                                <td>Price</td>
+                                <td>Total</td>
+                                <td>Qty Invoice</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 1;
+                            foreach ($getListOrderById as $data) {
+                                if ($data->statusQty == 1) {
+                            ?>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="<?php echo $data->idDetOrder ?>" name="idDetOrder[]">
+                                                <label class="form-check-label"></label>
+                                            </div>
+                                        </td>
+                                        <td><?php echo $data->description ?></td>
+                                        <td><?php echo $data->mcRefrence ?></td>
+                                        <td><?php echo $data->type ?></td>
+                                        <td><?php echo $data->qtyOrder ?></td>
+                                        <td><?php echo number_format($data->fixedPrice) ?></td>
+                                        <td><?php echo number_format($data->total) ?></td>
+                                        <td>
+                                            <input type="number" min="0" name="qtyInvoice[<?php echo $data->idDetOrder ?>]" class="form-control form-control-sm" max="<?php echo $data->qtyOrder ?>" value="<?php echo $data->qtyOrder ?>">
+                                        </td>
+                                    </tr>
+                            <?php }
+                            } ?>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="simpanInvoice()">Buat Invoice</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     let base_url = '<?php echo base_url(); ?>';
+    let idMasterOrder = '<?php echo $this->uri->segment(3) ?>';
     let form = document.getElementById('frmBarang');
     let formOrder = document.getElementById('frmAddBarang');
     let formAturStock = document.getElementById('frmAturStock');
@@ -516,6 +621,77 @@
             success: function(data) {
                 location.reload();
                 // console.log(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    const editOrder = (idDetOrder) => {
+        $.ajax({
+            url: base_url + 'order/getDetOrderById',
+            type: 'POST',
+            data: {
+                idDetOrder: idDetOrder
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                console.log(data);
+                $('[name="description"]').val(data.description);
+                $('[name="qtyOrder"]').val(data.qtyOrder);
+                $('[name="fixedPrice"]').val(data.fixedPrice);
+                $('[name="idDetEdit"]').val(data.idDetOrder);
+                $('#modalEdit').modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    const simpanEdit = () => {
+        let frmEdit = document.getElementById('frmEdit');
+        if (frmEdit.checkValidity() == true) {
+            $.ajax({
+                url: base_url + 'order/simpanEditOrder',
+                type: 'POST',
+                data: $('#frmEdit').serialize(),
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        } else {
+            frmEdit.reportValidity();
+        }
+    }
+
+    const buatInvoice = () => {
+        $('#modalInvoice').modal('show');
+    }
+
+    $("#flexCheckDefault").click(function() {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+
+    const simpanInvoice = () => {
+        $.ajax({
+            url: base_url + 'order/genInvoice/' + idMasterOrder,
+            type: 'POST',
+            data: $('#frmInvoice').serialize(),
+            dataType: 'JSON',
+            success: function(data) {
+                // console.log(data);
+                if (data === true) {
+                    location.reload();
+                } else {
+                    alert('Pilih barang untuk di checklist dahulu');
+                }
+                // location.reload();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');

@@ -82,6 +82,12 @@ class ModelOrder extends CI_Model
         $db = $this->db->get();
         return $db->row()->sumStockIssued;
     }
+
+    function insertNewOrder($object)
+    {
+        $this->db->insert('master_order', $object);
+        return $this->db->affected_rows() > 0;
+    }
 }
 
 /* End of file ModelOrder.php */

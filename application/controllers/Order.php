@@ -15,6 +15,8 @@ class Order extends CI_Controller
         $this->load->model('ModelBarang');
         $this->load->model('ModelOrder');
         $this->load->model('ModelToko');
+        $this->load->model('ModelCustomer');
+        $this->load->model('ModelInvoice');
     }
 
     public function index()
@@ -25,6 +27,7 @@ class Order extends CI_Controller
         }
         $data = array(
             'content' => 'app/order',
+            'getAllCustomer' => $this->ModelCustomer->getAllCustomer(),
             'getAllOrder' => $getAllOrder,
         );
         $this->load->view('app/index', $data);
@@ -222,13 +225,20 @@ class Order extends CI_Controller
         $getSumStockIssued  = $this->ModelOrder->getSumStockIssued($idDetOrder);
         $qtyOrder = $getDetOrderById->qtyOrder;
         $sumIssued  = $getSumStockIssued;
-        if ($sumIssued >= $qtyOrder) {
+        if ($sumIssued == $qtyOrder) {
             //OK
             $this->session->set_flashdata('msg', '
             <div class="alert alert-success" role="alert">
                 <strong>Atur stok berhasil!</strong>
             </div>');
             $this->db->update('det_master_order', ['statusQty' => '1', 'updatedAt' => date('Y-m-d H:i:s')], ['idDetOrder' => $idDetOrder]);
+            $status = true;
+        } elseif ($sumIssued > $qtyOrder) {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Atur stok lebih besar daripada qty order!</strong>
+            </div>');
+            $this->db->update('det_master_order', ['statusQty' => '2', 'updatedAt' => date('Y-m-d H:i:s')], ['idDetOrder' => $idDetOrder]);
             $status = true;
         } else {
             $this->db->update('det_master_order', ['statusQty' => '0', 'updatedAt' => date('Y-m-d H:i:s')], ['idDetOrder' => $idDetOrder]);
@@ -240,6 +250,101 @@ class Order extends CI_Controller
         }
 
         echo json_encode(true);
+    }
+
+    function getDetOrderById()
+    {
+        $idDetOrder = $this->input->post('idDetOrder');
+        $data = $this->ModelOrder->getDetOrderById($idDetOrder);
+        echo json_encode($data);
+    }
+
+    function simpanEditOrder()
+    {
+        $qtyOrder = $this->input->post('qtyOrder');
+        $fixedPrice = $this->input->post('fixedPrice');
+        $idDetOrder = $this->input->post('idDetEdit');
+        $total = $qtyOrder * $fixedPrice;
+        $data = [
+            'qtyOrder' => $qtyOrder,
+            'fixedPrice' => $fixedPrice,
+            'total' => $total,
+            'updatedAt' => date('Y-m-d H:i:s'),
+        ];
+        $this->db->update('det_master_order', $data, ['idDetOrder' => $idDetOrder]);
+        $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Edit Order berhasil!</strong>
+            </div>');
+        echo json_encode(true);
+    }
+
+    function addNewOrder()
+    {
+        $idCustomer = $this->input->post('idCustomer');
+        $poRefrence = $this->input->post('poRefrence');
+        $idMasterOrder = substr($this->uuid->v4(), 0, 8);
+        $data = [
+            'idMasterOrder' => $idMasterOrder,
+            'idCustomer' => $idCustomer,
+            'poRefrence' => $poRefrence,
+            'status' => 'PROSES',
+            'createdAt' => date('Y-m-d H:i:s'),
+        ];
+
+        $insertRow = $this->ModelOrder->insertNewOrder($data);
+        if ($insertRow) {
+            redirect('order/editOrder/' . $idMasterOrder);
+        } else {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Gagal Simpan Data!</strong>
+            </div>');
+            redirect('order');
+        }
+    }
+
+    function genInvoice($idMasterOrder)
+    {
+        $today = date('Y-m-d');
+        $idInvoice = substr($this->uuid->v4(), 0, 8);
+        $idSuratJalan = substr($this->uuid->v4(), 0, 8);
+        $oneMonthAfter = date('Y-m-d', strtotime("+30 days"));
+        if ($this->input->is_ajax_request()) {
+            $selectedOrders = $this->input->post('idDetOrder');
+            $quantities = $this->input->post('qtyInvoice');
+            $responseArray = [];
+
+            // Check if selectedOrders contain any values            
+            if ($selectedOrders && is_array($selectedOrders)) {
+                $dataInvoice = [
+                    'idInvoice' => $idInvoice,
+                    'idSuratJalan' => $idSuratJalan,
+                    'idMasterOrder' => $idMasterOrder,
+                    'dueDate' => $oneMonthAfter,
+                    'createdAt' => date('Y-m-d H:i:s'),
+                    'status' => "PENDING"
+                ];
+                $this->ModelInvoice->insertNewInvoice($dataInvoice);
+                foreach ($selectedOrders as $id) {
+                    $quantity = isset($quantities[$id]) ? $quantities[$id] : 0;
+                    if ($quantity) {
+                        $responseArray[] = [
+                            'idInvoice' => $idInvoice,
+                            'idDetOrder' => $id,
+                            'qtyInvoice' => $quantity,
+                            'createdAt' => date('Y-m-d H:i:s'),
+                        ];
+                        echo json_encode(true);
+                    } else {
+                        echo json_encode(false);
+                    }
+                }
+                $this->db->insert_batch('det_invoice', $responseArray);
+            } else {
+                echo json_encode(false);
+            }
+        }
     }
 }
 

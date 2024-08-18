@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Authentication forms">
-    <meta name="author" content="Arasari Studio">
+    <meta name="description" content="CV. Bunga Sakti Vendor Management System" />
+    <meta name="author" content="Naka Developers" />
     <title>Log In | CV. Bunga Sakti</title>
     <link rel="shortcut icon" href="<?php echo base_url() ?>assets/logo/bslogo.png">
     <link href="<?php echo base_url() ?>template/css/bootstrap.min.css" rel="stylesheet">

@@ -37,7 +37,7 @@
                                     <td><?php echo $data->updatedAt ?></td>
                                     <td>
                                         <button type="button" onclick="historyPembelian('<?php echo $data->idStock ?>')" class="btn btn-warning btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="History Pembelian" tabindex="0"><i class="mdi mdi-history"></i></button>
-                                        <button type="button" onclick="detailStock('<?php echo $data->idStock ?>')" class="btn btn-success btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang" tabindex="0"><i class="mdi mdi-details"></i></button>
+                                        <button type="button" onclick="detailStock('<?php echo $data->idBarang ?>')" class="btn btn-success btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang" tabindex="0"><i class="mdi mdi-details"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -103,7 +103,51 @@
     </div>
 </div>
 
-<!-- Optional: Place to the bottom of scripts -->
+<div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Detail Barang</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold table-secondary">Desckripsi</td>
+                            <td><span class="description"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold table-secondary">Barcode</td>
+                            <td><span class="barcode"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold table-secondary">Mat. Code</td>
+                            <td><span class="mcRefrence"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold table-secondary">UoM</td>
+                            <td><span class="uom"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold table-secondary">Tipe</td>
+                            <td><span class="type"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold table-secondary">Harga</td>
+                            <td><span class="basePrice"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold table-secondary">Total Stock</td>
+                            <td><span class="qtyTotal"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let base_url = '<?php echo base_url() ?>';
     let save_method;
@@ -134,5 +178,32 @@
         } else {
             form.reportValidity();
         }
+    }
+
+    const detailStock = (idBarang) => {
+        $.ajax({
+            url: base_url + 'stock/detailStock',
+            type: 'POST',
+            data: {
+                idBarang: idBarang
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                // console.log(data);
+                $('.description').text(data.data.description);
+                $('.uom').text(data.data.uom);
+                $('.type').text(data.data.type);
+                $('.basePrice').text(data.data.basePrice);
+                $('.mcRefrence').text(data.data.mcRefrence);
+                $('.barcode').text(data.data.barcode);
+                $('.qtyTotal').text(data.qty.qty);
+
+                $('#modalDetail').modal('show');
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
     }
 </script>
