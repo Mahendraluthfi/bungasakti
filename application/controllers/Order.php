@@ -41,6 +41,7 @@ class Order extends CI_Controller
             $getListOrderById = $this->ModelOrder->getOrderListById($idMasterOrder);
             foreach ($getListOrderById as $key => $value) {
                 $value->getStockIssuedByDetOrder = $this->ModelOrder->getStockIssuedByDetOrder($value->idDetOrder);
+                $value->getQtyInvoice = $this->db->get_where('det_invoice', ['idDetOrder' => $value->idDetOrder])->row();
             }
             $getPR = $getOrderById->idPR;
             $data = array(
@@ -297,7 +298,7 @@ class Order extends CI_Controller
             redirect('order/editOrder/' . $idMasterOrder);
         } else {
             $this->session->set_flashdata('msg', '
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-danger" role="alert">
                 <strong>Gagal Simpan Data!</strong>
             </div>');
             redirect('order');
@@ -306,44 +307,61 @@ class Order extends CI_Controller
 
     function genInvoice($idMasterOrder)
     {
-        $today = date('Y-m-d');
         $idInvoice = substr($this->uuid->v4(), 0, 8);
         $idSuratJalan = substr($this->uuid->v4(), 0, 8);
         $oneMonthAfter = date('Y-m-d', strtotime("+30 days"));
-        if ($this->input->is_ajax_request()) {
-            $selectedOrders = $this->input->post('idDetOrder');
-            $quantities = $this->input->post('qtyInvoice');
-            $responseArray = [];
 
-            // Check if selectedOrders contain any values            
-            if ($selectedOrders && is_array($selectedOrders)) {
-                $dataInvoice = [
-                    'idInvoice' => $idInvoice,
-                    'idSuratJalan' => $idSuratJalan,
-                    'idMasterOrder' => $idMasterOrder,
-                    'dueDate' => $oneMonthAfter,
-                    'createdAt' => date('Y-m-d H:i:s'),
-                    'status' => "PENDING"
-                ];
-                $this->ModelInvoice->insertNewInvoice($dataInvoice);
-                foreach ($selectedOrders as $id) {
-                    $quantity = isset($quantities[$id]) ? $quantities[$id] : 0;
-                    if ($quantity) {
-                        $responseArray[] = [
-                            'idInvoice' => $idInvoice,
-                            'idDetOrder' => $id,
-                            'qtyInvoice' => $quantity,
-                            'createdAt' => date('Y-m-d H:i:s'),
-                        ];
-                        echo json_encode(true);
-                    } else {
-                        echo json_encode(false);
-                    }
+        $data = $this->input->post(); // Get the POST data from the AJAX request
+        if (empty($data) || !isset($data['idDetOrder'])) {
+            echo json_encode(array('success' => false, 'message' => 'No data received.'));
+        } else {
+            $dataInvoice = [
+                'idInvoice' => $idInvoice,
+                'idSuratJalan' => $idSuratJalan,
+                'idMasterOrder' => $idMasterOrder,
+                'dueDate' => $oneMonthAfter,
+                'createdAt' => date('Y-m-d H:i:s'),
+                'status' => "PENDING"
+            ];
+            $this->ModelInvoice->insertNewInvoice($dataInvoice);
+            $this->db->update('master_order', ['status' => 'INVOICE'], ['idMasterOrder' => $idMasterOrder]);
+            $responseArray = array();
+            foreach ($data['idDetOrder'] as $idDetOrder) {
+                $qtyInvoice = $data['qtyInvoice'][$idDetOrder];
+                if ($qtyInvoice) {
+                    $responseArray[] = [
+                        'idInvoice' => $idInvoice,
+                        'idDetOrder' => $idDetOrder,
+                        'qtyInvoice' => $qtyInvoice,
+                        'createdAt' => date('Y-m-d H:i:s'),
+                    ];
                 }
-                $this->db->insert_batch('det_invoice', $responseArray);
-            } else {
-                echo json_encode(false);
             }
+            $this->db->insert_batch('det_invoice', $responseArray);
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Buat Invoice berhasil!</strong>
+            </div>');
+            echo json_encode(array('success' => true, 'message' => 'Done'));
+        }
+    }
+
+    function hapusItemOrder()
+    {
+        $idDetOrder = $this->input->post('idDetOrder');
+        $deleteRow = $this->db->delete('det_master_order', ['idDetOrder' => $idDetOrder]);
+        if ($deleteRow) {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Hapus Item berhasil!</strong>
+            </div>');
+            echo json_encode(true);
+        } else {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger" role="alert">
+                <strong>Hapus Item gagal!</strong>
+            </div>');
+            echo json_encode(true);
         }
     }
 }

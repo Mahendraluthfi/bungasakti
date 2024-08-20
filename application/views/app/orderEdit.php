@@ -93,6 +93,7 @@
                                     <td>Mat.Code</td>
                                     <td>Tipe</td>
                                     <td>Qty Order</td>
+                                    <td>Sisa</td>
                                     <td>Price</td>
                                     <td>Total</td>
                                     <td>Stock Take</td>
@@ -102,13 +103,16 @@
                             </thead>
                             <tbody>
                                 <?php $no = 1;
-                                foreach ($getListOrderById as $data) { ?>
+                                foreach ($getListOrderById as $data) {
+                                    $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->qtyInvoice : 0;
+                                ?>
                                     <tr>
                                         <td><?php echo $no++; ?></td>
                                         <td><?php echo $data->description ?></td>
                                         <td><?php echo $data->mcRefrence ?></td>
                                         <td><?php echo $data->type ?></td>
-                                        <td><?php echo '/' . $data->qtyOrder ?></td>
+                                        <td><?php echo $data->qtyOrder ?></td>
+                                        <td><?php echo $data->qtyOrder - $sisa ?></td>
                                         <td><?php echo number_format($data->fixedPrice) ?></td>
                                         <td><?php echo number_format($data->total) ?></td>
                                         <td>
@@ -128,7 +132,7 @@
                                             <?php if ($data->type == "READY") { ?>
                                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Atur Stock Order" tabindex="0" onclick="aturStock('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-store"></i></button>
                                             <?php } ?>
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Item" tabindex="0"><i class="mdi mdi-delete"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Item" tabindex="0" onclick="hapusItem('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-delete"></i></button>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -686,16 +690,36 @@
             dataType: 'JSON',
             success: function(data) {
                 // console.log(data);
-                if (data === true) {
-                    location.reload();
+                if (data.success === false) {
+                    alert('Pilih data terlebih dahulu');
                 } else {
-                    alert('Pilih barang untuk di checklist dahulu');
+                    // alert('Berhasil menyimpan data');
+                    location.reload();
                 }
-                // location.reload();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');
             }
         });
+    }
+
+    const hapusItem = (idDetOrder) => {
+        let x = confirm('Apakah anda yakin akan menghapus item ini ?');
+        if (x) {
+            $.ajax({
+                url: base_url + 'order/hapusItemOrder',
+                type: 'POST',
+                data: {
+                    idDetOrder: idDetOrder,
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        }
     }
 </script>

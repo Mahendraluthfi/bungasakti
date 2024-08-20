@@ -11,11 +11,17 @@ class Invoice extends CI_Controller
         }
         date_default_timezone_set('Asia/Jakarta');
         $this->load->library('Uuid');
+        $this->load->model('ModelInvoice');
     }
     public function index()
     {
+        $getAllInvoice = $this->ModelInvoice->getAllInvoice();
+        foreach ($getAllInvoice as $key => $value) {
+            $value->sumTotal = $this->ModelInvoice->getSumTotal($value->idInvoice);
+        }
         $data = [
-            'content' => 'app/invoice'
+            'content' => 'app/invoice',
+            'getAllInvoice' => $getAllInvoice
         ];
 
         $this->load->view('app/index', $data);
