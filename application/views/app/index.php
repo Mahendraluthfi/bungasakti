@@ -224,7 +224,7 @@
             </div> <!-- content -->
 
             <!-- Footer Start -->
-            <footer class="footer">
+            <footer class="footer d-print-none">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col fs-13 text-muted text-center">

@@ -37,7 +37,13 @@
                                     <td><?php echo number_format($data->sumTotal->totalBayar) ?></td>
                                     <td><?php echo ($data->paymentDate == '0000-00-00') ? '' : $data->paymentDate ?></td>
                                     <td><?php echo $data->status ?></td>
-                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm"><i class="mdi mdi-pencil"></i></button>
+                                        <button type="button" class="btn btn-primary btn-sm"><i class="mdi mdi-invoice-list-outline"></i></button>
+                                        <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-truck-delivery"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
+
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>

@@ -139,7 +139,7 @@
                             </tbody>
                         </table>
                         <div class="py-2">
-                            <button type="button" class="btn btn-primary"><i class="mdi mdi-offer"></i> Print Quotation</button>
+                            <a href="<?php echo base_url('order/printQuotation/' . $getOrderById->idMasterOrder) ?>" class="btn btn-primary"><i class="mdi mdi-offer"></i> Print Quotation</a>
                             <button type="button" class="btn btn-warning" onclick="buatInvoice()"><i class="mdi mdi-invoice-clock"></i> Generate Invoice</button>
 
                         </div>
@@ -358,6 +358,7 @@
                                 <td>Mat.Code</td>
                                 <td>Tipe</td>
                                 <td>Qty Order</td>
+                                <td>Sisa Order</td>
                                 <td>Price</td>
                                 <td>Total</td>
                                 <td>Qty Invoice</td>
@@ -367,6 +368,8 @@
                             <?php $no = 1;
                             foreach ($getListOrderById as $data) {
                                 if ($data->statusQty == 1) {
+                                    $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->qtyInvoice : 0;
+                                    $limit = $data->qtyOrder - $sisa;
                             ?>
                                     <tr>
                                         <td>
@@ -379,10 +382,11 @@
                                         <td><?php echo $data->mcRefrence ?></td>
                                         <td><?php echo $data->type ?></td>
                                         <td><?php echo $data->qtyOrder ?></td>
+                                        <td><?php echo $limit ?></td>
                                         <td><?php echo number_format($data->fixedPrice) ?></td>
                                         <td><?php echo number_format($data->total) ?></td>
                                         <td>
-                                            <input type="number" min="0" name="qtyInvoice[<?php echo $data->idDetOrder ?>]" class="form-control form-control-sm" max="<?php echo $data->qtyOrder ?>" value="<?php echo $data->qtyOrder ?>">
+                                            <input type="number" min="0" name="qtyInvoice[<?php echo $data->idDetOrder ?>]" class="form-control form-control-sm" max="<?php echo $limit ?>" value="<?php echo $limit ?>">
                                         </td>
                                     </tr>
                             <?php }

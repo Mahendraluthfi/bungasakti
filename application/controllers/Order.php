@@ -364,6 +364,44 @@ class Order extends CI_Controller
             echo json_encode(true);
         }
     }
+
+    function deleteMasterOrder()
+    {
+        $idMasterOrder = $this->input->post('idMasterOrder');
+        $deleteRow = $this->db->delete('master_order', ['idMasterOrder' => $idMasterOrder]);
+        $deleteDet = $this->db->delete('det_master_order', ['idMasterOrder' => $idMasterOrder]);
+        $deleteInvoice = $this->db->delete('master_invoice', ['idMasterOrder' => $idMasterOrder]);
+        if ($deleteRow && $deleteInvoice && $deleteDet) {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-success" role="alert">
+                <strong>Hapus Order berhasil!</strong>
+            </div>');
+            echo json_encode(true);
+        } else {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger" role="alert">
+                <strong>Hapus Order gagal!</strong>
+            </div>');
+            echo json_encode(true);
+        }
+    }
+
+    function printQuotation($idMasterOrder)
+    {
+        if ($idMasterOrder) {
+            $getOrderById = $this->ModelOrder->getOrderById($idMasterOrder);
+            $getListOrderById = $this->ModelOrder->getOrderListById($idMasterOrder);
+            $data = [
+                'content' => 'app/printQuotation',
+                'getOrderById' => $getOrderById,
+                'getListOrderById' => $getListOrderById,
+            ];
+
+            $this->load->view('app/index', $data);
+        } else {
+            redirect('order');
+        }
+    }
 }
 
 /* End of file Order.php */

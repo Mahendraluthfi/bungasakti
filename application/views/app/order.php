@@ -93,7 +93,23 @@
 <script>
     let base_url = '<?php echo base_url(); ?>';
     const deleteData = (idMasterOrder) => {
-        //
+        let x = confirm('Apakah anda yakin untuk menghapus data ini ?');
+        if (x) {
+            $.ajax({
+                url: base_url + 'order/deleteMasterOrder',
+                type: 'POST',
+                data: {
+                    idMasterOrder: idMasterOrder
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        }
     }
 
     const openModal = () => {
