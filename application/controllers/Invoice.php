@@ -26,6 +26,36 @@ class Invoice extends CI_Controller
 
         $this->load->view('app/index', $data);
     }
+
+    function cetakInvoice($idInvoice)
+    {
+        if ($idInvoice) {
+            $data = [
+                'content' => 'app/cetakInvoice',
+                'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
+                'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),
+            ];
+            $this->load->view('app/index', $data);
+            // echo json_encode($data);
+        } else {
+            redirect('invoice');
+        }
+    }
+
+    function cetakSuratJalan($idInvoice)
+    {
+        if ($idInvoice) {
+            $data = [
+                'content' => 'app/cetakSuratJalan',
+                'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
+                'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),
+            ];
+            $this->load->view('app/index', $data);
+            // echo json_encode($data);
+        } else {
+            redirect('invoice');
+        }
+    }
 }
 
 /* End of file Invoice.php */

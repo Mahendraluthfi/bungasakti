@@ -13,7 +13,7 @@
                                 <th>No</th>
                                 <th>Customer</th>
                                 <th>No.Invoice</th>
-                                <th>No.Surat Jalan</th>
+                                <th>No.SJ</th>
                                 <th>ID_MasterOrder</th>
                                 <th>Tanggal</th>
                                 <th>Tempo</th>
@@ -38,10 +38,10 @@
                                     <td><?php echo ($data->paymentDate == '0000-00-00') ? '' : $data->paymentDate ?></td>
                                     <td><?php echo $data->status ?></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm"><i class="mdi mdi-pencil"></i></button>
-                                        <button type="button" class="btn btn-primary btn-sm"><i class="mdi mdi-invoice-list-outline"></i></button>
-                                        <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-truck-delivery"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
+                                        <button type="button" class="btn btn-success btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Invoice" tabindex="0"><i class="mdi mdi-pencil"></i></button>
+                                        <a href="<?php echo base_url('invoice/cetakInvoice/' . $data->idInvoice) ?>" class="btn btn-primary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Cetak Invoice" tabindex="0"><i class="mdi mdi-invoice-list-outline"></i></a>
+                                        <a href="<?php echo base_url('invoice/cetakSuratJalan/' . $data->idInvoice) ?>" class="btn btn-warning btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Cetak Surat Jalan" tabindex="0"><i class="mdi mdi-truck-delivery"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Invoice" tabindex="0"><i class="mdi mdi-delete"></i></button>
 
                                     </td>
                                 </tr>
