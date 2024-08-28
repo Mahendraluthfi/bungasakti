@@ -294,6 +294,13 @@
                 direction: "asc"
             }
         });
+        new TomSelect("#select-barang", {
+            create: false,
+            sortField: {
+                field: "text",
+                direction: "asc"
+            }
+        });
     </script>
 </body>
 

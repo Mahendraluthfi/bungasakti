@@ -86,6 +86,25 @@ class ModelToko extends CI_Model
         $this->db->where('toko_stock.idBarang', $idBarang);
         return $this->db->get()->result();
     }
+
+    function getIdStock($idStock)
+    {
+        $this->db->select('toko_stock.*, master_barang.description');
+        $this->db->from('toko_stock');
+        $this->db->join('master_barang', 'master_barang.idBarang = toko_stock.idBarang');
+        $this->db->where('toko_stock.idStock', $idStock);
+        return $this->db->get()->row();
+    }
+
+    function reduceQty($idStock, $qty)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->db->where('idStock', $idStock);
+        $this->db->set('qtyStock', 'qtyStock -' . $qty, FALSE);
+        $this->db->set('updatedAt', date('Y-m-d H:i:s'));
+        $this->db->update('toko_stock');
+        return $this->db->affected_rows() > 0; // Return true if stock was updated successfully, otherwise return false        
+    }
 }
 
 /* End of file ModelToko.php */

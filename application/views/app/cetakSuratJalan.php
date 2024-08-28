@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive rounded-2">
-                                    <table class="table mt-4 mb-4 table-centered border text-center">
+                                    <table class="table mt-4 mb-4 table-centered border table-bordered">
                                         <thead class="rounded-2">
                                             <tr>
                                                 <th>#</th>
@@ -76,7 +76,7 @@
                                                     <td><?php echo $data->qtyOrder ?></td>
                                                     <td><?php echo $data->description ?></td>
                                                     <td><?php echo $data->qtyInvoice ?></td>
-                                                    <td></td>
+                                                    <td><?php echo $data->remark ?></td>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>

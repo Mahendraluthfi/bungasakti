@@ -1,3 +1,49 @@
+<style>
+    .range-container {
+        position: relative;
+        width: 300px;
+        margin: 10px auto;
+    }
+
+    .range-input {
+        width: 100%;
+        -webkit-appearance: none;
+        background: #ddd;
+        outline: none;
+        height: 6px;
+        border-radius: 3px;
+    }
+
+    .range-input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    .range-input::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    .range-value {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+</style>
 <div class="container-xxl mt-3">
     <div class="row">
         <div class="col-12">
@@ -11,7 +57,9 @@
                             <span class="breadcrumb-item active" aria-current="page"><?php echo $getNamaToko ?></span>
                         </nav>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm mb-2" onclick="addStock()"><i class="mdi mdi-plus"></i> Tambah Stock Barang</button>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-primary btn-sm mb-2" onclick="addStock()"><i class="mdi mdi-plus"></i> Tambah Stock Barang</button>
+                    </div>
                     <?php echo $this->session->flashdata('msg'); ?>
                     <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap">
                         <thead>
@@ -38,6 +86,8 @@
                                     <td>
                                         <button type="button" onclick="historyPembelian('<?php echo $data->idStock ?>')" class="btn btn-warning btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="History Pembelian" tabindex="0"><i class="mdi mdi-history"></i></button>
                                         <button type="button" onclick="detailStock('<?php echo $data->idBarang ?>')" class="btn btn-success btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang" tabindex="0"><i class="mdi mdi-details"></i></button>
+                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Transfer Stok Barang" tabindex="0" onclick="transferBarang('<?php echo $data->idStock ?>')"><i class="mdi mdi-truck"></i></button>
+
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -64,8 +114,6 @@
     </div>
 </div>
 
-<!-- Modal Body -->
-<!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
 <div class="modal fade" id="modalId" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -98,6 +146,56 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" onclick="save()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTransfer" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Transfer Barang ke Toko Lain</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmTransfer" method="POST" action="<?php echo  base_url('stock/transferStock') ?>">
+                    <div class="row mb-3">
+                        <label for="inputIdBarang" class="col-sm-3 col-form-label">Barang</label>
+                        <div class="col-sm-9">
+                            <input type="hidden" name="idStock">
+                            <input type="hidden" name="stockFrom" value="<?php echo $this->uri->segment(3) ?>">
+                            <input type="text" disabled class="form-control" name="description">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="qtyStock" class="col-sm-3 col-form-label">Qty Stock</label>
+                        <div class="col-sm-9">
+                            <div class="range-container">
+                                <input type="range" name="qtyTransfer" min="1" value="1" class="range-input" id="myRange">
+                                <div class="range-value" id="rangeValue">1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="qtyStock" class="col-sm-3 col-form-label">Tujuan Toko</label>
+                        <div class="col-sm-9">
+                            <select name="tokoTujuan" class="form-control" id="" required>
+                                <option value="">Pilih Toko</option>
+                                <?php foreach ($tokoDestination as $data) { ?>
+                                    <option value="<?php echo $data->idToko ?>"><?php echo $data->namaToko ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="qtyStock" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -152,6 +250,7 @@
     let base_url = '<?php echo base_url() ?>';
     let save_method;
     let form = document.getElementById('frmStock');
+    let formTransfer = document.getElementById('frmTransfer');
 
     const addStock = () => {
         $('#modalId').modal('show');
@@ -206,4 +305,38 @@
             }
         });
     }
+
+    const transferBarang = (idStock) => {
+        $.ajax({
+            url: base_url + 'stock/getIdStock',
+            type: 'POST',
+            data: {
+                idStock: idStock
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                // console.log(data);
+                $('[name="description"]').val(data.description);
+                $('[name="idStock"]').val(data.idStock);
+                $('[name="qtyTransfer"]').attr('max', data.qtyStock);
+                $('#modalTransfer').modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    const range = document.getElementById('myRange');
+    const rangeValue = document.getElementById('rangeValue');
+
+    function updateValue() {
+        const value = range.value;
+        rangeValue.textContent = value;
+        const percent = (value - range.min) / (range.max - range.min) * 100;
+        rangeValue.style.left = `${percent}%`;
+    }
+
+    range.addEventListener('input', updateValue);
+    updateValue(); // Initialize the value display
 </script>

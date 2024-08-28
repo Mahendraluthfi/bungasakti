@@ -51,99 +51,99 @@
                                 </tbody>
                             </form>
                         </table>
-                        <?php if ($checkBarangNotInMaster) { ?>
-                            <div class="alert alert-info" role="alert">
-                                <h5 class="alert-heading">List Barang belum masuk order dari PR</h5>
-                            </div>
-                            <table id="scroll-horizontal-datatable-zero" class="table table-striped w-100 nowrap">
-                                <thead>
-                                    <tr>
-                                        <td>Description</td>
-                                        <td>Qty Order</td>
-                                        <td>Keterangan</td>
-                                        <td>#</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($checkBarangNotInMaster as $data) { ?>
-                                        <tr>
-                                            <td><?php echo $data->descriptionCustom ?></td>
-                                            <td><?php echo $data->qtyOrder ?></td>
-                                            <td><?php echo $data->remark ?></td>
-                                            <td>
-                                                <button type="button" onclick="addNew('<?php echo $data->idDetPR ?>')" class="btn btn-info btn-sm" href="#" role="button"><i class="mdi mdi-download"></i> Tambah ke Order</button>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
-                            <hr>
-                        <?php } ?>
-                        <div class="d-flex mb-2">
-                            <div class="me-auto">
-                                <h5>List Order Barang</h5>
-                            </div>
-                            <button type="button" class="btn btn-primary btn-sm" onclick="addBarang()"><i class="mdi mdi-plus"></i> Tambah Barang</button>
+                    </div>
+                    <?php if ($checkBarangNotInMaster) { ?>
+                        <div class="alert alert-info" role="alert">
+                            <h5 class="alert-heading">List Barang belum masuk order dari PR</h5>
                         </div>
-                        <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap table-sm">
+                        <table id="scroll-horizontal-datatable-zero" class="table table-striped w-100 nowrap">
                             <thead>
-                                <tr class="fw-bold">
-                                    <td>No</td>
-                                    <td>Barang</td>
-                                    <td>Mat.Code</td>
-                                    <td>Tipe</td>
+                                <tr>
+                                    <td>Description</td>
                                     <td>Qty Order</td>
-                                    <td>Sisa</td>
-                                    <td>Price</td>
-                                    <td>Total</td>
-                                    <td>Stock Take</td>
-                                    <td>Status</td>
+                                    <td>Keterangan</td>
                                     <td>#</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $no = 1;
-                                foreach ($getListOrderById as $data) {
-                                    $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->qtyInvoice : 0;
-                                ?>
+                                <?php foreach ($checkBarangNotInMaster as $data) { ?>
                                     <tr>
-                                        <td><?php echo $no++; ?></td>
-                                        <td><?php echo $data->description ?></td>
-                                        <td><?php echo $data->mcRefrence ?></td>
-                                        <td><?php echo $data->type ?></td>
+                                        <td><?php echo $data->descriptionCustom ?></td>
                                         <td><?php echo $data->qtyOrder ?></td>
-                                        <td><?php echo $data->qtyOrder - $sisa ?></td>
-                                        <td><?php echo number_format($data->fixedPrice) ?></td>
-                                        <td><?php echo number_format($data->total) ?></td>
+                                        <td><?php echo $data->remark ?></td>
                                         <td>
-                                            <?php if ($data->getStockIssuedByDetOrder) {
-                                                foreach ($data->getStockIssuedByDetOrder as $datarow) { ?>
-                                                    <span class="badge bg-dark" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="<?php echo $datarow->namaToko ?>" tabindex="0"><?php echo $datarow->qtyIssued ?></span>
-                                            <?php }
-                                            } ?>
-                                        </td>
-                                        <td>
-                                            <?php echo ($data->statusQty == 1)
-                                                ? '<span class="badge bg-success">OK</span>'
-                                                : (($data->statusQty == 2) ? '<span class="badge bg-warning">OVER</span>' : '<span class="badge bg-danger">PENDING</span>') ?>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-info btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0" onclick="editOrder('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-pencil"></i></button>
-                                            <?php if ($data->type == "READY") { ?>
-                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Atur Stock Order" tabindex="0" onclick="aturStock('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-store"></i></button>
-                                            <?php } ?>
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Item" tabindex="0" onclick="hapusItem('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-delete"></i></button>
+                                            <button type="button" onclick="addNew('<?php echo $data->idDetPR ?>')" class="btn btn-info btn-sm" href="#" role="button"><i class="mdi mdi-download"></i> Tambah ke Order</button>
                                         </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
-                        <div class="py-2">
-                            <a href="<?php echo base_url('order/printQuotation/' . $getOrderById->idMasterOrder) ?>" class="btn btn-primary"><i class="mdi mdi-offer"></i> Print Quotation</a>
-                            <button type="button" class="btn btn-warning" onclick="buatInvoice()"><i class="mdi mdi-invoice-clock"></i> Generate Invoice</button>
-
+                        <hr>
+                    <?php } ?>
+                    <div class="d-flex mb-2">
+                        <div class="me-auto">
+                            <h5>List Order Barang</h5>
                         </div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addBarang()"><i class="mdi mdi-plus"></i> Tambah Barang</button>
                     </div>
+                    <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap table-sm">
+                        <thead>
+                            <tr class="fw-bold">
+                                <td>No</td>
+                                <td>Barang</td>
+                                <td>Mat.Code</td>
+                                <td>Tipe</td>
+                                <td>Qty Order</td>
+                                <td>Sisa</td>
+                                <td>Price</td>
+                                <td>Total</td>
+                                <td>Stock Take</td>
+                                <td>Status</td>
+                                <td>#</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 1;
+                            foreach ($getListOrderById as $data) {
+                                $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->qtyInvoice : 0;
+                            ?>
+                                <tr>
+                                    <td><?php echo $no++; ?></td>
+                                    <td><?php echo $data->description ?></td>
+                                    <td><?php echo $data->mcRefrence ?></td>
+                                    <td><?php echo $data->type ?></td>
+                                    <td><?php echo $data->qtyOrder ?></td>
+                                    <td><?php echo $data->qtyOrder - $sisa ?></td>
+                                    <td><?php echo number_format($data->fixedPrice) ?></td>
+                                    <td><?php echo number_format($data->total) ?></td>
+                                    <td>
+                                        <?php if ($data->getStockIssuedByDetOrder) {
+                                            foreach ($data->getStockIssuedByDetOrder as $datarow) { ?>
+                                                <span class="badge bg-dark" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="<?php echo $datarow->namaToko ?>" tabindex="0"><?php echo $datarow->qtyIssued ?></span>
+                                        <?php }
+                                        } ?>
+                                    </td>
+                                    <td>
+                                        <?php echo ($data->statusQty == 1)
+                                            ? '<span class="badge bg-success">OK</span>'
+                                            : (($data->statusQty == 2) ? '<span class="badge bg-warning">OVER</span>' : '<span class="badge bg-danger">PENDING</span>') ?>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0" onclick="editOrder('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-pencil"></i></button>
+                                        <?php if ($data->type == "READY") { ?>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Atur Stock Order" tabindex="0" onclick="aturStock('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-store"></i></button>
+                                        <?php } ?>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Item" tabindex="0" onclick="hapusItem('<?php echo $data->idDetOrder ?>')"><i class="mdi mdi-delete"></i></button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                    <div class="py-2">
+                        <a href="<?php echo base_url('order/printQuotation/' . $getOrderById->idMasterOrder) ?>" class="btn btn-primary"><i class="mdi mdi-offer"></i> Print Quotation</a>
+                        <button type="button" class="btn btn-warning" onclick="buatInvoice()"><i class="mdi mdi-invoice-clock"></i> Generate Invoice</button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -687,24 +687,29 @@
     });
 
     const simpanInvoice = () => {
-        $.ajax({
-            url: base_url + 'order/genInvoice/' + idMasterOrder,
-            type: 'POST',
-            data: $('#frmInvoice').serialize(),
-            dataType: 'JSON',
-            success: function(data) {
-                // console.log(data);
-                if (data.success === false) {
-                    alert('Pilih data terlebih dahulu');
-                } else {
-                    // alert('Berhasil menyimpan data');
-                    location.reload();
+        let frmInvoice = document.getElementById('frmInvoice');
+        if (frmInvoice.checkVisibility() === true) {
+            $.ajax({
+                url: base_url + 'order/genInvoice/' + idMasterOrder,
+                type: 'POST',
+                data: $('#frmInvoice').serialize(),
+                dataType: 'JSON',
+                success: function(data) {
+                    // console.log(data);
+                    if (data.success === false) {
+                        alert('Pilih data terlebih dahulu');
+                    } else {
+                        // alert('Berhasil menyimpan data');
+                        location.reload();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            }
-        });
+            });
+        } else {
+            frmInvoice.reportValidity();
+        }
     }
 
     const hapusItem = (idDetOrder) => {

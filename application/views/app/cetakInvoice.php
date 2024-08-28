@@ -60,7 +60,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive rounded-2">
-                                    <table class="table mt-4 mb-4 table-centered text-center border">
+                                    <table class="table mt-4 mb-4 table-centered border table-bordered">
                                         <thead class="rounded-2">
                                             <tr>
                                                 <th>#</th>
@@ -76,54 +76,25 @@
                                             <?php $no = 1;
                                             $total = 0;
                                             foreach ($getInvoiceItemById as $data) {
-                                                $total = $data->total + $total ?>
+                                                $total = ($data->qtyInvoice * $data->fixedPrice) + $total ?>
                                                 <tr>
                                                     <td><?php echo $no++ ?></td>
                                                     <td><?php echo $data->description ?></td>
                                                     <td><?php echo $data->mcRefrence ?></td>
                                                     <td><?php echo $data->uom ?></td>
-                                                    <td><?php echo $data->qtyOrder ?></td>
-                                                    <td class="align-items-end"><?php echo number_format($data->fixedPrice) ?></td>
-                                                    <td><?php echo number_format($data->total) ?></td>
+                                                    <td><?php echo $data->qtyInvoice ?></td>
+                                                    <td class="align-items-end">IDR <?php echo number_format($data->fixedPrice) ?></td>
+                                                    <td>IDR <?php echo number_format($data->qtyInvoice * $data->fixedPrice) ?></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr class="text-right">
                                                 <td colspan="5"></td>
-                                                <td colspan="2">
-                                                    <table
-                                                        class="table table-sm text-nowrap mb-0 table-borderless">
-                                                        <tbody>
-                                                            <!-- <tr>
-                                                                <td>
-                                                                    <p class="mb-0">Sub-total :</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="mb-0 fw-medium fs-15">IDR <?php echo number_format($total) ?></p>
-                                                                </td>
-                                                            </tr> -->
-                                                            <!-- <tr>
-                                                                <td scope="row">
-                                                                    <p class="mb-0">PPN <span
-                                                                            class="text-danger">(11%)</span>
-                                                                        :</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="mb-0 fw-medium fs-15">
-                                                                        $472.80</p>
-                                                                </td>
-                                                            </tr> -->
-                                                            <tr>
-                                                                <td scope="row">
-                                                                    <p class="mb-0 fs-14">Total :</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p
-                                                                        class="mb-0 fw-medium fs-16 text-success">
-                                                                        IDR <?php echo number_format($total) ?></p>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                <td>
+                                                    <p class="mb-0 fs-14">Total :</p>
+                                                </td>
+                                                <td>
+                                                    <p class="mb-0 fw-medium fs-16 text-success">
+                                                        IDR <?php echo number_format($total) ?></p>
                                                 </td>
                                             </tr>
                                         </tbody>
