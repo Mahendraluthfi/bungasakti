@@ -105,6 +105,7 @@
                             <td>Mat.Code</td>
                             <td>Tipe</td>
                             <td>Qty Order</td>
+                            <td>Sisa Order</td>
                             <td>Price</td>
                             <td>Total</td>
                         </tr>
@@ -130,7 +131,7 @@
             },
             dataType: 'JSON',
             success: function(data) {
-                console.log(data);
+                // console.log(data);
                 $('.companyName').text(data.getOrderById.companyName);
                 $('.email').text(data.getOrderById.email);
                 $('.idPR').text(data.getOrderById.idPR);
@@ -144,6 +145,9 @@
                 let html;
                 let no = 1;
                 for (let i = 0; i < data.getListOrderById.length; i++) {
+                    let sisa = (data.getListOrderById[i].getQtyInvoice) ? data.getListOrderById[i].getQtyInvoice.qtyInvoice : 0;
+                    let limit = data.getListOrderById[i].qtyOrder - sisa;
+
                     html += `
                     <tr>
                         <td>${no++}</td>
@@ -151,6 +155,7 @@
                         <td>${data.getListOrderById[i].mcRefrence}</td>                        
                         <td>${data.getListOrderById[i].type}</td>                        
                         <td>${data.getListOrderById[i].qtyOrder}</td>                                                             
+                        <td>${limit}</td>                                                             
                         <td>${formatNumberWithCommas(data.getListOrderById[i].fixedPrice)}</td>                        
                         <td>${formatNumberWithCommas(data.getListOrderById[i].total)}</td>                        
                     </tr>

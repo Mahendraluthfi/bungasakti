@@ -61,9 +61,14 @@ class Invoice extends CI_Controller
     function viewOrder()
     {
         $idMasterOrder  = $this->input->post('idMasterOrder');
+        $getListOrderById = $this->ModelOrder->getOrderListById($idMasterOrder);
+        foreach ($getListOrderById as $key => $value) {
+            # code...
+            $value->getQtyInvoice = $this->db->get_where('det_invoice', ['idDetOrder' => $value->idDetOrder])->row();
+        }
         $data = [
             'getOrderById' => $this->ModelOrder->getOrderById($idMasterOrder),
-            'getListOrderById' => $this->ModelOrder->getOrderListById($idMasterOrder),
+            'getListOrderById' => $getListOrderById,
 
         ];
         echo json_encode($data);

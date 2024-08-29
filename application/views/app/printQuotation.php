@@ -81,25 +81,6 @@
                                                         class="table table-sm text-nowrap mb-0 table-borderless">
                                                         <tbody>
                                                             <tr>
-                                                                <td>
-                                                                    <p class="mb-0">Sub-total :</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="mb-0 fw-medium fs-15">IDR <?php echo number_format($total) ?></p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td scope="row">
-                                                                    <p class="mb-0">PPN <span
-                                                                            class="text-danger">(11%)</span>
-                                                                        :</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p class="mb-0 fw-medium fs-15">
-                                                                        $472.80</p>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td scope="row">
                                                                     <p class="mb-0 fs-14">Total :</p>
                                                                 </td>

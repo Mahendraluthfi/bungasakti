@@ -24,7 +24,7 @@
                         <tbody>
                             <?php $no = 1;
                             foreach ($getAllBarang as $data) { ?>
-                                <tr>
+                                <tr <?php echo ($data->valueStock->qty <= 5 && $data->type == "READY") ? 'class="table-danger"' : '' ?>>
                                     <td><?php echo $no++ ?></td>
                                     <td><?php echo $data->description ?></td>
                                     <td><?php echo $data->barcode ?></td>

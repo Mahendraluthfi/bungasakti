@@ -140,18 +140,21 @@
                             </a>
                             <div class="collapse" id="pages">
                                 <ul class="nav-second-level">
-                                    <li>
-                                        <a href="<?php echo base_url('User') ?>" class="tp-link">User</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo base_url('Toko') ?>" class="tp-link">Toko</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo base_url('Customer') ?>" class="tp-link">Customer</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo base_url('Barang') ?>" class="tp-link">Barang</a>
-                                    </li>
+                                    <?php if ($this->session->userdata('sessionLevel') == "ADMIN") { ?>
+
+                                        <li>
+                                            <a href="<?php echo base_url('User') ?>" class="tp-link">User</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo base_url('Toko') ?>" class="tp-link">Toko</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo base_url('Customer') ?>" class="tp-link">Customer</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo base_url('Barang') ?>" class="tp-link">Barang</a>
+                                        </li>
+                                    <?php } ?>
                                     <li>
                                         <a href="<?php echo base_url('Stock') ?>" class="tp-link">Stock Toko</a>
                                     </li>
@@ -166,18 +169,20 @@
                             </a>
                             <div class="collapse" id="transaction">
                                 <ul class="nav-second-level">
-                                    <li>
-                                        <a href="<?php echo base_url('Purchase') ?>" class="tp-link">Purchase Request</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo base_url('Order') ?>" class="tp-link">Order</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo base_url('Invoice') ?>" class="tp-link">Invoice</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?php echo base_url('Pembelian') ?>" class="tp-link">Pembelian</a>
-                                    </li>
+                                    <?php if ($this->session->userdata('sessionLevel') == "ADMIN") { ?>
+                                        <li>
+                                            <a href="<?php echo base_url('Purchase') ?>" class="tp-link">Purchase Request</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo base_url('Order') ?>" class="tp-link">Order</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo base_url('Invoice') ?>" class="tp-link">Invoice</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?php echo base_url('Pembelian') ?>" class="tp-link">Pembelian</a>
+                                        </li>
+                                    <?php } ?>
                                     <li>
                                         <a href="<?php echo base_url('Penjualan') ?>" class="tp-link">Penjualan</a>
                                     </li>
@@ -192,11 +197,14 @@
                             </a>
                             <div class="collapse" id="report">
                                 <ul class="nav-second-level">
+                                    <?php if ($this->session->userdata('sessionLevel') == "ADMIN") { ?>
+
+                                        <li>
+                                            <a href="#" class="tp-link">Vendor</a>
+                                        </li>
+                                    <?php } ?>
                                     <li>
-                                        <a href="auth-login.html" class="tp-link">Penjualan</a>
-                                    </li>
-                                    <li>
-                                        <a href="auth-login.html" class="tp-link">Tagihan Invoice</a>
+                                        <a href="#" class="tp-link">Toko</a>
                                     </li>
                                 </ul>
                             </div>

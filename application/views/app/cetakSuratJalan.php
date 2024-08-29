@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="table-responsive rounded-2">
-                                    <table class="table mt-4 mb-4 table-centered border table-bordered">
+                                    <table class="table table-centered border table-bordered">
                                         <thead class="rounded-2">
                                             <tr>
                                                 <th>#</th>
@@ -69,8 +69,7 @@
                                         <tbody>
                                             <?php $no = 1;
                                             $total = 0;
-                                            foreach ($getInvoiceItemById as $data) {
-                                                $total = $data->total + $total ?>
+                                            foreach ($getInvoiceItemById as $data) { ?>
                                                 <tr>
                                                     <td><?php echo $no++ ?></td>
                                                     <td><?php echo $data->qtyOrder ?></td>
