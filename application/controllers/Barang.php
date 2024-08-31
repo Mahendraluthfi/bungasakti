@@ -21,6 +21,7 @@ class Barang extends CI_Controller
             $value->valueStock = $this->db->query("SELECT SUM(qtyStock) as qty from toko_stock where idBarang='$value->idBarang'")->row();
         }
         $data = array(
+            'title' => '',
             'content' => 'app/barang',
             'getAllBarang' => $getAllBarang,
         );

@@ -21,6 +21,7 @@ class Invoice extends CI_Controller
             $value->sumTotal = $this->ModelInvoice->getSumTotal($value->idInvoice);
         }
         $data = [
+            'title' => '',
             'content' => 'app/invoice',
             'getAllInvoice' => $getAllInvoice
         ];
@@ -32,6 +33,7 @@ class Invoice extends CI_Controller
     {
         if ($idInvoice) {
             $data = [
+                'title' => 'Invoice ' . $idInvoice . ' - BungaSakti',
                 'content' => 'app/cetakInvoice',
                 'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
                 'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),
@@ -47,6 +49,10 @@ class Invoice extends CI_Controller
     {
         if ($idInvoice) {
             $data = [
+                'title' => 'SuratJalan Invoice-' . $idInvoice . ' - BungaSakti',
+                'content' => 'app/cetakSuratJalan',
+                'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
+                'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),
                 'content' => 'app/cetakSuratJalan',
                 'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
                 'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),
@@ -79,6 +85,7 @@ class Invoice extends CI_Controller
         if ($idInvoice) {
 
             $data = [
+                'title' => '',
                 'content' => 'app/invoiceEdit',
                 'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),
                 'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
@@ -130,6 +137,8 @@ class Invoice extends CI_Controller
     function hapusInvoice()
     {
         $idInvoice = $this->input->post('idInvoice');
+        $getInvoice  = $this->db->get_where('master_invoice', ['idInvoice' => $idInvoice])->row();
+        $this->db->update('master_order', ['status' => 'INVOICE'], ['idMasterOrder' => $getInvoice->idMasterOrder]);
         $this->db->delete('master_invoice', ['idInvoice' => $idInvoice]);
         $this->db->delete('det_invoice', ['idInvoice' => $idInvoice]);
         $this->session->set_flashdata('msg', '

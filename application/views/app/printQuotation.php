@@ -54,8 +54,8 @@
                                                 <th>Type</th>
                                                 <th>Uom</th>
                                                 <th>Qty</th>
-                                                <th>Unit Price</th>
-                                                <th>Total</th>
+                                                <th class="text-end">Unit Price</th>
+                                                <th class="text-end">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -70,32 +70,21 @@
                                                     <td><?php echo $data->type ?></td>
                                                     <td><?php echo $data->uom ?></td>
                                                     <td><?php echo $data->qtyOrder ?></td>
-                                                    <td class="align-items-end"><?php echo number_format($data->fixedPrice) ?></td>
-                                                    <td><?php echo number_format($data->total) ?></td>
+                                                    <td class="align-items-end text-end"><?php echo number_format($data->fixedPrice) ?></td>
+                                                    <td class="text-end"><?php echo number_format($data->total) ?></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr>
                                                 <td colspan="6"></td>
-                                                <td colspan="2">
-                                                    <table
-                                                        class="table table-sm text-nowrap mb-0 table-borderless">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td scope="row">
-                                                                    <p class="mb-0 fs-14">Total :</p>
-                                                                </td>
-                                                                <td>
-                                                                    <p
-                                                                        class="mb-0 fw-medium fs-16 text-success">
-                                                                        IDR <?php echo number_format($total) ?></p>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
+                                                <td class="fw-bold text-end">Total IDR</td>
+                                                <td class="fs-16 text-success text-end"><?php echo number_format($total) ?></td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
+                                    <p class="pb-3">Hormat Kami</p>
+                                    <div style="height: 30px;"></div>
+                                    <p class="py-3">CV. BUNGA SAKTI</p>
                                 </div>
                             </div>
                         </div>

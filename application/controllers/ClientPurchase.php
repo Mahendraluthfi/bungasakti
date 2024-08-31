@@ -211,7 +211,7 @@ class ClientPurchase extends CI_Controller
             </div>');
             // echo json_encode(false);
         }
-        redirect('purchase');
+        redirect('clientPurchase');
     }
 
     function getDetailPR()

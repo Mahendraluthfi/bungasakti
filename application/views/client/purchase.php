@@ -32,7 +32,9 @@
                                         <?php if ($data->status == "PENDING" || $data->status == "SUBMIT") { ?>
                                             <a href="<?php echo base_url('clientPurchase/formEdit/' . $data->idPR) ?>" class="btn btn-warning btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Barang" tabindex="0"><i class="mdi mdi-pencil"></i></a>
                                         <?php } ?>
-                                        <button type="button" onclick="hapus('<?php echo $data->idPR ?>','<?php echo $data->status ?>')" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Barang" tabindex="0"><i class="mdi mdi-delete"></i></button>
+                                        <?php if ($data->status != "ORDER") { ?>
+                                            <button type="button" onclick="hapus('<?php echo $data->idPR ?>','<?php echo $data->status ?>')" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Barang" tabindex="0"><i class="mdi mdi-delete"></i></button>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -117,7 +119,8 @@
             },
             dataType: 'JSON',
             success: function(data) {
-                console.log(data);
+                // console.log(data);
+                $('#showData').html('');
                 $('.title-text').text('Detail PR ' + data.getPRbyId.idPR);
                 $('.companyName').text(data.getPRbyId.companyName);
                 $('.email').text(data.getPRbyId.email);

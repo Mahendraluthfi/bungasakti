@@ -162,6 +162,7 @@
             success: function(data) {
                 // console.log(data);                
                 $('#btnProcced').html('');
+                $('#showData').html('');
                 if (data.getPRbyId.status == 'SUBMIT') {
                     $('#btnProcced').html('<button type="button" onclick="procced(\'' + data.getPRbyId.idPR + '\')" class="btn btn-success mb-2"><i class="mdi mdi-cart-arrow-down"></i> Proses to Order</button>');
                 } else {

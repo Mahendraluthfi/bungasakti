@@ -88,6 +88,19 @@ class ModelOrder extends CI_Model
         $this->db->insert('master_order', $object);
         return $this->db->affected_rows() > 0;
     }
+
+    function isOrderComplete($idMasterOrder)
+    {
+        return $this->db->query("SELECT SUM(qtyInvoice) as totalInvoice FROM `det_invoice`
+            JOIN det_master_order ON det_master_order.idDetOrder = det_invoice.idDetOrder
+            WHERE det_invoice.idDetOrder IN(SELECT idDetOrder FROM det_master_order WHERE idMasterOrder = '35384d32')
+            AND det_master_order.idMasterOrder = '$idMasterOrder'")->row();
+    }
+
+    function countQtyOrder($idMasterOrder)
+    {
+        return $this->db->query("SELECT SUM(qtyOrder) as totalOrder FROM `det_master_order` WHERE idMasterOrder='$idMasterOrder'")->row();
+    }
 }
 
 /* End of file ModelOrder.php */

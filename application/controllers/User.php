@@ -21,6 +21,7 @@ class User extends CI_Controller
         $this->load->model('ModelToko');
 
         $data = array(
+            'title' => '',
             'content' => 'app/user',
             'getAllToko' => $this->ModelToko->getAllToko(),
             'getAllUsers' => $this->ModelUser->getAllUser(),

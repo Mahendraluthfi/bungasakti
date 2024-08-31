@@ -18,6 +18,7 @@ class AppHome extends CI_Controller
         $month = date('m');
         $year = date('Y');
         $data = [
+            'title' => '',
             'content' => $this->session->userdata('sessionLevel') == "ADMIN" ? 'app/dashboard' : 'app/dashboardKasir',
         ];
 
@@ -28,6 +29,8 @@ class AppHome extends CI_Controller
             $data['invoiceofMonth'] = $this->ModelDashboard->invoiceofMonth($month, $year);
             $data['kreditofMonth'] = $this->ModelDashboard->kreditofMonth($month, $year);
             $data['debitofMonth'] = $this->ModelDashboard->debitofMonth($month, $year);
+            $data['poComplete'] = $this->ModelDashboard->poComplete();
+            $data['poPending'] = $this->ModelDashboard->poPending();
         }
         $this->load->view('app/index', $data);
         // echo json_encode($data);

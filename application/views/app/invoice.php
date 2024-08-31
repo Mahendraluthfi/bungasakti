@@ -13,7 +13,7 @@
                                 <th>No</th>
                                 <th>Customer</th>
                                 <th>No.Invoice</th>
-                                <th>No.SJ</th>
+                                <th>PO Vendor</th>
                                 <th>ID_MasterOrder</th>
                                 <th>Tanggal</th>
                                 <th>Tempo</th>
@@ -30,7 +30,7 @@
                                     <td><?php echo $no++ ?></td>
                                     <td><?php echo $data->companyName ?></td>
                                     <td><?php echo $data->idInvoice ?></td>
-                                    <td><?php echo $data->idSuratJalan ?></td>
+                                    <td><?php echo $data->poRefrence ?></td>
                                     <td>
                                         <button type="button" class="btn btn-light btn-sm" onclick="viewOrder('<?php echo $data->idMasterOrder ?>')">
                                             <?php echo $data->idMasterOrder ?>

@@ -63,7 +63,7 @@
             <div class="card">
                 <div class="card-body p-2">
                     <div class="d-flex align-items-center">
-                        <div class="fs-14 mb-1">#Kredit <?php echo date('F') ?></div>
+                        <div class="fs-14 mb-1">#Piutang <?php echo date('F') ?></div>
                     </div>
                     <div class="d-flex align-items-baseline mb-2">
                         <div class="fs-22 mb-0 me-2 fw-semibold text-danger"><?php echo number_format($kreditofMonth->kredit_invoice) ?></div>
@@ -85,27 +85,57 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 col-xl-2">
-            <div class="card">
-                <div class="card-body p-2">
-                    <div class="d-flex align-items-center">
-                        <div class="fs-14 mb-1">#Kredit Cummulative</div>
+        <div class="col-md-6 col-xl-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">#PO Complete</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-2">
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-info"><?php echo $poComplete ?></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-baseline mb-2">
-                        <div class="fs-22 mb-0 me-2 fw-semibold text-danger">0</div>
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">#Piutang Cummulative</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-2">
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">#PO Pending</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-2">
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger"><?php echo $poPending ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">#Invoice Lewat Tempo</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-2">
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger">0</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-xl-2">
             <div class="card">
-                <div class="card-body p-2">
-                    <div class="d-flex align-items-center">
-                        <div class="fs-14 mb-1">#Invoice Lewat Tempo</div>
-                    </div>
-                    <div class="d-flex align-items-baseline mb-2">
-                        <div class="fs-22 mb-0 me-2 fw-semibold text-danger">0</div>
-                    </div>
+                <div class="card-header p-1">Barang low Stock</div>
+                <div class="card-body">
+
                 </div>
             </div>
         </div>

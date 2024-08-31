@@ -22,6 +22,7 @@ class Purchase extends CI_Controller
     public function index()
     {
         $data = array(
+            'title' => '',
             'content' => 'app/purchase',
             'getAllPurchase' => $this->ModelPurchase->getAllPurchase(),
             'getAllCustomer' => $this->ModelCustomer->getAllCustomer(),
@@ -46,6 +47,7 @@ class Purchase extends CI_Controller
             $getDetailPurchase = $this->ModelPurchase->getDetailPurchase($getCurrentPurchase->idPR);
 
             $data = array(
+                'title' => '',
                 'content' => 'app/purchaseForm',
                 'getCurrentPurchase' => $getCurrentPurchase,
                 'getDetailPurchase' => $getDetailPurchase,
@@ -63,6 +65,7 @@ class Purchase extends CI_Controller
         $getPRbyId = $this->ModelPurchase->getPRbyId($idPR);
         $getDetailPurchase = $this->ModelPurchase->getDetailPurchase($idPR);
         $data = array(
+            'title' => '',
             'content' => 'app/purchaseFormEdit',
             'getCurrentPurchase' => $getPRbyId,
             'getDetailPurchase' => $getDetailPurchase,

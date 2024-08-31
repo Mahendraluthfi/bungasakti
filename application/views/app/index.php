@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>CV. BUNGA SAKTI</title>
+    <title><?php echo $title ? $title : 'CV. BUNGA SAKTI'; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CV. Bunga Sakti Vendor Management System" />
     <meta name="author" content="Naka Developers" />

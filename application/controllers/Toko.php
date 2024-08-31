@@ -18,6 +18,7 @@ class Toko extends CI_Controller
     public function index()
     {
         $data = array(
+            'title' => '',
             'content' => 'app/toko',
             'getAllToko' => $this->ModelToko->getAllToko(),
         );

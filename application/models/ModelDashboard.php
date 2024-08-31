@@ -41,6 +41,16 @@ class ModelDashboard extends CI_Model
             JOIN master_invoice ON master_invoice.idInvoice = det_invoice.idInvoice
             WHERE MONTH(master_invoice.paymentDate) = '$month' AND YEAR(master_invoice.paymentDate) = '$year' AND master_invoice.status='LUNAS'")->row();
     }
+
+    function poComplete()
+    {
+        return $this->db->get_where('master_order', ['status' => 'COMPLETE'])->num_rows();
+    }
+
+    function poPending()
+    {
+        return $this->db->query("SELECT * FROM master_order WHERE NOT status = 'COMPLETE'")->num_rows();
+    }
 }
 
 /* End of file ModelDashboard.php */

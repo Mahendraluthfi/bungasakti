@@ -80,6 +80,10 @@
                                             <?php } ?>
                                         </tbody>
                                     </table>
+                                    <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
+                                    <p class="pb-3">Hormat Kami</p>
+                                    <div style="height: 30px;"></div>
+                                    <p class="py-3">CV. BUNGA SAKTI</p>
                                 </div>
                             </div>
                         </div>

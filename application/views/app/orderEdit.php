@@ -105,7 +105,7 @@
                         <tbody>
                             <?php $no = 1;
                             foreach ($getListOrderById as $data) {
-                                $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->qtyInvoice : 0;
+                                $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->total : 0;
                             ?>
                                 <tr>
                                     <td><?php echo $no++; ?></td>
@@ -368,28 +368,30 @@
                             <?php $no = 1;
                             foreach ($getListOrderById as $data) {
                                 if ($data->statusQty == 1) {
-                                    $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->qtyInvoice : 0;
+                                    $sisa = ($data->getQtyInvoice) ? $data->getQtyInvoice->total : 0;
                                     $limit = $data->qtyOrder - $sisa;
+                                    if ($limit > 0) {
                             ?>
-                                    <tr>
-                                        <td>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="<?php echo $data->idDetOrder ?>" name="idDetOrder[]">
-                                                <label class="form-check-label"></label>
-                                            </div>
-                                        </td>
-                                        <td><?php echo $data->description ?></td>
-                                        <td><?php echo $data->mcRefrence ?></td>
-                                        <td><?php echo $data->type ?></td>
-                                        <td><?php echo $data->qtyOrder ?></td>
-                                        <td><?php echo $limit ?></td>
-                                        <td><?php echo number_format($data->fixedPrice) ?></td>
-                                        <td><?php echo number_format($data->total) ?></td>
-                                        <td>
-                                            <input type="number" min="0" name="qtyInvoice[<?php echo $data->idDetOrder ?>]" class="form-control form-control-sm" max="<?php echo $limit ?>" value="<?php echo $limit ?>">
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="<?php echo $data->idDetOrder ?>" name="idDetOrder[]">
+                                                    <label class="form-check-label"></label>
+                                                </div>
+                                            </td>
+                                            <td><?php echo $data->description ?></td>
+                                            <td><?php echo $data->mcRefrence ?></td>
+                                            <td><?php echo $data->type ?></td>
+                                            <td><?php echo $data->qtyOrder ?></td>
+                                            <td><?php echo $limit ?></td>
+                                            <td><?php echo number_format($data->fixedPrice) ?></td>
+                                            <td><?php echo number_format($data->total) ?></td>
+                                            <td>
+                                                <input type="number" min="0" name="qtyInvoice[<?php echo $data->idDetOrder ?>]" class="form-control form-control-sm" max="<?php echo $limit ?>" value="<?php echo $limit ?>">
+                                            </td>
+                                        </tr>
                             <?php }
+                                }
                             } ?>
                         </tbody>
                     </table>
@@ -688,27 +690,32 @@
 
     const simpanInvoice = () => {
         let frmInvoice = document.getElementById('frmInvoice');
-        if (frmInvoice.checkVisibility() === true) {
-            $.ajax({
-                url: base_url + 'order/genInvoice/' + idMasterOrder,
-                type: 'POST',
-                data: $('#frmInvoice').serialize(),
-                dataType: 'JSON',
-                success: function(data) {
-                    // console.log(data);
-                    if (data.success === false) {
-                        alert('Pilih data terlebih dahulu');
-                    } else {
-                        // alert('Berhasil menyimpan data');
-                        location.reload();
+        let x = confirm('Apakah anda yakin akan membuat invoice ini ?');
+        if (x) {
+            if (frmInvoice.checkVisibility() === true) {
+                $.ajax({
+                    url: base_url + 'order/genInvoice/' + idMasterOrder,
+                    type: 'POST',
+                    data: $('#frmInvoice').serialize(),
+                    dataType: 'JSON',
+                    success: function(data) {
+                        // console.log(data);
+                        if (data.success === false) {
+                            alert('Pilih data terlebih dahulu');
+                        } else if (data.message === 'Done') {
+                            // alert('Berhasil menyimpan data');
+                            location.reload();
+                        } else if (data.message === 'Complete') {
+                            window.location.href = base_url + 'order';
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Error get data from ajax');
                     }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error get data from ajax');
-                }
-            });
-        } else {
-            frmInvoice.reportValidity();
+                });
+            } else {
+                frmInvoice.reportValidity();
+            }
         }
     }
 

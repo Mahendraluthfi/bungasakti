@@ -26,6 +26,7 @@ class Order extends CI_Controller
             $value->totalOrder = $this->db->query("SELECT SUM(total) as totalOrder FROM det_master_order WHERE idMasterOrder = '$value->idMasterOrder'")->row();
         }
         $data = array(
+            'title' => '',
             'content' => 'app/order',
             'getAllCustomer' => $this->ModelCustomer->getAllCustomer(),
             'getAllOrder' => $getAllOrder,
@@ -41,10 +42,11 @@ class Order extends CI_Controller
             $getListOrderById = $this->ModelOrder->getOrderListById($idMasterOrder);
             foreach ($getListOrderById as $key => $value) {
                 $value->getStockIssuedByDetOrder = $this->ModelOrder->getStockIssuedByDetOrder($value->idDetOrder);
-                $value->getQtyInvoice = $this->db->get_where('det_invoice', ['idDetOrder' => $value->idDetOrder])->row();
+                $value->getQtyInvoice = $this->db->query("SELECT SUM(qtyInvoice) as total FROM `det_invoice` WHERE idDetOrder = '$value->idDetOrder'")->row();
             }
             $getPR = $getOrderById->idPR;
             $data = array(
+                'title' => '',
                 'content' => 'app/orderEdit',
                 'getOrderById' => $getOrderById,
                 'getListOrderById' => $getListOrderById,
@@ -307,11 +309,15 @@ class Order extends CI_Controller
 
     function genInvoice($idMasterOrder)
     {
-        $idInvoice = substr($this->uuid->v4(), 0, 8);
+        $idInvoice = date('dyis');
         $idSuratJalan = substr($this->uuid->v4(), 0, 8);
         $oneMonthAfter = date('Y-m-d', strtotime("+30 days"));
 
         $data = $this->input->post(); // Get the POST data from the AJAX request
+        // echo json_encode([
+        //     'idDet' => $data['idDetOrder'],
+        //     'qty' => $data['qtyInvoice'],
+        // ]);
         if (empty($data) || !isset($data['idDetOrder'])) {
             echo json_encode(array('success' => false, 'message' => 'No data received.'));
         } else {
@@ -338,11 +344,24 @@ class Order extends CI_Controller
                 }
             }
             $this->db->insert_batch('det_invoice', $responseArray);
-            $this->session->set_flashdata('msg', '
-            <div class="alert alert-success" role="alert">
-                <strong>Buat Invoice berhasil!</strong>
-            </div>');
-            echo json_encode(array('success' => true, 'message' => 'Done'));
+            // cek apakah order sudah complete ?
+            $isOrderComplete = $this->ModelOrder->isOrderComplete($idMasterOrder);
+            $countQtyOrder = $this->ModelOrder->countQtyOrder($idMasterOrder);
+            $sisa = $countQtyOrder->totalOrder - $isOrderComplete->totalInvoice;
+            if ($sisa < 1) {
+                $this->db->update('master_order', ['status' => 'COMPLETE', 'updatedAt' => date('Y-m-d H:i:s')], ['idMasterOrder' => $idMasterOrder]);
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success" role="alert">
+                    <strong>Buat Invoice berhasil, Order sudah complete Invoice !</strong>
+                </div>');
+                echo json_encode(array('success' => true, 'message' => 'Complete'));
+            } else {
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success" role="alert">
+                    <strong>Buat Invoice berhasil!</strong>
+                </div>');
+                echo json_encode(array('success' => true, 'message' => 'Done'));
+            }
         }
     }
 
@@ -392,6 +411,7 @@ class Order extends CI_Controller
             $getOrderById = $this->ModelOrder->getOrderById($idMasterOrder);
             $getListOrderById = $this->ModelOrder->getOrderListById($idMasterOrder);
             $data = [
+                'title' => '',
                 'content' => 'app/printQuotation',
                 'getOrderById' => $getOrderById,
                 'getListOrderById' => $getListOrderById,

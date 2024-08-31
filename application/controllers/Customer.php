@@ -17,6 +17,7 @@ class Customer extends CI_Controller
     public function index()
     {
         $data = array(
+            'title' => '',
             'content' => 'app/customer',
             'getAllCustomer' => $this->ModelCustomer->getAllCustomer(),
         );

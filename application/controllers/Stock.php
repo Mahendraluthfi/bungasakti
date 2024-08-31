@@ -19,6 +19,7 @@ class Stock extends CI_Controller
     public function index()
     {
         $data = array(
+            'title' => '',
             'content' => 'app/stock',
             'getAllToko' => $this->ModelToko->getAllToko(),
         );
@@ -30,6 +31,7 @@ class Stock extends CI_Controller
         $getTokoById = $this->ModelToko->getTokoById($idToko);
         $getNotToko = $this->db->query("SELECT * FROM master_toko WHERE NOT idToko = '$idToko' AND isActive='1'")->result();
         $data = array(
+            'title' => '',
             'content' => 'app/stockView',
             'getNamaToko' => $getTokoById->namaToko,
             'getStockByToko' => $this->ModelToko->getStockByToko($idToko),

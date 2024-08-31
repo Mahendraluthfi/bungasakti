@@ -68,8 +68,8 @@
                                                 <th>Mat. Code</th>
                                                 <th>Uom</th>
                                                 <th>Qty</th>
-                                                <th>Unit Price</th>
-                                                <th>Total</th>
+                                                <th class="text-end">Unit Price</th>
+                                                <th class="text-end">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -83,22 +83,28 @@
                                                     <td><?php echo $data->mcRefrence ?></td>
                                                     <td><?php echo $data->uom ?></td>
                                                     <td><?php echo $data->qtyInvoice ?></td>
-                                                    <td class="align-items-end">IDR <?php echo number_format($data->fixedPrice) ?></td>
-                                                    <td>IDR <?php echo number_format($data->qtyInvoice * $data->fixedPrice) ?></td>
+                                                    <td class="text-end"><?php echo number_format($data->fixedPrice) ?></td>
+                                                    <td class="text-end"><?php echo number_format($data->qtyInvoice * $data->fixedPrice) ?></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr class="text-right">
                                                 <td colspan="5"></td>
                                                 <td>
-                                                    <p class="mb-0 fs-14">Total :</p>
+                                                    <p class="mb-0 fs-14 fw-bold">Total IDR</p>
                                                 </td>
                                                 <td>
-                                                    <p class="mb-0 fw-medium fs-16 text-success">
-                                                        IDR <?php echo number_format($total) ?></p>
+                                                    <p class="mb-0 fw-medium fs-16 text-success text-end">
+                                                        <?php echo number_format($total) ?></p>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <i class="text-danger">* Pembayaran max. 30 hari sejak tanggal invoice</i>
+                                    <p></p>
+                                    <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
+                                    <p class="pb-3">Hormat Kami</p>
+                                    <div style="height: 30px;"></div>
+                                    <p class="py-3">CV. BUNGA SAKTI</p>
                                 </div>
                             </div>
                         </div>
