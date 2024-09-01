@@ -13,15 +13,13 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Customer</th>
-                                <th>No.Invoice</th>
-                                <th>No.SJ</th>
-                                <th>ID_MasterOrder</th>
+                                <th>ID</th>
                                 <th>Tanggal</th>
-                                <th>Tempo</th>
+                                <th>Toko</th>
+                                <th>User</th>
+                                <th>Nota No.</th>
+                                <th>Ket.</th>
                                 <th>Total</th>
-                                <th>Tgl Bayar</th>
-                                <th>Status</th>
                                 <th>#</th>
                             </tr>
                         </thead>

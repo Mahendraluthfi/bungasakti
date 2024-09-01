@@ -200,11 +200,11 @@
                                     <?php if ($this->session->userdata('sessionLevel') == "ADMIN") { ?>
 
                                         <li>
-                                            <a href="#" class="tp-link">Vendor</a>
+                                            <a href="<?php echo base_url('laporan/vendor') ?>" class="tp-link">Vendor</a>
                                         </li>
                                     <?php } ?>
                                     <li>
-                                        <a href="#" class="tp-link">Toko</a>
+                                        <a href="<?php echo base_url('laporan/toko') ?>" class="tp-link">Toko</a>
                                     </li>
                                 </ul>
                             </div>

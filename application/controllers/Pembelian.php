@@ -18,6 +18,7 @@ class Pembelian extends CI_Controller
     public function index()
     {
         $data = [
+            'title' => '',
             'content' => 'app/pembelian'
         ];
 

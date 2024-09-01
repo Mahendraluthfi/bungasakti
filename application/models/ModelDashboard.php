@@ -51,6 +51,23 @@ class ModelDashboard extends CI_Model
     {
         return $this->db->query("SELECT * FROM master_order WHERE NOT status = 'COMPLETE'")->num_rows();
     }
+
+    function kreditCum()
+    {
+        return $this->db->query("SELECT master_invoice.createdAt, SUM(det_invoice.qtyInvoice * det_master_order.fixedPrice) as  kredit_invoice FROM `det_invoice`
+        JOIN det_master_order ON det_master_order.idDetOrder = det_invoice.idDetOrder
+        JOIN master_invoice ON master_invoice.idInvoice = det_invoice.idInvoice
+        WHERE master_invoice.status='PENDING'")->row();
+    }
+
+    function jatuhTempo($date)
+    {
+        $this->db->from('master_invoice');
+        $this->db->where('DATE(dueDate) <=', $date);
+        $this->db->where('status', 'PENDING');
+        $db = $this->db->get();
+        return $db->num_rows();
+    }
 }
 
 /* End of file ModelDashboard.php */

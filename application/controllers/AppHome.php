@@ -15,6 +15,7 @@ class AppHome extends CI_Controller
 
     public function index()
     {
+        $today = date('Y-m-d');
         $month = date('m');
         $year = date('Y');
         $data = [
@@ -28,9 +29,11 @@ class AppHome extends CI_Controller
             $data['omzetofMonth'] = $this->ModelDashboard->omzetofMonth($month, $year);
             $data['invoiceofMonth'] = $this->ModelDashboard->invoiceofMonth($month, $year);
             $data['kreditofMonth'] = $this->ModelDashboard->kreditofMonth($month, $year);
+            $data['kreditCum'] = $this->ModelDashboard->kreditCum();
             $data['debitofMonth'] = $this->ModelDashboard->debitofMonth($month, $year);
             $data['poComplete'] = $this->ModelDashboard->poComplete();
             $data['poPending'] = $this->ModelDashboard->poPending();
+            $data['jatuhTempo'] = $this->ModelDashboard->jatuhTempo($today);
         }
         $this->load->view('app/index', $data);
         // echo json_encode($data);

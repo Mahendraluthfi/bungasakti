@@ -25,8 +25,10 @@
                         </thead>
                         <tbody>
                             <?php $no = 1;
-                            foreach ($getAllInvoice as $data) { ?>
-                                <tr>
+                            foreach ($getAllInvoice as $data) {
+                                $date = date('Y-m-d');
+                            ?>
+                                <tr class="<?php echo ($data->dueDate < $date && $data->status == "PENDING") ? 'table-danger' : '' ?>">
                                     <td><?php echo $no++ ?></td>
                                     <td><?php echo $data->companyName ?></td>
                                     <td><?php echo $data->idInvoice ?></td>

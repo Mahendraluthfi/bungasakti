@@ -104,7 +104,7 @@
                                 <div class="fs-14 mb-1">#Piutang Cummulative</div>
                             </div>
                             <div class="d-flex align-items-baseline mb-2">
-                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger">0</div>
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger"><?php echo number_format($kreditCum->kredit_invoice) ?></div>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                                 <div class="fs-14 mb-1">#Invoice Lewat Tempo</div>
                             </div>
                             <div class="d-flex align-items-baseline mb-2">
-                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger">0</div>
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger"><?php echo $jatuhTempo ?></div>
                             </div>
                         </div>
                     </div>
