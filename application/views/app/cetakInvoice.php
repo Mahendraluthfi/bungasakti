@@ -26,6 +26,7 @@
                                     <img src="<?php echo base_url() ?>assets/logo/flatlogo.png" class="me-2" alt="logo" height="40">
                                     <address class="mt-2">
                                         Invoice To:<br>
+                                        <?php echo $getInvoiceById->username ?><br>
                                         <strong><?php echo $getInvoiceById->companyName ?></strong><br>
                                         <?php echo $getInvoiceById->address ?><br>
                                         <?php echo $getInvoiceById->contactNumber ?><br>
@@ -97,14 +98,35 @@
                                                         <?php echo number_format($total) ?></p>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="7" class="fst-italic fw-bold">
+                                                    Terbilang : <?php echo $terbilang ?> Rupiah
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
-                                    <i class="text-danger">* Pembayaran max. 30 hari sejak tanggal invoice</i>
+                                    Account No. / Nomor Rekening :<br>
+                                    <b>Bank Mandiri 136-00-1719093-2 an CV. BUNGA SAKTI</b><br>
+                                    <b>Bank BCA 0095011166 an AFFENDY HERMANU</b><br><br>
+                                    <i class="text-danger">Note: Maximum payment of 7 days after this invoice is received</i><br><br>
+                                    <i class="mdi mdi-email"></i> percetakan@bungasakti.com<br>
+                                    <i class="mdi mdi-phone"></i> (0294) 572108 <br>
+                                    <i class="mdi mdi-cellphone"></i> 085 727 741 082
                                     <p></p>
-                                    <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
-                                    <p class="pb-3">Hormat Kami</p>
-                                    <div style="height: 30px;"></div>
-                                    <p class="py-3">CV. BUNGA SAKTI</p>
+                                    <div class="row mx-3">
+                                        <div class="col-6">
+                                            <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
+                                            <p class="pb-3">Hormat Kami</p>
+                                            <div style="height: 30px;"></div>
+                                            <p class="py-3">CV. BUNGA SAKTI</p>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <p class="pb-0 m-0"></p>
+                                            <p class="pb-3">Received by / Diterima Oleh</p>
+                                            <div style="height: 30px;"></div>
+                                            <p class="py-3 mx-3">(<span class="mx-5"></span>)</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

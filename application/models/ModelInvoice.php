@@ -12,7 +12,7 @@ class ModelInvoice extends CI_Model
 
     function getAllInvoice()
     {
-        $this->db->select('master_invoice.*,customer.companyName, master_order.poRefrence');
+        $this->db->select('master_invoice.*,customer.companyName, customer.username, master_order.poRefrence');
         $this->db->from('master_invoice');
         $this->db->join('master_order', 'master_order.idMasterOrder = master_invoice.idMasterOrder');
         $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');

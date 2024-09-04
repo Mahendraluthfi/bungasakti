@@ -36,7 +36,7 @@ class ModelLaporan extends CI_Model
 
     function getAllOrder($df, $dt)
     {
-        $this->db->select('master_order.*, customer.companyName');
+        $this->db->select('master_order.*, customer.companyName, customer.username');
         $this->db->from('master_order');
         $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');
         $this->db->where('master_order.isActive', '1');
@@ -48,7 +48,7 @@ class ModelLaporan extends CI_Model
 
     function getAllInvoice($df, $dt)
     {
-        $this->db->select('master_invoice.*,customer.companyName, master_order.poRefrence');
+        $this->db->select('master_invoice.*,customer.companyName, master_order.poRefrence, customer.username');
         $this->db->from('master_invoice');
         $this->db->join('master_order', 'master_order.idMasterOrder = master_invoice.idMasterOrder');
         $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');

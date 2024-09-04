@@ -34,6 +34,11 @@ class AppHome extends CI_Controller
             $data['poComplete'] = $this->ModelDashboard->poComplete();
             $data['poPending'] = $this->ModelDashboard->poPending();
             $data['jatuhTempo'] = $this->ModelDashboard->jatuhTempo($today);
+            $data['chartOrder'] = $this->ModelDashboard->getOrderChart($year);
+            $data['chartInvoice'] = $this->ModelDashboard->getInvoiceChart($year);
+            $data['chartPiutang'] = $this->ModelDashboard->getPiutangChart($year);
+            $data['chartDebit'] = $this->ModelDashboard->getDebitChart($year);
+            $data['lowStock'] = $this->ModelDashboard->lowStock();
         }
         $this->load->view('app/index', $data);
         // echo json_encode($data);

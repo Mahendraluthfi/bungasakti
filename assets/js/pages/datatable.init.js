@@ -13,7 +13,10 @@ $(document).ready(function () {
 		$("#alternative-page-datatable").DataTable({ pagingType: "full_numbers" }),
 		$("#scroll-vertical-datatable").DataTable({
 			scrollY: "350px",
+			searching: false,
 			scrollCollapse: !0,
+			columnDefs: [{ width: "1%", targets: 1 }],
+			bInfo: false,
 			paging: !1,
 		}),
 		$("#scroll-horizontal-datatable-zero").DataTable({

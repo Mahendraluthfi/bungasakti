@@ -80,10 +80,20 @@
                                             <?php } ?>
                                         </tbody>
                                     </table>
-                                    <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
-                                    <p class="pb-3">Hormat Kami</p>
-                                    <div style="height: 30px;"></div>
-                                    <p class="py-3">CV. BUNGA SAKTI</p>
+                                    <div class="row mx-3">
+                                        <div class="col-6">
+                                            <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
+                                            <p class="pb-3">Hormat Kami</p>
+                                            <div style="height: 30px;"></div>
+                                            <p class="py-3">CV. BUNGA SAKTI</p>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <p class="pb-0 m-0"></p>
+                                            <p class="pb-3">Received by / Diterima Oleh</p>
+                                            <div style="height: 30px;"></div>
+                                            <p class="py-3 mx-3">(<span class="mx-5"></span>)</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

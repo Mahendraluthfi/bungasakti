@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <h4>Master Pembelian</h4>
-                        <button type="button" class="btn btn-primary btn-sm"><i class="mdi mdi-plus"></i> Tambah Data</button>
+                        <a href="<?php echo base_url('pembelian/editForm') ?>" class="btn btn-primary btn-sm"><i class="mdi mdi-plus"></i> Tambah Data</a>
                     </div>
                     <?php echo $this->session->flashdata('msg'); ?>
                     <table id="scroll-horizontal-datatable" class="table table-striped w-100 nowrap">
@@ -27,7 +27,6 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -25,7 +25,7 @@
                                 <tr>
                                     <td><?php echo $data->idPR ?></td>
                                     <td><?php echo $data->datePR ?></td>
-                                    <td><?php echo $data->companyName ?></td>
+                                    <td><?php echo $data->companyName . ' / ' . $data->username ?></td>
                                     <td><?php echo $data->remark ?></td>
                                     <td><?php echo $data->status ?></td>
                                     <td><?php echo $data->updatedAt ?></td>
@@ -64,7 +64,7 @@
                             <select name="idCustomer" id="select-beast" onchange="pickCustomer(this)">
                                 <option value="">Pilih Customer</option>
                                 <?php foreach ($getAllCustomer as $data) { ?>
-                                    <option value="<?php echo $data->idCustomer ?>"><?php echo $data->companyName ?></option>
+                                    <option value="<?php echo $data->idCustomer ?>"><?php echo $data->companyName . ' / ' . $data->username ?></option>
                                 <?php } ?>
                             </select>
                         </div>

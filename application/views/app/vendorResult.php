@@ -3,7 +3,7 @@
         <h4 class="text-center">Laporan Sales Vendor - <?php echo date('d M Y', strtotime($dateFrom)) ?> s/d <?php echo date('d M Y', strtotime($dateTo)) ?></h4>
         <div class="mt-2">
             <h5><u>Laporan Order</u></h5>
-            <table class="table table-sm table-bordered">
+            <table class="table table-sm table-bordered fs-12">
                 <thead>
                     <tr>
                         <th>ID_Order</th>
@@ -19,7 +19,7 @@
                         <tr>
                             <td><?php echo $data->idMasterOrder ?></td>
                             <td><?php echo date('d-m-Y', strtotime($data->createdAt)) ?></td>
-                            <td><?php echo $data->companyName ?></td>
+                            <td><?php echo $data->companyName . ' / ' . $data->username ?></td>
                             <td><?php echo $data->poRefrence ?></td>
                             <td><?php echo $data->status ?></td>
                             <td>Rp. <?php echo number_format($data->totalOrder->totalOrder) ?></td>
@@ -29,7 +29,7 @@
                 </tbody>
             </table>
             <h5><u>Laporan Invoice</u></h5>
-            <table class="table table-bordered table-sm">
+            <table class="table table-bordered table-sm fs-12">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -51,7 +51,7 @@
                             <td><?php echo $no++ ?></td>
                             <td><?php echo $data->idInvoice ?></td>
                             <td><?php echo date('Y-m-d', strtotime($data->createdAt)) ?></td>
-                            <td><?php echo $data->companyName ?></td>
+                            <td><?php echo $data->companyName . ' / ' . $data->username ?></td>
                             <td><?php echo $data->poRefrence ?></td>
                             <td><?php echo number_format($data->sumTotal->totalBayar) ?></td>
                             <td>

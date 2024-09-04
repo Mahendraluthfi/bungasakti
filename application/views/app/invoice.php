@@ -30,7 +30,7 @@
                             ?>
                                 <tr class="<?php echo ($data->dueDate < $date && $data->status == "PENDING") ? 'table-danger' : '' ?>">
                                     <td><?php echo $no++ ?></td>
-                                    <td><?php echo $data->companyName ?></td>
+                                    <td><?php echo $data->companyName . ' / ' . $data->username ?></td>
                                     <td><?php echo $data->idInvoice ?></td>
                                     <td><?php echo $data->poRefrence ?></td>
                                     <td>

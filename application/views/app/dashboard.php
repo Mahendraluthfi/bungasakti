@@ -135,7 +135,23 @@
             <div class="card">
                 <div class="card-header p-1">Barang low Stock</div>
                 <div class="card-body">
-
+                    <table id="scroll-vertical-datatable"
+                        class="table table-bordered dt-responsive table-sm w-100">
+                        <thead>
+                            <tr>
+                                <th>Deskripsi</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($lowStock as $data) { ?>
+                                <tr>
+                                    <td><?php echo $data->description ?></td>
+                                    <td><?php echo $data->total ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -174,21 +190,79 @@
                 dataLabels: {
                     enabled: true
                 },
-                enableMouseTracking: false
+                enableMouseTracking: true
             }
         },
         series: [{
-            name: 'Reggane',
-            data: [
-                16.0, 18.2, 23.1, 27.9, 32.2, 36.4, 39.8, 38.4, 35.5, 29.2,
-                22.0, 17.8
-            ]
-        }, {
-            name: 'Tallinn',
-            data: [
-                -2.9, -3.6, -0.6, 4.8, 10.2, 14.5, 17.6, 16.5, 12.0, 6.5,
-                2.0, -0.9
-            ]
-        }]
+                name: 'Order',
+                data: [
+                    <?php echo $chartOrder->January ?>,
+                    <?php echo $chartOrder->February ?>,
+                    <?php echo $chartOrder->March ?>,
+                    <?php echo $chartOrder->April ?>,
+                    <?php echo $chartOrder->May ?>,
+                    <?php echo $chartOrder->June ?>,
+                    <?php echo $chartOrder->July ?>,
+                    <?php echo $chartOrder->August ?>,
+                    <?php echo $chartOrder->September ?>,
+                    <?php echo $chartOrder->October ?>,
+                    <?php echo $chartOrder->November ?>,
+                    <?php echo $chartOrder->December ?>,
+                ]
+            },
+            {
+                name: 'Invoice',
+                data: [
+                    <?php echo $chartInvoice->January ?>,
+                    <?php echo $chartInvoice->February ?>,
+                    <?php echo $chartInvoice->March ?>,
+                    <?php echo $chartInvoice->April ?>,
+                    <?php echo $chartInvoice->May ?>,
+                    <?php echo $chartInvoice->June ?>,
+                    <?php echo $chartInvoice->July ?>,
+                    <?php echo $chartInvoice->August ?>,
+                    <?php echo $chartInvoice->September ?>,
+                    <?php echo $chartInvoice->October ?>,
+                    <?php echo $chartInvoice->November ?>,
+                    <?php echo $chartInvoice->December ?>,
+                ]
+            },
+            {
+                name: 'Piutang',
+                data: [
+                    <?php echo $chartPiutang->January ?>,
+                    <?php echo $chartPiutang->February ?>,
+                    <?php echo $chartPiutang->March ?>,
+                    <?php echo $chartPiutang->April ?>,
+                    <?php echo $chartPiutang->May ?>,
+                    <?php echo $chartPiutang->June ?>,
+                    <?php echo $chartPiutang->July ?>,
+                    <?php echo $chartPiutang->August ?>,
+                    <?php echo $chartPiutang->September ?>,
+                    <?php echo $chartPiutang->October ?>,
+                    <?php echo $chartPiutang->November ?>,
+                    <?php echo $chartPiutang->December ?>,
+                ],
+                color: 'red',
+            },
+            {
+                name: 'Debit',
+                data: [
+                    <?php echo $chartDebit->January ?>,
+                    <?php echo $chartDebit->February ?>,
+                    <?php echo $chartDebit->March ?>,
+                    <?php echo $chartDebit->April ?>,
+                    <?php echo $chartDebit->May ?>,
+                    <?php echo $chartDebit->June ?>,
+                    <?php echo $chartDebit->July ?>,
+                    <?php echo $chartDebit->August ?>,
+                    <?php echo $chartDebit->September ?>,
+                    <?php echo $chartDebit->October ?>,
+                    <?php echo $chartDebit->November ?>,
+                    <?php echo $chartDebit->December ?>,
+                ],
+                color: 'green',
+            }
+        ]
     });
 </script>

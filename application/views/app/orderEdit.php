@@ -18,7 +18,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="fw-bold table-secondary" width="13%">Customer</td>
-                                        <td width="37%"><?php echo $getOrderById->companyName ?></td>
+                                        <td width="37%"><?php echo $getOrderById->companyName . ' / ' . $getOrderById->username ?></td>
                                         <td class="fw-bold table-secondary">id PR</td>
                                         <td><?php echo $getOrderById->idPR ?></td>
                                     </tr>

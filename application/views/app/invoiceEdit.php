@@ -15,7 +15,7 @@
                         <tbody>
                             <tr>
                                 <td class="fw-bold table-secondary" width="13%">Customer</td>
-                                <td width="37%"><?php echo $getInvoiceById->companyName ?></td>
+                                <td width="37%"><?php echo $getInvoiceById->companyName . ' / ' . $getInvoiceById->username ?></td>
                                 <td class="fw-bold table-secondary">Total Bayar</td>
                                 <td>IDR <?php echo number_format($total->totalBayar) ?></td>
                             </tr>
