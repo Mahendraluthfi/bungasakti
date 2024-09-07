@@ -78,10 +78,10 @@ class Purchase extends CI_Controller
     {
         $idPR = $this->input->post('idPR');
         $priority = $this->input->post('priority');
-        $datePR = $this->input->post('datePR');
+        // $datePR = $this->input->post('datePR');
         $remark = $this->input->post('remark');
         $data = array(
-            'datePR' => $datePR,
+            // 'datePR' => $datePR,
             'remark' => $remark,
             'priority' => $priority,
             'updatedAt' => date('Y-m-d H:i:s'),
@@ -106,9 +106,12 @@ class Purchase extends CI_Controller
     function addDetBarang()
     {
         $idPR = $this->input->post('idPR');
+        $estimatedPrice = $this->input->post('estimatedPrice');
+        $uom = $this->input->post('uom');
+        $inputCustom = $this->input->post('inputCustom');
         $remark = $this->input->post('remark');
         $idBarang = $this->input->post('idBarang');
-        if ($idBarang == "CUSTOM") {
+        if ($inputCustom) {
             $descriptionCustom = $this->input->post('descriptionCustom');
             $inputIdBarang = null;
         } else {
@@ -119,9 +122,11 @@ class Purchase extends CI_Controller
         $data = array(
             'idPR' => $idPR,
             'qtyOrder' => $qtyOrder,
+            'uom' => $uom,
             'remark' => $remark,
             'createdAt' => date('Y-m-d H:i:s'),
             'idBarang' => $inputIdBarang,
+            'estimatedPrice' => $estimatedPrice,
             'descriptionCustom' => $descriptionCustom,
         );
 
@@ -146,7 +151,10 @@ class Purchase extends CI_Controller
         $idDetPR = $this->input->post('idDetPR');
         $remark = $this->input->post('remark');
         $idBarang = $this->input->post('idBarang');
-        if ($idBarang == "CUSTOM") {
+        $estimatedPrice = $this->input->post('estimatedPrice');
+        $uom = $this->input->post('uom');
+        $inputCustom = $this->input->post('inputCustom');
+        if ($inputCustom) {
             $descriptionCustom = $this->input->post('descriptionCustom');
             $inputIdBarang = null;
         } else {
@@ -158,7 +166,9 @@ class Purchase extends CI_Controller
             'idBarang' => $inputIdBarang,
             'descriptionCustom' => $descriptionCustom,
             'qtyOrder' => $qtyOrder,
+            'uom' => $uom,
             'remark' => $remark,
+            'estimatedPrice' => $estimatedPrice,
             'updatedAt' => date('Y-m-d H:i:s')
         );
         $updateRow = $this->ModelPurchase->updateDetBarang($idDetPR, $data);
@@ -271,15 +281,17 @@ class Purchase extends CI_Controller
 
         foreach ($getDetailPurchase as $key => $value) {
             if ($value->idBarang !== null) {
-                $total = $value->qtyOrder * $value->basePrice;
+                $total = $value->qtyOrder * $value->estimatedPrice;
+                $getBarang = $this->db->get_where('master_barang', ['idBarang' => $value->idBarang])->row();
 
                 $this->db->insert('det_master_order', [
                     'idMasterOrder' => $idMasterOrder,
                     'idBarang' => $value->idBarang,
                     'qtyOrder' => $value->qtyOrder,
                     'qtyBalance' => $value->qtyOrder,
-                    'fixedPrice' => $value->basePrice,
+                    'fixedPrice' => $value->estimatedPrice,
                     'total' => $total,
+                    'statusQty' => ($getBarang->type == "CUSTOM") ? 1 : 0,
                     'createdAt' => date('Y-m-d H:i:s')
                 ]);
             }
@@ -299,6 +311,24 @@ class Purchase extends CI_Controller
                 <strong>Gagal proses order!</strong>
             </div>');
             echo json_encode(false);
+        }
+    }
+
+    function printQuotation($idPR)
+    {
+        if ($idPR) {
+            $getPRbyId = $this->ModelPurchase->getPRbyId($idPR);
+            $getDetailPurchase = $this->ModelPurchase->getDetailPurchase($idPR);
+            $data = [
+                'title' => '',
+                'content' => 'app/printQuotation',
+                'getPRbyId' => $getPRbyId,
+                'getDetailPurchase' => $getDetailPurchase,
+            ];
+
+            $this->load->view('app/index', $data);
+        } else {
+            redirect('order');
         }
     }
 }

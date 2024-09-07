@@ -24,7 +24,7 @@
                             <?php foreach ($getAllPurchase as $data) { ?>
                                 <tr>
                                     <td><?php echo $data->idPR ?></td>
-                                    <td><?php echo $data->datePR ?></td>
+                                    <td><?php echo date('d-m-Y', strtotime($data->createdAt)) ?></td>
                                     <td><?php echo $data->companyName . ' / ' . $data->username ?></td>
                                     <td><?php echo $data->remark ?></td>
                                     <td><?php echo $data->status ?></td>
@@ -123,8 +123,10 @@
                             <tr>
                                 <td>No</td>
                                 <td>Barang</td>
-                                <td>Custom Request</td>
+                                <td>Mat. Code</td>
                                 <td>Qty</td>
+                                <td>Uom</td>
+                                <td>Est. Price</td>
                                 <td>Tipe</td>
                                 <td>Keterangan</td>
                             </tr>
@@ -182,14 +184,16 @@
                 let html;
                 let no = 1;
                 for (let i = 0; i < data.getDetailPurchase.length; i++) {
-                    let namaBarang = data.getDetailPurchase[i].description ? data.getDetailPurchase[i].description : '';
-                    let namaBarangCustom = data.getDetailPurchase[i].descriptionCustom ? data.getDetailPurchase[i].descriptionCustom : '';
-                    let type = (data.getDetailPurchase[i].type) ? data.getDetailPurchase[i].type : '';
+                    let namaBarang = data.getDetailPurchase[i].description ? data.getDetailPurchase[i].description : data.getDetailPurchase[i].descriptionCustom;
+                    let type = (data.getDetailPurchase[i].type) ? data.getDetailPurchase[i].type : 'REQUEST';
+                    let mcCode = (data.getDetailPurchase[i].mcRefrence) ? data.getDetailPurchase[i].mcRefrence : '';
                     html += '<tr>' +
                         '<td>' + no++ + '</td>' +
                         '<td>' + namaBarang + '</td>' +
-                        '<td>' + namaBarangCustom + '</td>' +
+                        '<td>' + mcCode + '</td>' +
                         '<td>' + data.getDetailPurchase[i].qtyOrder + '</td>' +
+                        '<td>' + data.getDetailPurchase[i].uom + '</td>' +
+                        '<td>' + data.getDetailPurchase[i].estimatedPrice + '</td>' +
                         '<td>' + type + '</td>' +
                         '<td>' + data.getDetailPurchase[i].remark + '</td>' +
                         '</tr>';

@@ -5,7 +5,7 @@ class ModelDashboard extends CI_Model
 {
     function getPRofMonth($month, $year)
     {
-        return $this->db->query("SELECT * FROM purchase_request WHERE MONTH(datePR) = '$month' AND YEAR(datePR) = '$year'")->num_rows();
+        return $this->db->query("SELECT * FROM purchase_request WHERE MONTH(createdAt) = '$month' AND YEAR(createdAt) = '$year'")->num_rows();
     }
 
     function getPOofMonth($month, $year)

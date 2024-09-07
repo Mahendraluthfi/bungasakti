@@ -17,7 +17,7 @@ class ModelPurchase extends CI_Model
 
     function getPRbyId($idPR)
     {
-        $this->db->select('purchase_request.*, customer.companyName, customer.address, customer.contactNumber, customer.email');
+        $this->db->select('purchase_request.*, customer.companyName, customer.username, customer.address, customer.contactNumber, customer.email');
         $this->db->from('purchase_request');
         $this->db->join('customer', 'customer.idCustomer = purchase_request.idCustomer');
         $this->db->where('IdPR', $idPR);

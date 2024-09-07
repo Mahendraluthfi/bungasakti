@@ -61,6 +61,8 @@
                                 <tr>
                                     <td>Description</td>
                                     <td>Qty Order</td>
+                                    <td>Uom</td>
+                                    <td>Est. Price</td>
                                     <td>Keterangan</td>
                                     <td>#</td>
                                 </tr>
@@ -70,6 +72,8 @@
                                     <tr>
                                         <td><?php echo $data->descriptionCustom ?></td>
                                         <td><?php echo $data->qtyOrder ?></td>
+                                        <td><?php echo $data->uom ?></td>
+                                        <td><?php echo number_format($data->estimatedPrice) ?></td>
                                         <td><?php echo $data->remark ?></td>
                                         <td>
                                             <button type="button" onclick="addNew('<?php echo $data->idDetPR ?>')" class="btn btn-info btn-sm" href="#" role="button"><i class="mdi mdi-download"></i> Tambah ke Order</button>
@@ -140,7 +144,6 @@
                         </tbody>
                     </table>
                     <div class="py-2">
-                        <a href="<?php echo base_url('order/printQuotation/' . $getOrderById->idMasterOrder) ?>" class="btn btn-primary"><i class="mdi mdi-offer"></i> Print Quotation</a>
                         <button type="button" class="btn btn-warning" onclick="buatInvoice()"><i class="mdi mdi-invoice-clock"></i> Generate Invoice</button>
                     </div>
 
@@ -447,6 +450,8 @@
                 $('[name="description"]').val(data.descriptionCustom);
                 $('[name="idDetPR"]').val(data.idDetPR);
                 $('[name="qtyOrder"]').val(data.qtyOrder);
+                $('[name="uom"]').val(data.uom);
+                $('[name="basePrice"]').val(data.estimatedPrice);
                 $('#modalId').modal('show');
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -26,7 +26,8 @@
                                         <td class="fw-bold table-secondary">Contact No</td>
                                         <td><?php echo $getCurrentPurchase->contactNumber ?></td>
                                         <td class="fw-bold table-secondary">Tanggal PR</td>
-                                        <td><input type="date" name="datePR" value="<?php echo $getCurrentPurchase->datePR ?>" class="form-control form-control-sm">
+                                        <td>
+                                            <input type="text" disabled name="datePR" value="<?php echo date('d-m-Y') ?>" class="form-control form-control-sm">
                                             <input type="hidden" name="idPR" value="<?php echo $getCurrentPurchase->idPR ?>">
                                         </td>
                                     </tr>
@@ -61,10 +62,11 @@
                         <thead>
                             <tr>
                                 <td>No</td>
-                                <td>Barang</td>
+                                <td>Barang / Request</td>
                                 <td>Mat.Code</td>
-                                <td>Custom Request</td>
                                 <td>Qty</td>
+                                <td>Uom</td>
+                                <td>Est. Harga</td>
                                 <td>Tipe</td>
                                 <td>Keterangan</td>
                                 <td>#</td>
@@ -76,11 +78,12 @@
                             foreach ($getDetailPurchase as $data) { ?>
                                 <tr>
                                     <td><?php echo $no++ ?></td>
-                                    <td><?php echo $data->description ?></td>
+                                    <td><?php echo $data->description ? $data->description : $data->descriptionCustom ?></td>
                                     <td><?php echo $data->mcRefrence ?></td>
-                                    <td><?php echo $data->descriptionCustom ?></td>
                                     <td><?php echo $data->qtyOrder ?></td>
-                                    <td><?php echo $data->type ?></td>
+                                    <td><?php echo $data->uom ?></td>
+                                    <td><?php echo number_format($data->estimatedPrice) ?></td>
+                                    <td><?php echo $data->type ? $data->type : 'REQUEST' ?></td>
                                     <td><?php echo $data->remark ?></td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-primary" onclick="get(<?php echo $data->idDetPR ?>)"><i class="mdi mdi-pencil"></i></button>
@@ -92,6 +95,8 @@
                     </table>
 
                     <a href="<?php echo base_url('purchase/submitPR/' . $getCurrentPurchase->idPR) ?>" class="btn btn-dark mt-2" onclick="return confirm('Apakah anda yakin untuk Submit PR ini ?')">Submit PR</a>
+                    <a href="<?php echo base_url('purchase/printQuotation/' . $getCurrentPurchase->idPR) ?>" class="btn btn-secondary mt-2"><i class="mdi mdi-offer"></i> Print Quotation</a>
+
                 </div>
             </div>
         </div>
@@ -110,16 +115,26 @@
                     <div class="row mb-3">
                         <label for="select-beast" class="col-sm-3 col-form-label">Pilih Barang</label>
                         <div class="col-sm-9">
-                            <select name="idBarang" id="select-beast" required>
+                            <select name="idBarang" id="select-beast" required onchange="select(this)">
                                 <option value="">Pilih</option>
-                                <option value="CUSTOM">Lainnya / Custom Barang</option>
                                 <?php foreach ($getAllBarang as $data) { ?>
                                     <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?> / <?php echo $data->mcRefrence ?></option>
                                 <?php } ?>
                             </select>
                         </div>
                     </div>
-                    <div id="contentCustom">
+                    <div class="row mb-3">
+                        <label for="select-beast" class="col-sm-3 col-form-label">Pilih Custom</label>
+                        <div class="col-sm-9">
+                            <div class="form-check pt-2">
+                                <input class="form-check-input" name="inputCustom" type="checkbox" value="1" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Custom / Lainnya
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="contentCustom" style="display: none;">
                         <div class="row mb-3">
                             <label for="customRequest" class="col-sm-3 col-form-label">Custom Request</label>
                             <div class="col-sm-9">
@@ -136,6 +151,18 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <label for="inputUom" class="col-sm-3 col-form-label">Uom</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="uom" required class="form-control" id="inputUom" placeholder="Masukan Unit of Measure">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPrice" class="col-sm-3 col-form-label">Estimasi Harga</label>
+                        <div class="col-sm-9">
+                            <input type="number" name="estimatedPrice" required class="form-control" min="0" id="inputPrice" placeholder="Estimasi Harga">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <label for="inputRemark" class="col-sm-3 col-form-label">Keterangan</label>
                         <div class="col-sm-9">
                             <textarea name="remark" class="form-control" id="inputRemark" placeholder="Masukan Keterangan"></textarea>
@@ -148,7 +175,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Tutup
                 </button>
-                <button type="button" class="btn btn-primary" onclick="save()">Tambah</button>
+                <button type="button" class="btn btn-caption btn-primary" onclick="save()">Tambah</button>
             </div>
         </div>
     </div>
@@ -161,22 +188,29 @@
     let form = document.getElementById('frmAddBarang');
 
     // Get the select element and the content custom div
-    let selectElement = document.getElementById('select-beast');
+    let checkbox = document.getElementById('flexCheckChecked');
     let contentCustom = document.getElementById('contentCustom');
-    contentCustom.style.display = 'none';
-    selectElement.addEventListener('change', function() {
-        if (this.value === 'CUSTOM') {
+
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
             contentCustom.style.display = 'block';
-            $('[name="descriptionCustom"]').attr('required', 'required');
+            $('[name="estimatedPrice"]').val('');
+            $('#select-beast').removeAttr('required');
+            document.querySelector('[name="descriptionCustom"]').setAttribute('required', 'required');
         } else {
+            $('#select-beast').attr('required');
             contentCustom.style.display = 'none';
-            $('[name="descriptionCustom"]').removeAttr('required', 'required');
+            document.querySelector('[name="descriptionCustom"]').removeAttribute('required');
         }
     });
 
     const addBarang = () => {
         $('#modalTitleId').text('Tambah Data Barang');
+        $('.btn-caption').text('Tambah');
         save_method = 'addDetBarang';
+        checkbox.checked = false;
+        contentCustom.style.display = 'none';
+        $('[name="descriptionCustom"]').removeAttr('required', 'required');
         $('#frmAddBarang')[0].reset();
         $('#modalId').modal('show');
     }
@@ -212,6 +246,7 @@
             success: function(data) {
                 $('#frmAddBarang')[0].reset();
                 $('#modalTitleId').text('Edit Data Barang');
+                $('.btn-caption').text('Edit');
                 save_method = 'updateDetBarang';
                 let selectElement = document.getElementById('select-beast');
 
@@ -229,17 +264,23 @@
                 }
 
                 // Set the selected value in the TomSelect plugin
-                selectInstance.setValue((data.idBarang == null) ? 'CUSTOM' : data.idBarang);
+                selectInstance.setValue((data.idBarang == null) ? '' : data.idBarang);
                 if (data.idBarang == null) {
+                    checkbox.checked = true;
                     contentCustom.style.display = 'block';
                     $('[name="descriptionCustom"]').attr('required', 'required');
+                    $('[name="idBarang"]').removeAttr('required', 'required');
                 } else {
+                    checkbox.checked = false;
                     contentCustom.style.display = 'none';
                     $('[name="descriptionCustom"]').removeAttr('required', 'required');
+                    $('[name="idBarang"]').attr('required', 'required');
                 }
                 $('[name="idDetPR"]').val(idDetPR);
                 $('[name="descriptionCustom"]').val(data.descriptionCustom);
                 $('#inputQty').val(data.qtyOrder);
+                $('#inputUom').val(data.uom);
+                $('#inputPrice').val(data.estimatedPrice);
                 $('#inputRemark').val(data.remark);
                 $('#modalId').modal('show');
             },
@@ -277,6 +318,26 @@
             dataType: 'JSON',
             success: function(data) {
                 location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    const select = (id) => {
+        let value = id.value;
+        // console.log(value);
+        $.ajax({
+            url: base_url + 'barang/getBarangById',
+            type: 'POST',
+            data: {
+                idBarang: value,
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                $('[name="estimatedPrice"]').val(data.basePrice);
+                $('[name="uom"]').val(data.uom);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');

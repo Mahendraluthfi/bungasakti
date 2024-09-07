@@ -26,7 +26,8 @@
                                         <td class="fw-bold table-secondary">Contact No</td>
                                         <td><?php echo $getCurrentPurchase->contactNumber ?></td>
                                         <td class="fw-bold table-secondary">Tanggal PR</td>
-                                        <td><input type="date" name="datePR" value="<?php echo $getCurrentPurchase->datePR ?>" class="form-control form-control-sm">
+                                        <td>
+                                            <input type="text" disabled name="datePR" value="<?php echo date('d-m-Y') ?>" class="form-control form-control-sm">
                                             <input type="hidden" name="idPR" value="<?php echo $getCurrentPurchase->idPR ?>">
                                         </td>
                                     </tr>

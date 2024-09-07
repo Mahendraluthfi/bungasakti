@@ -9,8 +9,8 @@
         <div class="text-end">
             <nav class="breadcrumb">
                 <a class="breadcrumb-item" href="<?php echo base_url() ?>">Dashboard</a>
-                <a class="breadcrumb-item" href="<?php echo base_url('Order/editOrder/' . $this->uri->segment('3')) ?>">Order</a>
-                <span class="breadcrumb-item active" aria-current="page">Edit Order</span>
+                <a class="breadcrumb-item" href="<?php echo base_url('purchase/formEdit/' . $this->uri->segment('3')) ?>">Purchase Form</a>
+                <span class="breadcrumb-item active" aria-current="page">Print Quotation</span>
             </nav>
         </div>
     </div>
@@ -26,18 +26,18 @@
                                     <img src="<?php echo base_url() ?>assets/logo/flatlogo.png" class="me-2" alt="logo" height="40">
                                     <address class="mt-2">
                                         Perihal: <strong>Penawaran Harga</strong><br>
-                                        Kepada: <strong><?php echo $getOrderById->username ?></strong><br>
-                                        <?php echo $getOrderById->companyName ?><br>
-                                        <?php echo $getOrderById->address ?><br>
-                                        <?php echo $getOrderById->contactNumber ?><br>
-                                        <?php echo $getOrderById->email ?><br>
+                                        Kepada: <strong><?php echo $getPRbyId->username ?></strong><br>
+                                        <?php echo $getPRbyId->companyName ?><br>
+                                        <?php echo $getPRbyId->address ?><br>
+                                        <?php echo $getPRbyId->contactNumber ?><br>
+                                        <?php echo $getPRbyId->email ?><br>
 
                                     </address>
                                 </div>
                                 <div class="float-end">
-                                    <h4 class="fs-18 mb-3">Quotation #<?php echo strtoupper($getOrderById->idMasterOrder) ?></h4>
-                                    <p class="mb-0"><strong>Date: </strong><?php echo date('d/m/Y', strtotime($getOrderById->createdAt)) ?></p>
-                                    <p class="mb-0"><strong>ID PR: </strong> <span class="label label-pink"><?php echo ($getOrderById->idPR) ? $getOrderById->idPR : '-' ?></span></p>
+                                    <h4 class="fs-18 mb-3">Quotation #<?php echo strtoupper($getPRbyId->idPR) ?></h4>
+                                    <p class="mb-0"><strong>Date: </strong><?php echo date('d/m/Y', strtotime($getPRbyId->createdAt)) ?></p>
+                                    <!-- <p class="mb-0"><strong>ID PR: </strong> <span class="label label-pink"><?php echo ($getPRbyId->idPR) ? $getPRbyId->idPR : '-' ?></span></p> -->
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,6 @@
                                                 <th>#</th>
                                                 <th>Deskripsi</th>
                                                 <th>Mat. Code</th>
-                                                <th>Type</th>
                                                 <th>Uom</th>
                                                 <th>Qty</th>
                                                 <th class="text-end">Unit Price</th>
@@ -61,30 +60,34 @@
                                         <tbody>
                                             <?php $no = 1;
                                             $total = 0;
-                                            foreach ($getListOrderById as $data) {
-                                                $total = $data->total + $total ?>
+                                            foreach ($getDetailPurchase as $data) {
+                                                $total = $total + ($data->qtyOrder * $data->estimatedPrice);
+                                            ?>
                                                 <tr>
                                                     <td><?php echo $no++ ?></td>
-                                                    <td><?php echo $data->description ?></td>
+                                                    <td><?php echo $data->description ? $data->description : $data->descriptionCustom  ?></td>
                                                     <td><?php echo $data->mcRefrence ?></td>
-                                                    <td><?php echo $data->type ?></td>
                                                     <td><?php echo $data->uom ?></td>
                                                     <td><?php echo $data->qtyOrder ?></td>
-                                                    <td class="align-items-end text-end"><?php echo number_format($data->fixedPrice) ?></td>
-                                                    <td class="text-end"><?php echo number_format($data->total) ?></td>
+                                                    <td class="align-items-end text-end"><?php echo number_format($data->estimatedPrice) ?></td>
+                                                    <td class="text-end"><?php echo number_format($data->qtyOrder * $data->estimatedPrice) ?></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr>
-                                                <td colspan="6"></td>
+                                                <td colspan="5"></td>
                                                 <td class="fw-bold text-end">Total IDR</td>
-                                                <td class="fs-16 text-success text-end"><?php echo number_format($total) ?></td>
+                                                <td class="fs-16 fw-bold text-end"><?php echo number_format($total) ?></td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div class="fw-bold mb-3">
+                                        Note : <?php echo $getPRbyId->remark ?>
+                                    </div>
                                     <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
                                     <p class="pb-3">Hormat Kami</p>
                                     <div style="height: 30px;"></div>
-                                    <p class="py-3">CV. BUNGA SAKTI</p>
+                                    <p class="pt-3">CV. BUNGA SAKTI</p>
+                                    <?php echo $this->session->userdata('sessionUsername'); ?>
                                 </div>
                             </div>
                         </div>

@@ -144,10 +144,10 @@ class ClientPurchase extends CI_Controller
 
         $idPR = $this->input->post('idPR');
         $priority = $this->input->post('priority');
-        $datePR = $this->input->post('datePR');
+        // $datePR = $this->input->post('datePR');
         $remark = $this->input->post('remark');
         $data = array(
-            'datePR' => $datePR,
+            // 'datePR' => $datePR,
             'remark' => $remark,
             'priority' => $priority,
             'updatedAt' => date('Y-m-d H:i:s'),

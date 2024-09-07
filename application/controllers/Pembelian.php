@@ -32,7 +32,7 @@ class Pembelian extends CI_Controller
             'title' => '',
             'content' => 'app/pembelianEdit',
         ];
-        if ($idPembelian) {
+        if (!$idPembelian) {
             $isPending = $this->ModelPembelian->isPending();
             if (!$isPending) {
                 $array = array(
@@ -51,8 +51,10 @@ class Pembelian extends CI_Controller
         }
         $data['getPending'] = $getPending;
         $data['getItem'] = $getItemPending;
+        $data['idPembelian'] = $idPembelian ? $idPembelian : $getPending->idPembelian;
 
         $this->load->view('app/index', $data);
+        // echo json_encode($data);
     }
 }
 
