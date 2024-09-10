@@ -10,6 +10,7 @@ class ModelOrder extends CI_Model
         $this->db->from('master_order');
         $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');
         $this->db->where('master_order.isActive', '1');
+        $this->db->order_by('master_order.createdAt', 'desc');
         $db = $this->db->get();
         return $db->result();
     }
@@ -93,7 +94,7 @@ class ModelOrder extends CI_Model
     {
         return $this->db->query("SELECT SUM(qtyInvoice) as totalInvoice FROM `det_invoice`
             JOIN det_master_order ON det_master_order.idDetOrder = det_invoice.idDetOrder
-            WHERE det_invoice.idDetOrder IN(SELECT idDetOrder FROM det_master_order WHERE idMasterOrder = '35384d32')
+            WHERE det_invoice.idDetOrder IN(SELECT idDetOrder FROM det_master_order WHERE idMasterOrder = '$idMasterOrder')
             AND det_master_order.idMasterOrder = '$idMasterOrder'")->row();
     }
 

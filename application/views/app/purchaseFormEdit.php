@@ -93,8 +93,9 @@
                             <?php } ?>
                         </tbody>
                     </table>
-
-                    <a href="<?php echo base_url('purchase/submitPR/' . $getCurrentPurchase->idPR) ?>" class="btn btn-dark mt-2" onclick="return confirm('Apakah anda yakin untuk Submit PR ini ?')">Submit PR</a>
+                    <?php if ($getCurrentPurchase->status != "ORDER") { ?>
+                        <a href="<?php echo base_url('purchase/submitPR/' . $getCurrentPurchase->idPR) ?>" class="btn btn-dark mt-2" onclick="return confirm('Apakah anda yakin untuk Submit PR ini ?')">Submit PR</a>
+                    <?php } ?>
                     <a href="<?php echo base_url('purchase/printQuotation/' . $getCurrentPurchase->idPR) ?>" class="btn btn-secondary mt-2"><i class="mdi mdi-offer"></i> Print Quotation</a>
 
                 </div>

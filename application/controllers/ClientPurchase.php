@@ -29,9 +29,11 @@ class ClientPurchase extends CI_Controller
     function addDetBarang()
     {
         $idPR = $this->input->post('idPR');
+        $uom = $this->input->post('uom');
+        $inputCustom = $this->input->post('inputCustom');
         $remark = $this->input->post('remark');
         $idBarang = $this->input->post('idBarang');
-        if ($idBarang == "CUSTOM") {
+        if ($inputCustom) {
             $descriptionCustom = $this->input->post('descriptionCustom');
             $inputIdBarang = null;
         } else {
@@ -42,6 +44,7 @@ class ClientPurchase extends CI_Controller
         $data = array(
             'idPR' => $idPR,
             'qtyOrder' => $qtyOrder,
+            'uom' => $uom,
             'remark' => $remark,
             'createdAt' => date('Y-m-d H:i:s'),
             'idBarang' => $inputIdBarang,
@@ -69,7 +72,9 @@ class ClientPurchase extends CI_Controller
         $idDetPR = $this->input->post('idDetPR');
         $remark = $this->input->post('remark');
         $idBarang = $this->input->post('idBarang');
-        if ($idBarang == "CUSTOM") {
+        $uom = $this->input->post('uom');
+        $inputCustom = $this->input->post('inputCustom');
+        if ($inputCustom) {
             $descriptionCustom = $this->input->post('descriptionCustom');
             $inputIdBarang = null;
         } else {
@@ -81,6 +86,7 @@ class ClientPurchase extends CI_Controller
             'idBarang' => $inputIdBarang,
             'descriptionCustom' => $descriptionCustom,
             'qtyOrder' => $qtyOrder,
+            'uom' => $uom,
             'remark' => $remark,
             'updatedAt' => date('Y-m-d H:i:s')
         );
@@ -242,6 +248,13 @@ class ClientPurchase extends CI_Controller
             </div>');
             echo json_encode(false);
         }
+    }
+
+    function getBarangById()
+    {
+        $idBarang = $this->input->post('idBarang');
+        $data = $this->ModelBarang->getBarangById($idBarang);
+        echo json_encode($data);
     }
 }
 

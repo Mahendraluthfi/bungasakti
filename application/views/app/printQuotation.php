@@ -9,7 +9,8 @@
         <div class="text-end">
             <nav class="breadcrumb">
                 <a class="breadcrumb-item" href="<?php echo base_url() ?>">Dashboard</a>
-                <a class="breadcrumb-item" href="<?php echo base_url('purchase/formEdit/' . $this->uri->segment('3')) ?>">Purchase Form</a>
+                <a class="breadcrumb-item" href="<?php echo base_url('purchase') ?>">Master PR</a>
+                <a class="breadcrumb-item" href="javascript:history.back()">Purchase Form</a>
                 <span class="breadcrumb-item active" aria-current="page">Print Quotation</span>
             </nav>
         </div>
@@ -87,7 +88,7 @@
                                     <p class="pb-3">Hormat Kami</p>
                                     <div style="height: 30px;"></div>
                                     <p class="pt-3">CV. BUNGA SAKTI</p>
-                                    <?php echo $this->session->userdata('sessionUsername'); ?>
+                                    <?php echo $this->session->userdata('sessionName'); ?>
                                 </div>
                             </div>
                         </div>

@@ -10,7 +10,7 @@ class ModelPurchase extends CI_Model
         $this->db->from('purchase_request');
         $this->db->join('customer', 'customer.idCustomer = purchase_request.idCustomer');
         $this->db->where('purchase_request.isActive', '1');
-
+        $this->db->order_by('purchase_request.createdAt', 'desc');
         $db = $this->db->get();
         return $db->result();
     }

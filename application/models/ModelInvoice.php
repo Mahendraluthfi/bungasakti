@@ -16,6 +16,8 @@ class ModelInvoice extends CI_Model
         $this->db->from('master_invoice');
         $this->db->join('master_order', 'master_order.idMasterOrder = master_invoice.idMasterOrder');
         $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');
+        $this->db->order_by('master_invoice.createdAt', 'desc');
+
         $db = $this->db->get();
         return $db->result();
     }

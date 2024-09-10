@@ -27,6 +27,7 @@ class Purchase extends CI_Controller
             'getAllPurchase' => $this->ModelPurchase->getAllPurchase(),
             'getAllCustomer' => $this->ModelCustomer->getAllCustomer(),
         );
+        // echo json_encode($data);
         $this->load->view('app/index', $data);
     }
 

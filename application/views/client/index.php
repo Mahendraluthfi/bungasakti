@@ -64,44 +64,23 @@
                                     <h6 class="text-overflow m-0"><?php echo $this->session->userdata('sessionUsernameCustomer') ?></h6>
                                 </div>
 
-                                <!-- item-->
-                                <!-- <a href="pages-profile.html" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
-                                    <span>My Account</span>
-                                </a> -->
-
-                                <!-- item-->
-                                <!-- <a href="auth-lock-screen.html" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
-                                    <span>Lock Screen</span>
-                                </a> -->
-
-                                <!-- <div class="dropdown-divider"></div> -->
-
-                                <!-- item-->
                                 <a href="<?php echo base_url('login/logout') ?>" class="dropdown-item notify-item">
                                     <i class="mdi mdi-location-exit fs-16 align-middle"></i>
                                     <span>Logout</span>
                                 </a>
-
                             </div>
                         </li>
-
                     </ul>
                 </div>
-
             </div>
-
         </div>
         <!-- end Topbar -->
 
         <!-- Left Sidebar Start -->
         <div class="app-sidebar-menu">
             <div class="h-100" data-simplebar>
-
                 <!--- Sidemenu -->
                 <div id="sidebar-menu">
-
                     <div class="logo-box">
                         <a href="<?php echo base_url() ?>" class="logo logo-light">
                             <span class="logo-sm">
@@ -120,11 +99,8 @@
                             </span>
                         </a>
                     </div>
-
                     <ul id="side-menu">
-
                         <li class="menu-title">Menu</li>
-
                         <li>
                             <a href="<?php echo base_url('clientHome') ?>" class="tp-link">
                                 <i data-feather="home"></i>
@@ -139,18 +115,21 @@
                             </a>
                         </li>
                         <li>
+                            <a href="<?php echo base_url('clientInvoice') ?>" class="tp-link">
+                                <i data-feather="file-text"></i>
+                                <span>Invoices</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="<?php echo base_url('profile') ?>" class="tp-link">
                                 <i data-feather="user"></i>
                                 <span> Profile </span>
                             </a>
                         </li>
                     </ul>
-
                 </div>
                 <!-- End Sidebar -->
-
                 <div class="clearfix"></div>
-
             </div>
         </div>
         <!-- Left Sidebar End -->

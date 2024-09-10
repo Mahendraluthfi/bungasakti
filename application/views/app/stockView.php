@@ -129,7 +129,7 @@
                             <select name="idBarang" required id="select-beast">
                                 <option value="">Pilih</option>
                                 <?php foreach ($getAllBarang as $data) { ?>
-                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?></option>
+                                    <option value="<?php echo $data->idBarang ?>"><?php echo $data->description . ' / ' . $data->mcRefrence ?></option>
                                 <?php } ?>
                             </select>
                         </div>

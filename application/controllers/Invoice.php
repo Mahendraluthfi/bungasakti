@@ -106,10 +106,12 @@ class Invoice extends CI_Controller
 
         $tglInvoice = strtotime($this->input->post('createdAt'));
         $paymentDate = $this->input->post('paymentDate');
+        $paymentRemark = $this->input->post('paymentRemark');
         $dueDate = date('Y-m-d', strtotime("+30 days", $tglInvoice));
 
         $this->db->update('master_invoice', [
             'paymentDate' => $paymentDate,
+            'paymentRemark' => $paymentRemark,
             'createdAt' => date('Y-m-d H:i:s', $tglInvoice),
             'dueDate' => $dueDate,
             'status' => 'LUNAS',

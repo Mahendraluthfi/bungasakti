@@ -32,9 +32,11 @@
                                     <td>
 
                                         <button type="button" onclick="get('<?php echo $data->idPR ?>')" class="btn btn-info btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Barang / Proses Order" tabindex="0"><i class="mdi mdi-eye"></i></button>
-                                        <?php if ($data->status == "PENDING" || $data->status == "SUBMIT") { ?>
-                                            <a href="<?php echo base_url('purchase/formEdit/' . $data->idPR) ?>" class="btn btn-warning btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Barang" tabindex="0"><i class="mdi mdi-pencil"></i></a>
-                                        <?php } ?>
+                                        <a href="<?php echo base_url('purchase/formEdit/' . $data->idPR) ?>" class="btn btn-warning btn-sm mr-1" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Barang" tabindex="0"><i class="mdi mdi-pencil"></i></a>
+                                        <?php //if ($data->status == "PENDING" || $data->status == "SUBMIT") { 
+                                        ?>
+                                        <?php //} 
+                                        ?>
                                         <button type="button" onclick="hapus('<?php echo $data->idPR ?>','<?php echo $data->status ?>')" class="btn btn-danger btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus Barang" tabindex="0"><i class="mdi mdi-delete"></i></button>
                                     </td>
                                 </tr>

@@ -348,7 +348,7 @@ class Order extends CI_Controller
             $isOrderComplete = $this->ModelOrder->isOrderComplete($idMasterOrder);
             $countQtyOrder = $this->ModelOrder->countQtyOrder($idMasterOrder);
             $sisa = $countQtyOrder->totalOrder - $isOrderComplete->totalInvoice;
-            if ($sisa < 1) {
+            if ($sisa == 0) {
                 $this->db->update('master_order', ['status' => 'COMPLETE', 'updatedAt' => date('Y-m-d H:i:s')], ['idMasterOrder' => $idMasterOrder]);
                 $this->session->set_flashdata('msg', '
                 <div class="alert alert-success" role="alert">

@@ -62,10 +62,11 @@
                         <thead>
                             <tr>
                                 <td>No</td>
-                                <td>Barang</td>
+                                <td>Barang / Request</td>
                                 <td>Mat.Code</td>
-                                <td>Custom Request</td>
                                 <td>Qty</td>
+                                <td>Uom</td>
+                                <td>Tipe</td>
                                 <td>Keterangan</td>
                                 <td>#</td>
                             </tr>
@@ -76,10 +77,11 @@
                             foreach ($getDetailPurchase as $data) { ?>
                                 <tr>
                                     <td><?php echo $no++ ?></td>
-                                    <td><?php echo $data->description ?></td>
+                                    <td><?php echo $data->description ? $data->description : $data->descriptionCustom ?></td>
                                     <td><?php echo $data->mcRefrence ?></td>
-                                    <td><?php echo $data->descriptionCustom ?></td>
                                     <td><?php echo $data->qtyOrder ?></td>
+                                    <td><?php echo $data->uom ?></td>
+                                    <td><?php echo $data->type ? $data->type : 'REQUEST' ?></td>
                                     <td><?php echo $data->remark ?></td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-primary" onclick="get(<?php echo $data->idDetPR ?>)"><i class="mdi mdi-pencil"></i></button>
@@ -109,13 +111,23 @@
                     <div class="row mb-3">
                         <label for="select-beast" class="col-sm-3 col-form-label">Pilih Barang</label>
                         <div class="col-sm-9">
-                            <select name="idBarang" id="select-beast" required>
+                            <select name="idBarang" id="select-beast" required onchange="select(this)">
                                 <option value="">Pilih</option>
-                                <option value="CUSTOM">Lainnya / Custom Barang</option>
                                 <?php foreach ($getAllBarang as $data) { ?>
                                     <option value="<?php echo $data->idBarang ?>"><?php echo $data->description ?> / <?php echo $data->mcRefrence ?></option>
                                 <?php } ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="select-beast" class="col-sm-3 col-form-label">Pilih Custom</label>
+                        <div class="col-sm-9">
+                            <div class="form-check pt-2">
+                                <input class="form-check-input" name="inputCustom" type="checkbox" value="1" id="flexCheckChecked">
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Custom / Lainnya
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div id="contentCustom">
@@ -132,6 +144,12 @@
                         <label for="inputQty" class="col-sm-3 col-form-label">Qty</label>
                         <div class="col-sm-9">
                             <input type="number" name="qtyOrder" required class="form-control" min="0" id="inputQty" placeholder="Masukan Qty">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputUom" class="col-sm-3 col-form-label">Uom</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="uom" required class="form-control" id="inputUom" placeholder="Masukan Unit of Measure">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -160,22 +178,28 @@
     let form = document.getElementById('frmAddBarang');
 
     // Get the select element and the content custom div
-    let selectElement = document.getElementById('select-beast');
+    let checkbox = document.getElementById('flexCheckChecked');
     let contentCustom = document.getElementById('contentCustom');
-    contentCustom.style.display = 'none';
-    selectElement.addEventListener('change', function() {
-        if (this.value === 'CUSTOM') {
+
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
             contentCustom.style.display = 'block';
-            $('[name="descriptionCustom"]').attr('required', 'required');
+            $('#select-beast').removeAttr('required');
+            document.querySelector('[name="descriptionCustom"]').setAttribute('required', 'required');
         } else {
+            $('#select-beast').attr('required');
             contentCustom.style.display = 'none';
-            $('[name="descriptionCustom"]').removeAttr('required', 'required');
+            document.querySelector('[name="descriptionCustom"]').removeAttribute('required');
         }
     });
 
     const addBarang = () => {
         $('#modalTitleId').text('Tambah Data Barang');
+        $('.btn-caption').text('Tambah');
         save_method = 'addDetBarang';
+        checkbox.checked = false;
+        contentCustom.style.display = 'none';
+        $('[name="descriptionCustom"]').removeAttr('required', 'required');
         $('#frmAddBarang')[0].reset();
         $('#modalId').modal('show');
     }
@@ -230,15 +254,21 @@
                 // Set the selected value in the TomSelect plugin
                 selectInstance.setValue((data.idBarang == null) ? 'CUSTOM' : data.idBarang);
                 if (data.idBarang == null) {
+                    checkbox.checked = true;
                     contentCustom.style.display = 'block';
                     $('[name="descriptionCustom"]').attr('required', 'required');
+                    $('[name="idBarang"]').removeAttr('required', 'required');
                 } else {
                     contentCustom.style.display = 'none';
+                    checkbox.checked = false;
                     $('[name="descriptionCustom"]').removeAttr('required', 'required');
+                    $('[name="idBarang"]').attr('required', 'required');
                 }
+
                 $('[name="idDetPR"]').val(idDetPR);
                 $('[name="descriptionCustom"]').val(data.descriptionCustom);
                 $('#inputQty').val(data.qtyOrder);
+                $('#inputUom').val(data.uom);
                 $('#inputRemark').val(data.remark);
                 $('#modalId').modal('show');
             },
@@ -276,6 +306,25 @@
             dataType: 'JSON',
             success: function(data) {
                 location.reload();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    const select = (id) => {
+        let value = id.value;
+        // console.log(value);
+        $.ajax({
+            url: base_url + 'clientPurchase/getBarangById',
+            type: 'POST',
+            data: {
+                idBarang: value,
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                $('[name="uom"]').val(data.uom);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');

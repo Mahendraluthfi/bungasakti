@@ -21,6 +21,7 @@ $(document).ready(function () {
 		}),
 		$("#scroll-horizontal-datatable-zero").DataTable({
 			scrollX: !0,
+			order: [],
 		}),
 		$("#scroll-horizontal-datatable").DataTable({
 			scrollX: !0,

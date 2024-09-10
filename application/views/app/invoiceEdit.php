@@ -14,36 +14,40 @@
                     <table class="table table-light table-bordered table-sm">
                         <tbody>
                             <tr>
-                                <td class="fw-bold table-secondary" width="13%">Customer</td>
-                                <td width="37%"><?php echo $getInvoiceById->companyName . ' / ' . $getInvoiceById->username ?></td>
+                                <td rowspan="2" class="fw-bold table-secondary align-middle" width="13%">Customer</td>
+                                <td rowspan="2" class="align-middle" width="37%"><?php echo $getInvoiceById->companyName . ' / ' . $getInvoiceById->username ?></td>
                                 <td class="fw-bold table-secondary">Total Bayar</td>
                                 <td>IDR <?php echo number_format($total->totalBayar) ?></td>
                             </tr>
                             <tr>
-                                <td class="fw-bold table-secondary" width="13%">PO Refrence</td>
-                                <td width="37%"><?php echo $getInvoiceById->poRefrence ?></td>
                                 <td class="fw-bold table-secondary">Tgl Invoice</td>
                                 <td><?php echo date('d-m-Y', strtotime($getInvoiceById->createdAt)) ?></td>
                             </tr>
                             <tr>
-                                <td class="fw-bold table-secondary">Invoice No.</td>
-                                <td><?php echo strtoupper($getInvoiceById->idInvoice) ?></td>
+                                <td class="fw-bold table-secondary" width="13%">PO Refrence</td>
+                                <td width="37%"><?php echo $getInvoiceById->poRefrence ?></td>
                                 <td class="fw-bold table-secondary">Tgl Tempo</td>
                                 <td><?php echo date('d-m-Y', strtotime($getInvoiceById->dueDate)) ?></td>
                             </tr>
                             <tr>
-                                <td class="fw-bold table-secondary">SuratJalan No.</td>
-                                <td><?php echo strtoupper($getInvoiceById->idSuratJalan) ?></td>
+                                <td class="fw-bold table-secondary">Invoice No.</td>
+                                <td><?php echo strtoupper($getInvoiceById->idInvoice) ?></td>
                                 <td class="fw-bold table-secondary">Tgl Bayar</td>
                                 <td>
                                     <?php echo ($getInvoiceById->paymentDate == '0000=00=00') ? '<span class="text-danger fw-bold">Belum Bayar</span>' : $getInvoiceById->paymentDate ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="fw-bold table-secondary">Master Order</td>
-                                <td><?php echo strtoupper($getInvoiceById->idMasterOrder) ?></td>
+                                <td class="fw-bold table-secondary">SuratJalan No.</td>
+                                <td><?php echo strtoupper($getInvoiceById->idSuratJalan) ?></td>
                                 <td class="fw-bold table-secondary">Status</td>
                                 <td><?php echo $getInvoiceById->status ?></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold table-secondary">Master Order</td>
+                                <td><?php echo strtoupper($getInvoiceById->idMasterOrder) ?></td>
+                                <td class="fw-bold table-secondary">Ket Pembayaran</td>
+                                <td><?php echo $getInvoiceById->paymentRemark ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -117,6 +121,12 @@
                         <label for="paymentDate" class="col-sm-3 col-form-label">Tgl Bayar</label>
                         <div class="col-sm-9">
                             <input type="date" name="paymentDate" class="form-control" id="paymentDate" value="<?php echo $getInvoiceById->paymentDate ?>" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="paymentDate" class="col-sm-3 col-form-label">Ket. Pembayaran</label>
+                        <div class="col-sm-9">
+                            <textarea name="paymentRemark" class="form-control" placeholder="Keterangan Pembayaran"><?php echo $getInvoiceById->paymentRemark ?></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">

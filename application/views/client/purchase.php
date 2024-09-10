@@ -23,7 +23,7 @@
                             <?php foreach ($getAllPurchaseByCustomer as $data) { ?>
                                 <tr>
                                     <td><?php echo $data->idPR ?></td>
-                                    <td><?php echo $data->datePR ?></td>
+                                    <td><?php echo date('d-m-Y', strtotime($data->createdAt)) ?></td>
                                     <td><?php echo $data->remark ?></td>
                                     <td><?php echo $data->status ?></td>
                                     <td><?php echo $data->updatedAt ?></td>
