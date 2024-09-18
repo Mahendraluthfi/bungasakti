@@ -23,7 +23,24 @@
                                 <th>#</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <?php $no = 1;
+                            foreach ($getAllPembelian as $data) { ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $data->idPembelian ?></td>
+                                    <td><?php echo $data->issuingDate ?></td>
+                                    <td><?php echo $data->namaToko ?></td>
+                                    <td><?php echo $data->name ?></td>
+                                    <td><?php echo $data->notaRefrence ?></td>
+                                    <td><?php echo $data->remark ?></td>
+                                    <td><?php echo number_format($data->total->totalPembelian) ?></td>
+                                    <td>
+                                        <a href="<?php echo base_url('pembelian/editForm/' . $data->idPembelian) ?>" class="btn btn-warning btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Edit Order" tabindex="0"><i class="mdi mdi-pencil"></i></a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
                     </table>
                 </div>
             </div>

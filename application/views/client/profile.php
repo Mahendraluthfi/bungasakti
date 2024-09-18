@@ -22,7 +22,7 @@
                     <div class="row mb-3">
                         <label for="inputPassword" class="col-sm-3 col-form-label">Password</label>
                         <div class="col-sm-9">
-                            <button type="button" class="btn btn-danger btn-sm">Change Password</button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#modalId" class="btn btn-danger btn-sm">Change Password</button>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -55,3 +55,50 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?php echo form_open('profile/changePassword') ?>
+                <div class="row mb-3">
+                    <label for="inputCompany" class="col-sm-4 col-form-label">Current Passowrd</label>
+                    <div class="col-sm-8">
+                        <input type="hidden" name="idCustomer" value="<?php echo $get->idCustomer ?>">
+                        <input type="password" class="form-control" name="currentPassword" placeholder="Current Password" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputUsername" class="col-sm-4 col-form-label">New Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" class="form-control" name="newPassword" placeholder="New Password" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Confirm Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label"></label>
+                    <div class="col-sm-8">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+                <?php echo form_close() ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+</script>

@@ -10,12 +10,18 @@ class ClientHome extends CI_Controller
         if ($this->auth->is_logged_in_customer() == false) {
             redirect('login', 'refresh');
         }
+        $this->load->model('ModelCustomer');
     }
 
     public function index()
     {
+        $idCustomer = $this->session->userdata('sessionIdCustomer');
+
         $data = array(
             'content' => 'client/dashboard',
+            'getPRbyId' => $this->ModelCustomer->getPRbyId($idCustomer),
+            'getPRpending' => $this->ModelCustomer->getPRbyStatus($idCustomer, 'PENDING'),
+            'getPRsubmit' => $this->ModelCustomer->getPRbyStatus($idCustomer, 'SUBMIT'),
         );
         $this->load->view('client/index', $data);
     }

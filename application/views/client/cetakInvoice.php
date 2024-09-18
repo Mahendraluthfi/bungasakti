@@ -8,8 +8,8 @@
 
         <div class="text-end">
             <nav class="breadcrumb">
-                <a class="breadcrumb-item" href="<?php echo base_url('appHome') ?>">Dashboard</a>
-                <a class="breadcrumb-item" href="<?php echo base_url('invoice') ?>">Invoice</a>
+                <a class="breadcrumb-item" href="<?php echo base_url() ?>">Dashboard</a>
+                <a class="breadcrumb-item" href="<?php echo base_url('clientInvoices') ?>">Invoice</a>
                 <span class="breadcrumb-item active" aria-current="page">Cetak Invoice</span>
             </nav>
         </div>
@@ -118,8 +118,7 @@
                                             <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
                                             <p class="pb-3">Hormat Kami</p>
                                             <div style="height: 30px;"></div>
-                                            <p class="pt-3">CV. BUNGA SAKTI</p>
-                                            <?php echo $this->session->userdata('sessionName'); ?>
+                                            <p class="py-3">CV. BUNGA SAKTI</p>
                                         </div>
                                         <div class="col-6 text-end">
                                             <p class="pb-0 m-0"></p>

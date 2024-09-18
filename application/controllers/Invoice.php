@@ -228,12 +228,6 @@ class Invoice extends CI_Controller
         }
         return $hasil;
     }
-
-    function tes()
-    {
-        $angka = 1530093;
-        echo ucwords($this->terbilang($angka));
-    }
 }
 
 /* End of file Invoice.php */

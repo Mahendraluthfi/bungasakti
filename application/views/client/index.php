@@ -115,7 +115,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url('clientInvoice') ?>" class="tp-link">
+                            <a href="<?php echo base_url('clientInvoices') ?>" class="tp-link">
                                 <i data-feather="file-text"></i>
                                 <span>Invoices</span>
                             </a>

@@ -53,6 +53,14 @@ class ModelInvoice extends CI_Model
         $db = $this->db->get();
         return $db->row();
     }
+
+    function clientInvoices($idCustomer)
+    {
+        return $this->db->query("SELECT master_invoice.*, master_order.idPR FROM `master_invoice`
+        JOIN master_order ON master_order.idMasterOrder = master_invoice.idMasterOrder
+        JOIN customer ON master_order.idCustomer = customer.idCustomer
+        WHERE master_order.idCustomer = '$idCustomer'")->result();
+    }
 }
 
 /* End of file ModelInvoice.php */

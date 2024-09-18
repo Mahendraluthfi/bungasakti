@@ -49,8 +49,14 @@ class ModelCustomer extends CI_Model
         return $query->row();
     }
 
-    function register()
+    function getPRbyId($idCustomer)
     {
+        return $this->db->get_where('purchase_request', ['idCustomer' => $idCustomer])->num_rows();
+    }
+
+    function getPRbyStatus($idCustomer, $status)
+    {
+        return $this->db->get_where('purchase_request', ['idCustomer' => $idCustomer, 'status' => $status])->num_rows();
     }
 }
 
