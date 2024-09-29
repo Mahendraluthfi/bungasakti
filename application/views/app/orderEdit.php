@@ -31,8 +31,8 @@
                                     <tr>
                                         <td class="fw-bold table-secondary">Contact Number</td>
                                         <td><?php echo $getOrderById->contactNumber ?></td>
-                                        <td class="fw-bold table-secondary">Created At</td>
-                                        <td><?php echo $getOrderById->createdAt ?></td>
+                                        <td class="fw-bold table-secondary">Created At / User</td>
+                                        <td><?php echo $getOrderById->createdAt . ' / ' . $getOrderById->name ?></td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold table-secondary">PO Refrence</td>

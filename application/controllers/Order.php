@@ -64,7 +64,17 @@ class Order extends CI_Controller
     {
         $idMasterOrder = $this->input->post('idMasterOrder');
         $poRefrence = $this->input->post('poRefrence');
-        $this->db->update('master_order', ['poRefrence' => $poRefrence, 'updatedAt' => date('Y-m-d H:i:s')], ['idMasterOrder' => $idMasterOrder]);
+        $isPO = $this->db->get_where('master_order', ['poRefrence' => $poRefrence])->num_rows();
+        if ($isPO > 0) {
+            $this->session->set_flashdata('msg', '
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error Simpan Data !</strong> PO sudah pernah dibuat. Tolong check kembali.
+                </div>            
+            ');
+        } else {
+            $this->db->update('master_order', ['poRefrence' => $poRefrence, 'updatedAt' => date('Y-m-d H:i:s')], ['idMasterOrder' => $idMasterOrder]);
+        }
+
         echo json_encode(true);
     }
 
@@ -284,11 +294,13 @@ class Order extends CI_Controller
 
     function addNewOrder()
     {
+        $idUser = $this->session->userdata('sessionIdUser');
         $idCustomer = $this->input->post('idCustomer');
         $poRefrence = $this->input->post('poRefrence');
         $idMasterOrder = substr($this->uuid->v4(), 0, 8);
         $data = [
             'idMasterOrder' => $idMasterOrder,
+            'idUser' => $idUser,
             'idCustomer' => $idCustomer,
             'poRefrence' => $poRefrence,
             'status' => 'PROSES',

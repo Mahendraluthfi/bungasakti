@@ -179,10 +179,10 @@
                                         <li>
                                             <a href="<?php echo base_url('Invoice') ?>" class="tp-link">Invoice</a>
                                         </li>
-                                        <li>
-                                            <a href="<?php echo base_url('Pembelian') ?>" class="tp-link">Pembelian</a>
-                                        </li>
                                     <?php } ?>
+                                    <li>
+                                        <a href="<?php echo base_url('Pembelian') ?>" class="tp-link">Pembelian</a>
+                                    </li>
                                     <li>
                                         <a href="<?php echo base_url('Penjualan') ?>" class="tp-link">Penjualan</a>
                                     </li>

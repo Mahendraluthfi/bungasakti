@@ -105,6 +105,17 @@ class ModelToko extends CI_Model
         $this->db->update('toko_stock');
         return $this->db->affected_rows() > 0; // Return true if stock was updated successfully, otherwise return false        
     }
+
+    function getHistoryPembelian($idToko)
+    {
+        $this->db->select('master_pembelian.*, master_toko.namaToko, user.name');
+        $this->db->from('master_pembelian');
+        $this->db->join('master_toko', 'master_toko.idToko = master_pembelian.idToko');
+        $this->db->join('user', 'user.idUser = master_pembelian.idUser');
+        $this->db->where('master_pembelian.status', 'SUBMIT');
+        $this->db->where('master_pembelian.idToko', $idToko);
+        return $this->db->get()->result();
+    }
 }
 
 /* End of file ModelToko.php */

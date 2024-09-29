@@ -8,13 +8,13 @@
                         <button type="button" class="btn btn-primary btn-sm mb-3" onclick="openModal()"><i class="mdi mdi-plus"></i> Tambah Data</button>
                     </div>
                     <?php echo $this->session->flashdata('msg'); ?>
-                    <table id="scroll-horizontal-datatable-zero" class="table table-striped w-100 nowrap">
+                    <table id="scroll-horizontal-datatable-zero" class="table table-striped w-100">
                         <thead>
                             <tr>
                                 <th>ID_PR</th>
                                 <th>Tanggal</th>
                                 <th>Customer</th>
-                                <th>Keterangan</th>
+                                <th width="20%">Keterangan</th>
                                 <th>Status</th>
                                 <th>Last_Update</th>
                                 <th>#</th>

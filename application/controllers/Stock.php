@@ -14,15 +14,22 @@ class Stock extends CI_Controller
         $this->load->library('Uuid');
         $this->load->model('ModelToko');
         $this->load->model('ModelBarang');
+        $this->load->model('ModelPembelian');
     }
 
     public function index()
     {
+        $level = $this->session->userdata('sessionLevel');
+        $idToko = $this->session->userdata('sessionToko');
+        $getAllToko = ($level == "KASIR")
+            ? $this->db->get_where('master_toko', ['idToko' => $idToko])->result()
+            : $this->ModelToko->getAllToko();
         $data = array(
             'title' => '',
             'content' => 'app/stock',
-            'getAllToko' => $this->ModelToko->getAllToko(),
+            'getAllToko' => $getAllToko,
         );
+        // echo json_encode($data);
         $this->load->view('app/index', $data);
     }
 
@@ -30,13 +37,18 @@ class Stock extends CI_Controller
     {
         $getTokoById = $this->ModelToko->getTokoById($idToko);
         $getNotToko = $this->db->query("SELECT * FROM master_toko WHERE NOT idToko = '$idToko' AND isActive='1'")->result();
+        $getHistory = $this->ModelToko->getHistoryPembelian($idToko);
+        foreach ($getHistory as $key => $value) {
+            $value->total = $this->ModelPembelian->getTotalPembelian($value->idPembelian);
+        }
         $data = array(
             'title' => '',
             'content' => 'app/stockView',
             'getNamaToko' => $getTokoById->namaToko,
             'getStockByToko' => $this->ModelToko->getStockByToko($idToko),
             'getAllBarang' => $this->ModelBarang->getAllBarangReady(),
-            'tokoDestination' => $getNotToko
+            'tokoDestination' => $getNotToko,
+            'getHistoryPembelianByToko' => $getHistory
         );
         $this->load->view('app/index', $data);
     }
@@ -128,6 +140,13 @@ class Stock extends CI_Controller
         // $insertDetPembelian =[
         // ];
 
+    }
+
+    function getPembelianById()
+    {
+        $idPembelian = $this->input->post('idPembelian');
+        $data = $this->ModelPembelian->getItemPembelian($idPembelian);
+        echo json_encode($data);
     }
 }
 

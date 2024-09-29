@@ -102,11 +102,27 @@
                                 <th>idPembelian</th>
                                 <th>Tanggal</th>
                                 <th>Refrensi Nota</th>
+                                <th>Total</th>
                                 <th>Keterangan</th>
                                 <th>#</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <?php $no = 1;
+                            foreach ($getHistoryPembelianByToko as $data) { ?>
+                                <tr>
+                                    <td><?php echo $no++ ?></td>
+                                    <td><?php echo $data->idPembelian ?></td>
+                                    <td><?php echo $data->issuingDate ?></td>
+                                    <td><?php echo $data->notaRefrence ?></td>
+                                    <td><?php echo number_format($data->total->totalPembelian) ?></td>
+                                    <td><?php echo $data->remark ?></td>
+                                    <td>
+                                        <button type="button" onclick="detailPembelian('<?php echo $data->idPembelian ?>')" class="btn btn-success btn-sm" data-bs-custom-class="custom-popover" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail Pembelian" tabindex="0"><i class="mdi mdi-details"></i></button>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
                     </table>
                 </div><!-- end card body -->
             </div>
@@ -246,6 +262,31 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalPembelian" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Detail Pembelian</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped w-100 table-sm">
+                    <thead>
+                        <tr class="fw-bold">
+                            <td>No</td>
+                            <td>Barang</td>
+                            <td>Qty</td>
+                            <td class="text-end">Harga</td>
+                            <td class="text-end">Total</td>
+                        </tr>
+                    </thead>
+                    <tbody id="showTab"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let base_url = '<?php echo base_url() ?>';
     let save_method;
@@ -277,6 +318,37 @@
         } else {
             form.reportValidity();
         }
+    }
+
+    const detailPembelian = (idPembelian) => {
+        $.ajax({
+            url: base_url + 'stock/getPembelianById',
+            type: 'POST',
+            data: {
+                idPembelian: idPembelian
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                let html;
+                let no = 1;
+                for (let i = 0; i < data.length; i++) {
+                    html += `
+                        <tr>
+                            <td>${no++}</td>
+                            <td>${data[i].description}</td>
+                            <td>${data[i].qty}</td>
+                            <td class="text-end">${data[i].price}</td>
+                            <td class="text-end">${data[i].total}</td>                        
+                        </tr>                
+                    `;
+                }
+                $('#showTab').html(html);
+                $('#modalPembelian').modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
     }
 
     const detailStock = (idBarang) => {

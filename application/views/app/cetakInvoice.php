@@ -35,7 +35,7 @@
                                     </address>
                                 </div>
                                 <div class="float-end">
-                                    <h3 class="fs-18 mb-3">INVOICE</h3>
+                                    <h3 class="fs-28 text-primary mb-3">INVOICE</h3>
                                     <table class="table table-sm">
                                         <tr>
                                             <td class="fst-italic">INVOICE NO</td>

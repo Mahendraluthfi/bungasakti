@@ -22,9 +22,10 @@ class ModelOrder extends CI_Model
 
     function getOrderById($idMasterOrder)
     {
-        $this->db->select('master_order.*, customer.companyName, customer.email, customer.contactNumber, customer.address, customer.username');
+        $this->db->select('master_order.*, customer.companyName, customer.email, customer.contactNumber, customer.address, customer.username, user.name');
         $this->db->from('master_order');
         $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');
+        $this->db->join('user', 'master_order.idUser = user.idUser', 'left');
         $this->db->where('idMasterOrder', $idMasterOrder);
         $db = $this->db->get();
         return $db->row();

@@ -85,7 +85,8 @@
                                             <p class="pb-0 m-0">Kendal, <?php echo date('d F Y') ?></p>
                                             <p class="pb-3">Hormat Kami</p>
                                             <div style="height: 30px;"></div>
-                                            <p class="py-3">CV. BUNGA SAKTI</p>
+                                            <p class="pt-3">CV. BUNGA SAKTI</p>
+                                            <?php echo $this->session->userdata('sessionName'); ?>
                                         </div>
                                         <div class="col-6 text-end">
                                             <p class="pb-0 m-0"></p>

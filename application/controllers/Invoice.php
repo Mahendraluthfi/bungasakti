@@ -51,8 +51,9 @@ class Invoice extends CI_Controller
     function cetakSuratJalan($idInvoice)
     {
         if ($idInvoice) {
+            $getSuratNo = $this->db->get_where('master_invoice', ['idInvoice' => $idInvoice])->row();
             $data = [
-                'title' => 'SuratJalan Invoice-' . $idInvoice . ' - BungaSakti',
+                'title' => 'Surat Jalan NO-' . strtoupper($getSuratNo->idSuratJalan) . ' - BungaSakti',
                 'content' => 'app/cetakSuratJalan',
                 'getInvoiceItemById' => $this->ModelInvoice->getInvoiceItemById($idInvoice),
                 'getInvoiceById' => $this->ModelInvoice->getInvoiceById($idInvoice),

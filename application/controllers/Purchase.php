@@ -266,11 +266,13 @@ class Purchase extends CI_Controller
 
     function proccedOrder()
     {
+        $idUser = $this->session->userdata('sessionIdUser');
         $idPR = $this->input->post('idPR');
         $getPRbyId = $this->ModelPurchase->getPRbyId($idPR);
         $idMasterOrder = substr($this->uuid->v4(), 0, 8);
         $objectOrder = array(
             'idMasterOrder' => $idMasterOrder,
+            'idUser' => $idUser,
             'idCustomer' => $getPRbyId->idCustomer,
             'idPR' => $idPR,
             'status' => 'PROSES',
