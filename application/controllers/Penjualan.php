@@ -16,8 +16,14 @@ class Penjualan extends CI_Controller
     }
     public function index()
     {
+        $getAll = $this->ModelPenjualan->getAllPenjualan();
+        foreach ($getAll as $key => $value) {
+            $value->total = $this->ModelPenjualan->getTotalBayar($value->idPenjualan);
+        }
         $data = [
+            'title' => '',
             'content' => 'app/penjualan',
+            'get' => $getAll
         ];
 
         $this->load->view('app/index', $data);
@@ -193,7 +199,7 @@ class Penjualan extends CI_Controller
             echo json_encode(['status' => true]);
         }
 
-        // }
+        // 
         // echo json_encode($getStock);
     }
 
@@ -241,6 +247,60 @@ class Penjualan extends CI_Controller
         $this->db->where('idStock', $idStock);
         $this->db->update('toko_stock');
 
+        echo json_encode(true);
+    }
+
+    function simpanPenjualan()
+    {
+        $remark = $this->input->post('remark');
+        $idPenjualan = $this->input->post('idPenjualan');
+        $customer = $this->input->post('customer');
+
+        $this->db->update('master_penjualan', [
+            'customerName' => $customer,
+            'remark' => $remark,
+            'updatedAt' => date('Y-m-d H:i:s'),
+            'status' => '1'
+        ], ['idPenjualan' => $idPenjualan]);
+
+        echo json_encode($idPenjualan);
+    }
+
+    function printNota($idPenjualan)
+    {
+        $totalBayar = $this->ModelPenjualan->getTotalBayar($idPenjualan);
+        $totalItems = $this->ModelPenjualan->getTotalItems($idPenjualan);
+        $data = [
+            'getPenjualan' => $this->ModelPenjualan->getPenjualanById($idPenjualan),
+            'getDetailTransaksi' => $this->ModelPenjualan->getDetailTransaksi($idPenjualan),
+            'totalBayar' => $totalBayar,
+            'totalItems' => $totalItems,
+        ];
+        $this->load->view('app/printNota', $data);
+        // echo json_encode($data);
+    }
+
+    function getPenjualan()
+    {
+        $idPenjualan = $this->input->post('idPenjualan');
+        $data = [
+            'listItems' => $this->ModelPenjualan->getDetailTransaksi($idPenjualan),
+        ];
+        echo json_encode($data);
+    }
+
+    function hapusPenjualan()
+    {
+        $idPenjualan = $this->input->post('idPenjualan');
+        $getDetail = $this->db->get_where('det_master_penjualan', ['idPenjualan' => $idPenjualan])->result();
+        foreach ($getDetail as $data) {
+            $idStock = $data->idStock;
+            $this->db->set('qtyStock', 'qtyStock + ' . $data->qty, FALSE);
+            $this->db->where('idStock', $idStock);
+            $this->db->update('toko_stock');
+        }
+        $this->db->delete('master_penjualan', ['idPenjualan' => $idPenjualan]);
+        $this->db->delete('det_master_penjualan', ['idPenjualan' => $idPenjualan]);
         echo json_encode(true);
     }
 }

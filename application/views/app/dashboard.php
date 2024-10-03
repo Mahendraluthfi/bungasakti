@@ -125,14 +125,63 @@
                             <div class="d-flex align-items-center">
                                 <div class="fs-14 mb-1">#Invoice Lewat Tempo</div>
                             </div>
+                            <div class="d-flex align-items-baseline mb-1">
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger">
+                                    <button type="button" class="btn btn-danger" onclick="tempo()">
+                                        <?php echo $jatuhTempo ?>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">Omzet Toko Hari ini</div>
+                            </div>
                             <div class="d-flex align-items-baseline mb-2">
-                                <div class="fs-22 mb-0 me-2 fw-semibold text-danger"><?php echo $jatuhTempo ?></div>
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-success"><?php echo number_format($omzetTokoToday->omzet) ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">#Transaksi Toko Hari ini</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-1">
+                                <div class="fs-22 mb-0 me-2 fw-semibold"><?php echo number_format($transaksiTokoToday) ?></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">Omzet Toko Bulan ini</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-2">
+                                <div class="fs-22 mb-0 me-2 fw-semibold text-success"><?php echo number_format($omzetTokoMonth->omzet) ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="d-flex align-items-center">
+                                <div class="fs-14 mb-1">#Transaksi Toko Bulan ini</div>
+                            </div>
+                            <div class="d-flex align-items-baseline mb-1">
+                                <div class="fs-22 mb-0 me-2 fw-semibold"><?php echo number_format($transaksiTokoMonth) ?></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <!-- <div class="card">
                 <div class="card-header p-1">Barang low Stock</div>
                 <div class="card-body">
                     <table id="scroll-vertical-datatable"
@@ -153,13 +202,40 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="col-md-6 col-xl-8">
             <div class="card">
                 <div class="card-body p-2">
                     <div id="container"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Detail Invoice Jatuh Tempo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Customer</th>
+                            <th>No.Invoice</th>
+                            <th>PO Vendor</th>
+                            <th>Tanggal</th>
+                            <th>Tempo</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="showTab"></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -265,4 +341,38 @@
             }
         ]
     });
+    let base_url = '<?php echo base_url(); ?>';
+    const tempo = () => {
+        $.ajax({
+            url: base_url + 'appHome/getTempo',
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(data) {
+                let html;
+                let no = 1;
+                for (let i = 0; i < data.length; i++) {
+                    html += `
+                        <tr>
+                            <td>${no++}</td>
+                            <td>${data[i].companyName}</td>
+                            <td>${data[i].idInvoice}</td>
+                            <td>${(data[i].poRefrence) ? data[i].poRefrence : ''}</td>
+                            <td>${data[i].createdAt}</td>
+                            <td>${data[i].dueDate}</td>
+                            <td>${formatNumber(data[i].sumTotal.totalBayar)}</td>                        
+                        </tr>
+                    `;
+                }
+                $('#showTab').html(html);
+                $('#modalId').modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+    function formatNumber(num) {
+        return Number(num).toLocaleString('en-US');
+    }
 </script>

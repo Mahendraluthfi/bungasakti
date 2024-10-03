@@ -69,13 +69,14 @@
                         <div class="row mb-2">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Cutomer</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" value="Umum">
+                                <input type="text" class="form-control" name="customer" value="Umum">
+                                <input type="hidden" name="idPenjualan" value="<?php echo $idPenjualan ?>">
                             </div>
                         </div>
                         <div class="row">
                             <label for="staticEmail" class="col-sm-3 col-form-label">Catatan</label>
                             <div class="col-sm-9">
-                                <textarea name="" class="form-control" placeholder="Catatan Transaksi"></textarea>
+                                <textarea name="remark" class="form-control" placeholder="Catatan Transaksi"></textarea>
                             </div>
                         </div>
                     </form>
@@ -375,22 +376,24 @@
             showCancelButton: true,
             confirmButtonText: 'Hapus',
             cancelButtonText: 'Batal'
-        }).then(function() {
-            $.ajax({
-                url: base_url + 'penjualan/hapusitem',
-                type: 'POST',
-                data: {
-                    id: id
-                },
-                dataType: 'JSON',
-                success: function(data) {
-                    showItems(idPenjualan);
-                    barcodeEnter.focus();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Error get data from ajax');
-                }
-            });
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: base_url + 'penjualan/hapusitem',
+                    type: 'POST',
+                    data: {
+                        id: id
+                    },
+                    dataType: 'JSON',
+                    success: function(data) {
+                        showItems(idPenjualan);
+                        barcodeEnter.focus();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Error get data from ajax');
+                    }
+                });
+            }
             // alert("OK");
         });
     }
@@ -403,26 +406,52 @@
         let idStock = id.value;
 
         // alert(idStock);
-        $.ajax({
-            url: base_url + 'penjualan/selectedBarang',
-            type: 'POST',
-            data: {
-                idStock: idStock,
-                idPenjualan: idPenjualan
-            },
-            dataType: 'JSON',
-            success: function(data) {
-                showItems(idPenjualan);
-                barcodeEnter.focus();
-                $('#modalCari').modal('hide');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            }
-        });
+        if (idStock) {
+            $.ajax({
+                url: base_url + 'penjualan/selectedBarang',
+                type: 'POST',
+                data: {
+                    idStock: idStock,
+                    idPenjualan: idPenjualan
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    showItems(idPenjualan);
+                    barcodeEnter.focus();
+                    $('#modalCari').modal('hide');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                }
+            });
+        }
     }
 
     const printsave = () => {
 
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Simpan dan Cetak Nota ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: base_url + 'penjualan/simpanPenjualan',
+                    type: 'POST',
+                    data: $('#detailForm').serialize(),
+                    dataType: 'JSON',
+                    success: function(data) {
+                        window.open(base_url + 'penjualan/printNota/' + data, '_blank');
+                        location.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('Error get data from ajax');
+                    }
+                });
+            }
+        });
     }
 </script>

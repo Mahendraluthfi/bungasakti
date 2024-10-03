@@ -135,18 +135,18 @@ class ModelDashboard extends CI_Model
     function getDebitChart($year)
     {
         return $this->db->query("SELECT 
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 1 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS January,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 2 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS February,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 3 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS March,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 4 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS April,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 5 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS May,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 6 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS June,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 7 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS July,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 8 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS August,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 9 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS September,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 10 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS October,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 11 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS November,
-            SUM(CASE WHEN MONTH(master_invoice.createdAt) = 12 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS December
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 1 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS January,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 2 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS February,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 3 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS March,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 4 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS April,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 5 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS May,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 6 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS June,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 7 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS July,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 8 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS August,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 9 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS September,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 10 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS October,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 11 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS November,
+            SUM(CASE WHEN MONTH(master_invoice.paymentDate) = 12 THEN det_invoice.qtyInvoice * det_master_order.fixedPrice ELSE 0 END) AS December
         FROM det_invoice
         JOIN det_master_order ON det_master_order.idDetOrder = det_invoice.idDetOrder
         JOIN master_invoice ON master_invoice.idInvoice = det_invoice.idInvoice
@@ -161,6 +161,49 @@ class ModelDashboard extends CI_Model
         JOIN master_barang ON master_barang.idBarang = toko_stock.idBarang
         GROUP BY toko_stock.idBarang
         HAVING SUM(qtyStock) <= 5;")->result();
+    }
+
+    function getTempo($date)
+    {
+        $this->db->select('master_invoice.*,customer.companyName, customer.username, master_order.poRefrence');
+        $this->db->from('master_invoice');
+        $this->db->join('master_order', 'master_order.idMasterOrder = master_invoice.idMasterOrder');
+        $this->db->join('customer', 'customer.idCustomer = master_order.idCustomer');
+        $this->db->where('master_invoice.dueDate <=', $date);
+        $this->db->where('master_invoice.status', 'PENDING');
+        $this->db->order_by('master_invoice.createdAt', 'desc');
+        $db = $this->db->get();
+        return $db->result();
+    }
+
+    function omzetToko($date = '', $idToko = '', $month = '')
+    {
+        $this->db->select('SUM(det_master_penjualan.total) as omzet');
+        $this->db->from('det_master_penjualan');
+        $this->db->join('master_penjualan', 'master_penjualan.idPenjualan = det_master_penjualan.idPenjualan');
+        if ($month) {
+            $this->db->where('MONTH(master_penjualan.updatedAt)', $month);
+        } else {
+            $this->db->where('DATE(master_penjualan.updatedAt)', $date);
+        }
+        if ($idToko) {
+            $this->db->where('master_penjualan.idToko', $idToko);
+        }
+        return $this->db->get()->row();
+    }
+
+    function transaksiToko($date = '', $idToko = '', $month = '')
+    {
+        $this->db->from('master_penjualan');
+        if ($month) {
+            $this->db->where('MONTH(updatedAt)', $month);
+        } else {
+            $this->db->where('DATE(updatedAt)', $date);
+        }
+        if ($idToko) {
+            $this->db->where('idToko', $idToko);
+        }
+        return $this->db->get()->num_rows();
     }
 }
 

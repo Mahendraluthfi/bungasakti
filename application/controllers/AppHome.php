@@ -11,6 +11,7 @@ class AppHome extends CI_Controller
             redirect('appLogin', 'refresh');
         }
         $this->load->model('ModelDashboard');
+        $this->load->model('ModelToko');
     }
 
     public function index()
@@ -39,9 +40,30 @@ class AppHome extends CI_Controller
             $data['chartPiutang'] = $this->ModelDashboard->getPiutangChart($year);
             $data['chartDebit'] = $this->ModelDashboard->getDebitChart($year);
             $data['lowStock'] = $this->ModelDashboard->lowStock();
+            $data['omzetTokoToday'] = $this->ModelDashboard->omzetToko($today);
+            $data['omzetTokoMonth'] = $this->ModelDashboard->omzetToko('', '', $month);
+            $data['transaksiTokoToday'] = $this->ModelDashboard->transaksiToko($today);
+            $data['transaksiTokoMonth'] = $this->ModelDashboard->transaksiToko('', '', $month);
+        } else {
+            $data['toko'] = $this->ModelToko->getTokoById($this->session->userdata('sessionToko'));
+            $data['omzetTokoToday'] = $this->ModelDashboard->omzetToko($today, $this->session->userdata('sessionToko'));
+            $data['omzetTokoMonth'] = $this->ModelDashboard->omzetToko('', $this->session->userdata('sessionToko'), $month);
+            $data['transaksiTokoToday'] = $this->ModelDashboard->transaksiToko($today, $this->session->userdata('sessionToko'));
+            $data['transaksiTokoMonth'] = $this->ModelDashboard->transaksiToko('', $this->session->userdata('sessionToko'), $month);
         }
         $this->load->view('app/index', $data);
         // echo json_encode($data);
+    }
+
+    function getTempo()
+    {
+        $this->load->model('ModelInvoice');
+        $today = date('Y-m-d');
+        $data = $this->ModelDashboard->getTempo($today);
+        foreach ($data as $key => $value) {
+            $value->sumTotal = $this->ModelInvoice->getSumTotal($value->idInvoice);
+        }
+        echo json_encode($data);
     }
 }
 
